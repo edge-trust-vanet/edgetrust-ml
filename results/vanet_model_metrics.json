@@ -1,0 +1,185 @@
+{
+  "models": {
+    "Random Forest": {
+      "accuracy": 95.6,
+      "f1_score": 95.71,
+      "precision": 96.25,
+      "recall": 95.6,
+      "false_alert_rate": 3.75,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          0,
+          252
+        ]
+      ],
+      "is_best": true
+    },
+    "Gradient Boosting": {
+      "accuracy": 95.3,
+      "f1_score": 95.41,
+      "precision": 95.85,
+      "recall": 95.3,
+      "false_alert_rate": 4.15,
+      "confusion_matrix": [
+        [
+          705,
+          43
+        ],
+        [
+          4,
+          248
+        ]
+      ],
+      "is_best": false
+    },
+    "Extra Trees": {
+      "accuracy": 94.5,
+      "f1_score": 94.62,
+      "precision": 95.04,
+      "recall": 94.5,
+      "false_alert_rate": 4.96,
+      "confusion_matrix": [
+        [
+          702,
+          46
+        ],
+        [
+          9,
+          243
+        ]
+      ],
+      "is_best": false
+    },
+    "AdaBoost": {
+      "accuracy": 95.6,
+      "f1_score": 95.71,
+      "precision": 96.25,
+      "recall": 95.6,
+      "false_alert_rate": 3.75,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          0,
+          252
+        ]
+      ],
+      "is_best": false
+    },
+    "Decision Tree": {
+      "accuracy": 94.6,
+      "f1_score": 94.7,
+      "precision": 95.04,
+      "recall": 94.6,
+      "false_alert_rate": 4.96,
+      "confusion_matrix": [
+        [
+          705,
+          43
+        ],
+        [
+          11,
+          241
+        ]
+      ],
+      "is_best": false
+    },
+    "SVM (RBF)": {
+      "accuracy": 93.4,
+      "f1_score": 93.5,
+      "precision": 93.76,
+      "recall": 93.4,
+      "false_alert_rate": 6.24,
+      "confusion_matrix": [
+        [
+          702,
+          46
+        ],
+        [
+          20,
+          232
+        ]
+      ],
+      "is_best": false
+    },
+    "K-Nearest Neighbors": {
+      "accuracy": 89.0,
+      "f1_score": 89.03,
+      "precision": 89.06,
+      "recall": 89.0,
+      "false_alert_rate": 10.94,
+      "confusion_matrix": [
+        [
+          691,
+          57
+        ],
+        [
+          53,
+          199
+        ]
+      ],
+      "is_best": false
+    },
+    "Logistic Regression": {
+      "accuracy": 92.2,
+      "f1_score": 92.22,
+      "precision": 92.24,
+      "recall": 92.2,
+      "false_alert_rate": 7.76,
+      "confusion_matrix": [
+        [
+          707,
+          41
+        ],
+        [
+          37,
+          215
+        ]
+      ],
+      "is_best": false
+    },
+    "Gaussian Naive Bayes": {
+      "accuracy": 93.6,
+      "f1_score": 93.8,
+      "precision": 94.66,
+      "recall": 93.6,
+      "false_alert_rate": 5.34,
+      "confusion_matrix": [
+        [
+          688,
+          60
+        ],
+        [
+          4,
+          248
+        ]
+      ],
+      "is_best": false
+    }
+  },
+  "best_model": "Random Forest",
+  "dataset": "vanet_malicious_nodes",
+  "n_features": 14,
+  "feature_importance": {
+    "trust_score": 37.103,
+    "neighbor_trust_score_avg": 23.957,
+    "historical_trust_score": 21.776,
+    "latency": 1.84,
+    "position_y": 1.803,
+    "position_x": 1.772,
+    "packet_received": 1.735,
+    "signal_strength": 1.688,
+    "direction": 1.685,
+    "acceleration": 1.668,
+    "speed": 1.48,
+    "packet_sent": 1.409,
+    "packet_drop_ratio": 1.351,
+    "message_retransmission_count": 0.734
+  }
+}

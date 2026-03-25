@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EdgeTrust-VANET — Security Dashboard</title>
+  <meta name="description" content="Real-time VANET misbehavior detection dashboard with ML model comparison"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"/>
+  <link rel="stylesheet" href="/static/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="logo-title">EdgeTrust<span>-VANET</span></h1>
+        <p class="logo-sub">Misbehavior Detection Dashboard</p>
+      </div>
+    </div>
+  </div>
+  <div class="header-right">
+    <nav class="nav-tabs">
+      <button class="nav-tab active"  onclick="showSection('evaluator', this)">🚗 Evaluator</button>
+      <button class="nav-tab"         onclick="showSection('arena',     this)">🏆 VeReMi Arena</button>
+      <button class="nav-tab"         onclick="showSection('vanet',     this)">🌐 VANET Nodes</button>
+    </nav>
+    <div class="status-pill"><span class="status-dot pulse"></span>Model Active</div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 1 — EVALUATOR
+══════════════════════════════════════════════════════ -->
+<main class="main" id="sec-evaluator">
+  <section class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="stat-body"><p class="stat-label">Vehicles Accepted</p><h2 class="stat-value" id="s-accepted">0</h2></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="stat-body"><p class="stat-label">Warnings Issued</p><h2 class="stat-value" id="s-warned">0</h2></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon red">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <div class="stat-body"><p class="stat-label">Vehicles Blocked</p><h2 class="stat-value" id="s-blocked">0</h2></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+      </div>
+      <div class="stat-body"><p class="stat-label">Total Evaluated</p><h2 class="stat-value" id="s-total">0</h2></div>
+    </div>
+  </section>
+
+  <div class="mid-row">
+    <section class="card form-card">
+      <div class="card-header">
+        <h2>🚗 Vehicle Evaluator</h2>
+        <button class="btn-sim" onclick="simulate()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Simulate Random
+        </button>
+      </div>
+      <form id="eval-form" onsubmit="evaluate(event)">
+        <p class="section-label">📡 Sensor Features</p>
+        <div class="form-grid">
+          <div class="form-group"><label>Vehicle ID</label><input type="text" id="f-vid" value="V1234"/></div>
+          <div class="form-group"><label>Speed (m/s)</label><input type="number" step="0.1" id="f-speed" value="12.5" required/></div>
+          <div class="form-group"><label>Acceleration</label><input type="number" step="0.1" id="f-accel" value="0.3" required/></div>
+          <div class="form-group"><label>Position X</label><input type="number" step="0.1" id="f-px" value="100.2" required/></div>
+          <div class="form-group"><label>Position Y</label><input type="number" step="0.1" id="f-py" value="200.5" required/></div>
+          <div class="form-group"><label>Heading (°)</label><input type="number" step="0.1" id="f-heading" value="45.0" required/></div>
+          <div class="form-group"><label>Msg Frequency</label><input type="number" step="1" id="f-freq" value="10" required/></div>
+          <div class="form-group"><label>Neighbor Count</label><input type="number" step="1" id="f-neighbors" value="3" required/></div>
+        </div>
+        <p class="section-label" style="margin-top:18px">🔐 Trust Factors <span class="hint">(0.0–1.0)</span></p>
+        <div class="trust-sliders">
+          <div class="slider-row"><label>Message Consistency</label><input type="range" min="0" max="1" step="0.01" id="sl-mc" value="0.2" oninput="updateSlider('sl-mc','sv-mc')"/><span class="slider-val" id="sv-mc">0.20</span></div>
+          <div class="slider-row"><label>Behavior History</label><input type="range" min="0" max="1" step="0.01" id="sl-bh" value="0.1" oninput="updateSlider('sl-bh','sv-bh')"/><span class="slider-val" id="sv-bh">0.10</span></div>
+          <div class="slider-row"><label>Neighbor Validation</label><input type="range" min="0" max="1" step="0.01" id="sl-nv" value="0.15" oninput="updateSlider('sl-nv','sv-nv')"/><span class="slider-val" id="sv-nv">0.15</span></div>
+          <div class="slider-row"><label>Plausibility Check</label><input type="range" min="0" max="1" step="0.01" id="sl-pl" value="0.2" oninput="updateSlider('sl-pl','sv-pl')"/><span class="slider-val" id="sv-pl">0.20</span></div>
+        </div>
+        <button type="submit" class="btn-evaluate" id="btn-eval">Evaluate Vehicle</button>
+      </form>
+    </section>
+
+    <section class="card result-card">
+      <div class="card-header"><h2>🛡️ Decision Output</h2></div>
+      <div class="verdict-panel" id="verdict-panel">
+        <div class="verdict-idle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="56" height="56" opacity="0.25">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <p>Submit a vehicle to see the verdict</p>
+        </div>
+      </div>
+      <div class="trust-gauge-section" id="trust-gauge-section" style="display:none">
+        <p class="section-label">Trust Score Breakdown</p>
+        <canvas id="radarChart" height="220"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <div class="bottom-row">
+    <section class="card chart-card">
+      <div class="card-header"><h2>📊 System Performance vs Baselines</h2></div>
+      <canvas id="perfChart" height="180"></canvas>
+    </section>
+    <section class="card log-card">
+      <div class="card-header">
+        <h2>📋 Activity Log</h2>
+        <button class="btn-clear" onclick="clearLog()">Clear</button>
+      </div>
+      <div class="log-container" id="log-container">
+        <p class="log-empty">No evaluations yet.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 2 — VEREMI ARENA
+══════════════════════════════════════════════════════ -->
+<main class="main" id="sec-arena" style="display:none">
+  <div class="arena-header">
+    <h2 class="arena-title">🏆 VeReMi Arena — All 9 Models Compared</h2>
+    <p class="arena-sub">VeReMi-style dataset · 4 attack types · 8,800 train / 2,200 test · Ranked by F1 Score</p>
+    <div id="arena-loading" class="arena-loading"><div class="spinner"></div><span>Loading…</span></div>
+  </div>
+  <div class="model-cards-grid" id="model-cards-grid"></div>
+  <section class="card mega-chart-card">
+    <div class="card-header"><h2>📈 Full Performance Comparison</h2></div>
+    <div class="chart-tabs">
+      <button class="chart-tab active" onclick="switchMetric('accuracy',this,'megaChart','arena')">Accuracy</button>
+      <button class="chart-tab" onclick="switchMetric('f1_score',this,'megaChart','arena')">F1 Score</button>
+      <button class="chart-tab" onclick="switchMetric('precision',this,'megaChart','arena')">Precision</button>
+      <button class="chart-tab" onclick="switchMetric('recall',this,'megaChart','arena')">Recall</button>
+      <button class="chart-tab" onclick="switchMetric('false_alert_rate',this,'megaChart','arena')">False Alert Rate</button>
+    </div>
+    <canvas id="megaChart" height="160"></canvas>
+  </section>
+  <div class="bottom-row" style="margin-top:0">
+    <section class="card">
+      <div class="card-header"><h2>🕸️ Multi-Model Radar — Top 5</h2></div>
+      <canvas id="arenaRadar" height="280"></canvas>
+    </section>
+    <section class="card spotlight-card">
+      <div class="card-header"><h2>🥇 Best Model Spotlight</h2></div>
+      <div class="spotlight-body" id="spotlight-body"><p class="log-empty">Loading…</p></div>
+    </section>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 3 — VANET NODES DATASET
+══════════════════════════════════════════════════════ -->
+<main class="main" id="sec-vanet" style="display:none">
+  <div class="arena-header">
+    <h2 class="arena-title">🌐 VANET Malicious Nodes — Rich Dataset Analysis</h2>
+    <p class="arena-sub">5,000 nodes · 18 features · Network + Trust + Attack metrics · 25.2% attack rate</p>
+    <div id="vanet-loading" class="arena-loading"><div class="spinner"></div><span>Loading…</span></div>
+  </div>
+
+  <section class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h7"/></svg></div>
+      <div class="stat-body"><p class="stat-label">Total Nodes</p><h2 class="stat-value" style="font-size:1.5rem">5,000</h2></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+      <div class="stat-body"><p class="stat-label">Malicious Nodes</p><h2 class="stat-value" style="font-size:1.5rem;color:var(--red)">1,262</h2></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3m12 0h3m-9-9v3m0 12v3"/></svg></div>
+      <div class="stat-body"><p class="stat-label">Rich Features</p><h2 class="stat-value" style="font-size:1.5rem">18</h2></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="stat-body"><p class="stat-label">Attack Types</p><h2 class="stat-value" style="font-size:1.5rem">4</h2></div>
+    </div>
+  </section>
+
+  <div class="mid-row" style="grid-template-columns:1fr 1fr">
+    <section class="card">
+      <div class="card-header"><h2>🔑 Feature Importance</h2></div>
+      <div id="fi-bars" style="padding:20px 24px"><p class="log-empty">Loading…</p></div>
+    </section>
+    <section class="card">
+      <div class="card-header"><h2>⚔️ Attack Types in This Dataset</h2></div>
+      <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
+        <div class="attack-type-row"><div class="at-badge blackhole">Blackhole</div><p>Drops all incoming packets to isolate victims and degrade network performance.</p></div>
+        <div class="attack-type-row"><div class="at-badge sybil">Sybil</div><p>Creates multiple fake node identities to gain disproportionate influence.</p></div>
+        <div class="attack-type-row"><div class="at-badge dos">DoS</div><p>Floods the network with bogus traffic to exhaust resources of legitimate nodes.</p></div>
+        <div class="attack-type-row"><div class="at-badge inject">Injection</div><p>Injects false data packets into communication channels to corrupt decisions.</p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="model-cards-grid" id="vanet-cards-grid"></div>
+
+  <section class="card mega-chart-card">
+    <div class="card-header"><h2>📈 VANET Nodes — Model Performance</h2></div>
+    <div class="chart-tabs">
+      <button class="chart-tab active" onclick="switchMetric('accuracy',this,'vanetChart','vanet')">Accuracy</button>
+      <button class="chart-tab" onclick="switchMetric('f1_score',this,'vanetChart','vanet')">F1 Score</button>
+      <button class="chart-tab" onclick="switchMetric('precision',this,'vanetChart','vanet')">Precision</button>
+      <button class="chart-tab" onclick="switchMetric('recall',this,'vanetChart','vanet')">Recall</button>
+    </div>
+    <canvas id="vanetChart" height="160"></canvas>
+  </section>
+
+  <div class="bottom-row" style="margin-top:0">
+    <section class="card">
+      <div class="card-header"><h2>🕸️ VANET — Multi-Model Radar</h2></div>
+      <canvas id="vanetRadar" height="280"></canvas>
+    </section>
+    <section class="card spotlight-card">
+      <div class="card-header"><h2>🥇 Best Model — VANET Nodes</h2></div>
+      <div class="spotlight-body" id="vanet-spotlight"><p class="log-empty">Loading…</p></div>
+    </section>
+  </div>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
