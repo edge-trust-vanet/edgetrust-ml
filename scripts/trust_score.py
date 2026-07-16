@@ -1,5 +1,4 @@
-import numpy as np
-import pandas as pd
+
 
 def calculate_trust_score(vehicle_data):
     """

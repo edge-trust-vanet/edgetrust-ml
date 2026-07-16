@@ -73,14 +73,14 @@
   <div class="mid-row">
     <section class="card form-card">
       <div class="card-header">
-        <h2>🚗 Vehicle Evaluator</h2>
+        <h2> Vehicle Evaluator</h2>
         <button class="btn-sim" onclick="simulate()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Simulate Random
         </button>
       </div>
       <form id="eval-form" onsubmit="evaluate(event)">
-        <p class="section-label">📡 Sensor Features</p>
+        <p class="section-label"> Sensor Features</p>
         <div class="form-grid">
           <div class="form-group"><label>Vehicle ID</label><input type="text" id="f-vid" value="V1234"/></div>
           <div class="form-group"><label>Speed (m/s)</label><input type="number" step="0.1" id="f-speed" value="12.5" required/></div>
@@ -91,7 +91,7 @@
           <div class="form-group"><label>Msg Frequency</label><input type="number" step="1" id="f-freq" value="10" required/></div>
           <div class="form-group"><label>Neighbor Count</label><input type="number" step="1" id="f-neighbors" value="3" required/></div>
         </div>
-        <p class="section-label" style="margin-top:18px">🔐 Trust Factors <span class="hint">(0.0–1.0)</span></p>
+        <p class="section-label" style="margin-top:18px"> Trust Factors <span class="hint">(0.0–1.0)</span></p>
         <div class="trust-sliders">
           <div class="slider-row"><label>Message Consistency</label><input type="range" min="0" max="1" step="0.01" id="sl-mc" value="0.2" oninput="updateSlider('sl-mc','sv-mc')"/><span class="slider-val" id="sv-mc">0.20</span></div>
           <div class="slider-row"><label>Behavior History</label><input type="range" min="0" max="1" step="0.01" id="sl-bh" value="0.1" oninput="updateSlider('sl-bh','sv-bh')"/><span class="slider-val" id="sv-bh">0.10</span></div>
@@ -103,7 +103,7 @@
     </section>
 
     <section class="card result-card">
-      <div class="card-header"><h2>🛡️ Decision Output</h2></div>
+      <div class="card-header"><h2> Decision Output</h2></div>
       <div class="verdict-panel" id="verdict-panel">
         <div class="verdict-idle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="56" height="56" opacity="0.25">
@@ -121,12 +121,12 @@
 
   <div class="bottom-row">
     <section class="card chart-card">
-      <div class="card-header"><h2>📊 System Performance vs Baselines</h2></div>
+      <div class="card-header"><h2> System Performance vs Baselines</h2></div>
       <canvas id="perfChart" height="180"></canvas>
     </section>
     <section class="card log-card">
       <div class="card-header">
-        <h2>📋 Activity Log</h2>
+        <h2> Activity Log</h2>
         <button class="btn-clear" onclick="clearLog()">Clear</button>
       </div>
       <div class="log-container" id="log-container">
@@ -141,13 +141,13 @@
 ══════════════════════════════════════════════════════ -->
 <main class="main" id="sec-arena" style="display:none">
   <div class="arena-header">
-    <h2 class="arena-title">🏆 VeReMi Arena — All 9 Models Compared</h2>
+    <h2 class="arena-title"> VeReMi Arena — All 9 Models Compared</h2>
     <p class="arena-sub">VeReMi-style dataset · 4 attack types · 8,800 train / 2,200 test · Ranked by F1 Score</p>
     <div id="arena-loading" class="arena-loading"><div class="spinner"></div><span>Loading…</span></div>
   </div>
   <div class="model-cards-grid" id="model-cards-grid"></div>
   <section class="card mega-chart-card">
-    <div class="card-header"><h2>📈 Full Performance Comparison</h2></div>
+    <div class="card-header"><h2> Full Performance Comparison</h2></div>
     <div class="chart-tabs">
       <button class="chart-tab active" onclick="switchMetric('accuracy',this,'megaChart','arena')">Accuracy</button>
       <button class="chart-tab" onclick="switchMetric('f1_score',this,'megaChart','arena')">F1 Score</button>
@@ -159,11 +159,11 @@
   </section>
   <div class="bottom-row" style="margin-top:0">
     <section class="card">
-      <div class="card-header"><h2>🕸️ Multi-Model Radar — Top 5</h2></div>
+      <div class="card-header"><h2> Multi-Model Radar — Top 5</h2></div>
       <canvas id="arenaRadar" height="280"></canvas>
     </section>
     <section class="card spotlight-card">
-      <div class="card-header"><h2>🥇 Best Model Spotlight</h2></div>
+      <div class="card-header"><h2> Best Model Spotlight</h2></div>
       <div class="spotlight-body" id="spotlight-body"><p class="log-empty">Loading…</p></div>
     </section>
   </div>
@@ -174,7 +174,7 @@
 ══════════════════════════════════════════════════════ -->
 <main class="main" id="sec-vanet" style="display:none">
   <div class="arena-header">
-    <h2 class="arena-title">🌐 VANET Malicious Nodes — Rich Dataset Analysis</h2>
+    <h2 class="arena-title"> VANET Malicious Nodes — Rich Dataset Analysis</h2>
     <p class="arena-sub">5,000 nodes · 18 features · Network + Trust + Attack metrics · 25.2% attack rate</p>
     <div id="vanet-loading" class="arena-loading"><div class="spinner"></div><span>Loading…</span></div>
   </div>
@@ -200,11 +200,11 @@
 
   <div class="mid-row" style="grid-template-columns:1fr 1fr">
     <section class="card">
-      <div class="card-header"><h2>🔑 Feature Importance</h2></div>
+      <div class="card-header"><h2> Feature Importance</h2></div>
       <div id="fi-bars" style="padding:20px 24px"><p class="log-empty">Loading…</p></div>
     </section>
     <section class="card">
-      <div class="card-header"><h2>⚔️ Attack Types in This Dataset</h2></div>
+      <div class="card-header"><h2> Attack Types in This Dataset</h2></div>
       <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
         <div class="attack-type-row"><div class="at-badge blackhole">Blackhole</div><p>Drops all incoming packets to isolate victims and degrade network performance.</p></div>
         <div class="attack-type-row"><div class="at-badge sybil">Sybil</div><p>Creates multiple fake node identities to gain disproportionate influence.</p></div>
@@ -217,7 +217,7 @@
   <div class="model-cards-grid" id="vanet-cards-grid"></div>
 
   <section class="card mega-chart-card">
-    <div class="card-header"><h2>📈 VANET Nodes — Model Performance</h2></div>
+    <div class="card-header"><h2> VANET Nodes — Model Performance</h2></div>
     <div class="chart-tabs">
       <button class="chart-tab active" onclick="switchMetric('accuracy',this,'vanetChart','vanet')">Accuracy</button>
       <button class="chart-tab" onclick="switchMetric('f1_score',this,'vanetChart','vanet')">F1 Score</button>
@@ -229,11 +229,11 @@
 
   <div class="bottom-row" style="margin-top:0">
     <section class="card">
-      <div class="card-header"><h2>🕸️ VANET — Multi-Model Radar</h2></div>
+      <div class="card-header"><h2> VANET — Multi-Model Radar</h2></div>
       <canvas id="vanetRadar" height="280"></canvas>
     </section>
     <section class="card spotlight-card">
-      <div class="card-header"><h2>🥇 Best Model — VANET Nodes</h2></div>
+      <div class="card-header"><h2> Best Model — VANET Nodes</h2></div>
       <div class="spotlight-body" id="vanet-spotlight"><p class="log-empty">Loading…</p></div>
     </section>
   </div>

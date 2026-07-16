@@ -1,0 +1,94 @@
+=========================================================
+      EDGETRUST-VANET: HOW TO RUN THE DEMO
+=========================================================
+
+Follow these simple steps exactly to run your project for the panel demo.
+
+STEP 1: OPEN YOUR TERMINAL
+---------------------------------------------------------
+1. Open VS Code or your standard terminal (PowerShell/Command Prompt).
+2. Make sure you are in the main project folder:
+   C:\Users\konch\OneDrive\Desktop\EdgeTrust-VANET
+
+
+STEP 2: TRAIN THE AI MODELS (Optional but recommended)
+---------------------------------------------------------
+Before starting the dashboard, you can run the training script to show the panel how the Machine Learning works behind the scenes.
+1. Run this command:
+   python scripts/analyze_vanet_nodes.py
+
+2. Wait for it to finish. You will see it print out the 95.6% accuracy results and save the new models to the /models/ folder.
+
+
+STEP 3: START THE DASHBOARD SERVER
+---------------------------------------------------------
+This starts the backend Flask server that connects the AI to your web interface.
+1. Run this command:
+   python dashboard/app.py
+
+2. You should see a message saying:
+   * Running on http://127.0.0.1:5000
+   (Do NOT close this terminal window while presenting!)
+
+
+STEP 4: OPEN IN YOUR BROWSER
+---------------------------------------------------------
+1. Open Google Chrome, Edge, or Firefox.
+2. Type this URL into the address bar and press Enter:
+   http://127.0.0.1:5000
+
+3. IMPORTANT: If you ever see old data (like 100% accuracy), press Ctrl + Shift + R to force-refresh the page and clear the browser cache.
+
+
+STEP 5: WHAT TO SHOW THE PANEL
+---------------------------------------------------------
+Now that the dashboard is open, walk them through these two main tabs:
+
+A) "🌐 VANET Nodes" Tab:
+   - Click this tab first. 
+   - Show them the 5,000 nodes dataset stats.
+   - Scroll down to show that Random Forest won with 95.6% Accuracy.
+   - Explain how you prevented "Data Leakage" to get an honest score.
+
+B) "🚗 Evaluator" Tab:
+   - Click this tab second.
+   - Explain that this simulates a Roadside Unit (RSU).
+   - Click the "Simulate Random" button a few times.
+   - Watch the Activity Log show "ACCEPT", "WARN", or "BLOCK" based on the AI's real-time decision.
+
+
+HOW TO STOP THE DEMO:
+---------------------------------------------------------
+When you are completely finished, go back to your terminal and press:
+   Ctrl + C
+This will shut down the Flask server.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   python scripts/analyze_vanet_nodes.py
+
+
+   python dashboard/app.py

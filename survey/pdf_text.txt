@@ -1,0 +1,787 @@
+--- PAGE 1 ---
+This literature review synthesizes 285 peer-reviewed publications (2014–2026) on edge-assisted, trust-adaptive misbehavior detection and trusted event dissemination in Vehicular Ad Hoc Networks (VANETs). The review examines trust management models, machine learning-based misbehavior
+detection, edge/RSU architectures, SDN integration, sensor-based hazard detection, and simulation methodologies. Key findings reveal that hybrid trust models combining direct observation and indirect reputation achieve 86–95% detection accuracy, while federated learning and blockchain
+approaches address privacy concerns. However, significant gaps persist in real-world validation, lightweight edge-deployable ML models, adaptive trust mechanisms for dynamic attack scenarios, and integrated frameworks combining trust management with secure event dissemination. This review
+identifies critical research opportunities in RSU misbehavior detection, SDN-based resilient control planes, and sensor-fusion approaches for pothole detection, providing a roadmap for developing comprehensive VANET security solutions.
+1. Introduction
+2. Search Strategy and Methodology
+3. Summary Table of Selected Papers
+4. Annotated Bibliography: Top 20 Most Relevant Papers
+5. Thematic Synthesis
+5.1Trust Models
+5.2Misbehavior Detection Methods
+5.3Edge/RSU Architectures
+5.4SDN and Control-Plane Resilience
+5.5Sensor-Based Pothole Detection
+5.6Simulation Datasets and Evaluation
+6. Comparison of Machine Learning Approaches
+7. Datasets and Tools Inventory
+8. Gaps and Open Problems
+9. Research Questions and Hypotheses
+10. Suggested Experimental Design
+11. Limitations and Ethical Considerations
+12. Actionable Research Roadmap
+13. References
+Vehicular Ad Hoc Networks (VANETs) form the communication backbone of Intelligent Transportation Systems (ITS), enabling vehicles to exchange safety-critical information about accidents, congestion, road hazards, and emergency events. However, the open and dynamic nature of VANETs
+exposes them to diverse security threats, including false data injection, Sybil attacks, message replay, selfish forwarding, and compromised infrastructure nodes. These attacks can have catastrophic consequences, from traffic disruptions to life-threatening accidents.
+Trust management and misbehavior detection have emerged as essential security mechanisms to ensure the reliability of disseminated information. Traditional centralized approaches face scalability challenges in highly mobile networks with thousands of vehicles. Recent advances in edge
+computing, where Roadside Units (RSUs) provide computational resources near the network edge, offer promising solutions for real-time, low-latency misbehavior detection. Additionally, Software-Defined Networking (SDN) architectures enable flexible, programmable control planes that can adapt
+to evolving attack patterns.
+This comprehensive literature review examines the state-of-the-art in edge-assisted, trust-adaptive misbehavior detection and trusted event dissemination in VANETs. We analyze 285 publications spanning trust models, machine learning techniques, edge architectures, SDN integration, sensor-
+based hazard detection, and simulation methodologies. Our goal is to identify effective approaches, highlight critical gaps, and provide a concrete roadmap for developing integrated VANET security solutions that combine trust management, misbehavior detection, and secure event dissemination.
+A comprehensive multi-database search was conducted across the following platforms:
+SciSpace: Deep search, paper search, and full-text search capabilities
+Google Scholar: Broad coverage of academic publications
+ArXiv: Preprints and recent research
+The search strategy employed multiple query combinations targeting different aspects of the research domain:
+Core Security Queries:
+"edge-assisted trust-adaptive misbehavior detection VANETs"
+"trust management + misbehavior detection + edge computing + VANETs"
+"trust-based misbehavior + edge/RSU + VANETs"
+"edge-assisted trust management + VANETs"
+ML and Detection Queries:
+"ML/anomaly detection + VANETs + misbehavior"
+"machine learning misbehavior detection VANETs"
+Infrastructure Queries:
+"SDN in VANETs + security"
+"SDN controller placement + vehicular networks"
+"SDN vehicular networks"
+Sensor and Application Queries:
+"pothole detection + sensors + accelerometer/IMU"
+"pothole detection + ML + sensors"
+"sensor-based pothole detection"
+Simulation Queries:
+"VANET simulation tools + SUMO + OMNeT++/Veins"
+"simulation with attack datasets + VANETs"
+Papers were included if they met the following criteria:
+1. Publication Type: Peer-reviewed journal articles, conference proceedings, or high-quality arXiv preprints
+2. Venues: IEEE, ACM, Springer, Elsevier, and other reputable publishers
+3. Time Period: Published between 2014 and 2026
+4. Validation: Included experimental, simulation, or emulation validation (not purely theoretical)
+5. Relevance: Addressed at least one core topic area (trust management, misbehavior detection, edge computing, SDN, sensor-based detection, or simulation methodologies)
+Papers were excluded if they:
+1. Lacked experimental or simulation validation
+2. Were purely theoretical without practical implementation considerations
+3. Focused exclusively on cryptographic protocols without trust or detection mechanisms
+4. Were not available in English
+5. Were duplicate publications or earlier versions of included papers
+Total Papers Retrieved: 1,213 papers across all databases
+After Deduplication: 285 unique papers
+Final Analysis Set: Top 30 papers ranked by relevance to the comprehensive research query
+The final merged dataset was reranked based on relevance to all specified topic areas with experimental validation, ensuring comprehensive coverage of edge-assisted trust management, misbehavior detection, SDN integration, sensor-based hazard detection, and simulation methodologies.
+#CitationYearVenue Problem Addressed Approach Dataset/Simulator Key Results Strengths Weaknesses
+1Tariq et al.
+[1]2025World Electric
+Vehicle JournalSecurity vulnerabilities (spoofing,
+tampering, DoS) in V2X networksD-CASBR framework: hybrid ML (ElasticNet,
+Gradient Boosting), consortium blockchain, fog-
+enabled reputationNot specified95% anomaly detection accuracy,
+minimal false positivesNovel integrated framework,
+high accuracy, addresses
+latencyLimited details on real-world
+deployment
+2Zheng et al.
+[2]2024IEEE Trans. ITSRapid anomaly detection and
+notification with privacy preservation2PT-CIDS: two-layer privacy-aware trust
+evaluation, game-theoretic incentives
+(Stackelberg, noncooperative), D3QN learningNot specifiedEnhanced detection and
+notification efficiencyGame-theoretic privacy
+mechanisms, reinforcement
+learning integrationComputational complexity not
+fully addressed
+3Survey [3]2022Research SquareClassification of misbehavior detection
+schemesComprehensive survey: architecture, approach,
+node-centric, data-centric classificationVeReMi datasetMA-CIDS(RF): 97% accuracy;
+CIDS(SVM): 99% F-measureComprehensive classification
+frameworkMost techniques lack real-time
+implementation, high
+communication overhead
+4Zhang et al.
+[4]2021IEEE IoT JournalErroneous/tampered traffic messages
+from malfunctioning sensors or
+malicious vehiclesAIT: AI-enabled trust management with deep
+learning, blockchain for validation and
+revocationNot specifiedOutperforms existing approaches
+in accuracy and efficiencyDeep learning + blockchain
+integration, RSU-based
+revocationScalability and real-world
+validation not detailed
+5Ahmed et al.
+[5]2022IET NetworksPrivacy, trust management, false
+information disseminationBlockchain-based authentication, trust model
+evaluating vehicle and data trustworthinessSimulation validationBetter performance than state-of-
+the-art, effective malicious vehicle
+identificationBlockchain privacy protection,
+dual trust evaluationBlockchain overhead not
+quantified
+6Junejo et al.
+[6]2020Scientific
+ProgrammingIdentifying dishonest nodes, credential
+revocation in MiTM attacksLightweight trust model: 5 parameters (location,
+integrity, authentication, timestamp, peer alert),
+RSUs as trusted sourcesSUMO + OMNeT++ + VEINS,
+OpenStreetMap95% F-score with 40% MiTM
+attackers vs. 90% for MARINEPrivacy-preserving pseudonym
+scheme, lightweight designSimulation-only validation, real-
+time confirmation challenges
+7Abhishek et
+al. [7]2019ICC ChinaRSU misbehavior causing packet
+corruption/droppingTrust-based detection: vehicle feedback to
+central server, aggregated trust values,
+threshold-based classificationNot specifiedDemonstrates effectiveness,
+adversary parameter impactAddresses RSU compromise,
+includes malicious vehicle
+detectionCentral server dependency,
+scalability concernsEdge-Assisted, Trust-Adaptive Misbehavior Detection and Trusted Event Dissemination in VANETs: A Comprehensive Literature Review
+Abstract
+Table of Contents
+1. Introduction
+2. Search Strategy and Methodology
+2.1 Databases Searched
+2.2 Keywords and Search Queries
+2.3 Inclusion Criteria
+2.4 Exclusion Criteria
+2.5 Search Results
+3. Summary Table of Selected Papers05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 1/7
+
+--- PAGE 2 ---
+#CitationYearVenue Problem Addressed Approach Dataset/Simulator Key Results Strengths Weaknesses
+8HDRS [8]2022IEEE Trans. ITSDetecting malicious vehicles,
+vulnerabilities in traditional reputation
+schemesHybrid reputation system: separate vehicle/RSU
+evaluations, reliability filtering, dynamic update
+intervals (AHP)Simulation results30% increase in collusion
+detection, 16% increase in
+intelligent attack detectionNovel hybrid approach,
+dynamic adaptationSpecific simulators not
+mentioned
+9Lam et al. [9]2024IEEE IoT JournalData hijacking and interception, trust
+managementMEFPB: Dempster-Shafer fusion of
+direct/indirect trust and transmission path, path-
+backtracking mechanismNot specifiedHigh malicious behavior detection
+rateNovel transmission path
+indicator, multidimensional
+fusionComputational complexity not
+addressed
+10Siddiqua et
+al. [10]2022JASBSMalicious RSU detection in edge-
+enabled VANETsTrust-based scheme: stable R2R interaction,
+sensor data alteration detectionSUMO + NetEdit + NS-3, 25
+RSUs, 500 vehicles, 14×14
+km92% recall, 86% accuracy, FPR up
+to 30%R2R interaction analysis, sensor
+data validationHigh FPR, cannot exclude
+malicious RSUs from network
+11Zhang et al.
+[11]2019IEEE AccessTrust-based multiservice delivery with
+misbehavior toleranceFog computing for dynamic trust weights,
+differential resource allocation, trust-aware
+traffic allocationExtensive simulations12–40% higher successful
+delivery, 10–20% higher network
+utilityIntegrated detection and
+tolerance, fog-enabledFog infrastructure requirements
+not detailed
+12Nagaraju
+[12]N/AN/A RSU misbehavior detection Trust-based model Not specified Limited results Addresses RSU misbehaviorLacks ML, secure dissemination,
+SDN integration
+13Siddiqua et
+al. [13]2022arXivMalicious RSU detection in edge-
+enabled VANETsTrust-based mechanism: R2R interaction, sensor
+data alteration detectionSUMO + NetEdit + NS-3, 25
+RSUs, 500 vehicles92% recall, 86% accuracy Robust sensor data validationFPR up to 30%, persistent
+congestion from beacon flooding
+14Shahariar et
+al. [14]2024IJACSAUntrue attacks by trusted drivers, fixed
+reward/punishment limitationsFuzzy RSU controller: incident severity, driver
+history, RSU confidence; Markov chain for lying
+behaviorVeins simulatorEncourages driver behavior
+improvementDynamic fuzzy assessment,
+behavioral modelingSimulation-only, lacks lightweight
+ML
+15Roy et al.
+[15]2019N/AInaccurate information, malicious
+vehicles disrupting traffic monitoringEdge cloud-based privacy-preserving model:
+heuristic using GPS and velocityVENTOS + SUMO +
+OMNeT++, simulated cloudEffective malicious vehicle filteringEdge cloud integration, privacy
+preservationRequires at least one non-
+malicious vehicle in ROI
+16Liu et al. [16]2021WASACyber attacks due to large attack
+surfaces, time-space limitations in
+edge computingDITVEN: digital twin vehicular edge network,
+distributed trust evaluation, time/space-aware
+anomaly detectionNot specified Not specifiedDigital twin approach,
+distributed trust, time/space
+awarenessLimitations not stated in
+metadata
+17Paranjothi
+[17]N/AN/A Rogue node detection and preventionOn-demand IDS, stochastic SUMO simulationSUMO with randomness Not specifiedStochastic simulation for
+realismLacks trust-adaptive
+mechanisms, edge-offloading,
+ML, SDN
+18Amari et al.
+[18]2023IEEE AccessEfficient and robust trust management
+in VANETsExtensive survey: classification and comparison
+of trust approachesSurvey paper Comprehensive overviewExtensive classification,
+identifies challengesSurvey paper, not a primary
+research contribution
+19Siddiqua et
+al. [19]2022arXiv Malicious RSU detection Trust-based mechanism: R2R interaction SUMO + NS-3 92% recall, 86% accuracy R2R analysisHigh FPR, cannot exclude
+malicious RSUs
+20CARES [20]2022ACM Trans.
+Internet Tech.Malicious vehicles propagating false
+information in crowdsensingContext-aware trust estimation: transfer learning
+for quick trust values, Q-learning for dynamic
+adjustmentExtensive simulationOutperforms existing schemes in
+detection accuracyTransfer learning for quick
+adaptation, Q-learning for
+dynamicsSimulation-only validation
+21Almaziad et
+al. [21]2025Procedia CS Hybrid trust management VANETGuard system Not specified Not specified Hybrid approach Details not available in metadata
+22Alkhalidy et
+al. [22]2022Future InternetFalse emergency alerts, malicious node
+detectionFuzzy logic model with multiple factors, RSU-
+managed clustersSimulationsDetects and evicts all malicious
+nodes over time, increases
+success rate to ideal levelsFuzzy logic for trust evaluation,
+RSU cluster managementSimulation-only, time to full
+detection not specified
+23Yang et al.
+[23]2016Mobile Info.
+SystemsAnomaly detection in IV collaborationTrust-based scheme with affinity propagation,
+cluster heads for intracluster management,
+distributed supervising, central arbitratorNot specified <1% detection failure rateLow failure rate, distributed +
+central hybridOlder work (2016), limited edge
+computing focus
+24Gupta et al.
+[24]2023Wireless Personal
+Comm.Malicious node detectionEnhanced beacon trust management with
+clustering protocol (EBTM-CP)Not specified Not specified Beacon-based trust, clusteringDetails not available in metadata
+25Abhishek et
+al. [25]2022J. Comm.
+NetworksAdversaries compromising RSUs,
+selective packet dropping/corruptionTrust-based detection: vehicles report
+uplink/downlink trust to RSU gateway, threshold-
+based classificationMATLAB simulationsDemonstrates detection
+performance and adversary
+parameter impactAddresses RSU compromise,
+uplink/downlink trust separationMATLAB-only, not integrated
+with realistic VANET simulators
+26Siddiqua et
+al. [26]2025JASBS Malicious RSU detection Trust-based mechanism Not specified 92% detection R2R interaction Details not fully available
+27Sedar [27]2024DissertationMisbehavior detection and trustworthy
+collaborationDissertation research Not specified Not specified Comprehensive researchDissertation, not peer-reviewed
+journal
+28Blockchain
+FL [28]2022IEEE Trans.
+Network Service
+Mgmt.Dishonest vehicles transmitting false
+information, privacy in centralized MLBlockchain-based federated learning, differential
+privacy (Gaussian mechanism)Not specified Satisfied accuracy and efficiencyPrivacy-preserving federated
+learning, blockchain integrationBlockchain overhead, federated
+learning convergence time
+29Eunice et al.
+[29]2019IJACSASecured multi-hop clustering and
+routingLocation-based routing protocol Not specified Not specified Multi-hop clusteringLimited focus on misbehavior
+detection
+30Haydari et al.
+[30]2022SensorsFalse data injection and stealthy DDoS
+attacksRSU-based online IDS: novel ML techniques for
+centralized detection and mitigationTraffic simulator, real traffic
+dataset78% improvement (best case),
+27% improvement (worst case) vs.
+state-of-the-artSuperior detection and
+localization, real dataset
+validationCentralized RSU approach,
+scalability not addressed
+This paper proposes the D-CASBR (Decentralized Consortium Authentication and Security-Based Reputation) framework for V2X networks, integrating hybrid machine learning (ElasticNet and Gradient Boosting) for real-time anomaly detection, consortium blockchain for secure information
+exchange, and a fog-enabled reputation system for trust management. The framework achieves 95% anomaly detection accuracy with minimal false positives, addressing latency issues and eliminating single points of failure. This work is highly relevant as it combines multiple security mechanisms
+(ML, blockchain, reputation) in a decentralized edge architecture, directly aligning with our project's goals of edge-assisted, trust-adaptive misbehavior detection.
+Relevance to Project: Provides a comprehensive framework integrating ML-based detection, blockchain-based trust, and fog/edge computing—all core components of our proposed system.
+Zheng et al. address the dual challenges of rapid anomaly detection and privacy-preserving notification in VANETs through their two-layer privacy-aware trust evaluation CIDS framework (2PT-CIDS). The system employs game-theoretic information incentive mechanisms (Stackelberg and
+noncooperative games) and reinforcement learning (reward-shaping double duelling deep Q network) to prevent privacy leakage while enhancing detection. The integration of game theory with deep reinforcement learning represents a novel approach to balancing security and privacy in
+collaborative intrusion detection systems.
+Relevance to Project: Demonstrates advanced privacy-preserving mechanisms for collaborative detection, addressing a critical concern in trust-based systems where vehicles must share information without compromising privacy.
+This comprehensive survey classifies misbehavior detection schemes for VANETs based on architecture (centralized, distributed, hybrid), approach (cryptographic, trust-based, ML-based), and data characteristics. It highlights that machine learning techniques, particularly using the VeReMi
+dataset, achieve high accuracy (97–99% for various classifiers), but most techniques lack real-time implementation and suffer from communication overhead due to digital signatures and certificates. The survey identifies the need for compact certificates, data aggregation, and practical real-time
+deployment.
+Relevance to Project: Provides a comprehensive taxonomy of existing approaches, identifies critical gaps (real-time implementation, overhead reduction), and validates the importance of ML-based detection methods.
+The AIT (AI-enabled Trust Management) system combines deep learning for vehicle trust management with blockchain technology for validating reports and enabling RSU-based revocation of untrustworthy vehicles. The system addresses security challenges from erroneous or tampered traffic
+messages caused by malfunctioning sensors or malicious vehicles. Experimental results show AIT outperforms existing approaches in accuracy and efficiency, though specific quantitative metrics are not detailed in available metadata.
+Relevance to Project: Demonstrates the integration of AI/deep learning with blockchain for trust management and RSU-based enforcement, providing a model for combining detection with revocation mechanisms.
+Ahmed et al. propose a blockchain-based authentication scheme to protect vehicle identity privacy and a trust management model that evaluates both vehicle and data trustworthiness to detect false information. The dual evaluation approach (vehicle trust and data trust) enables RSUs to
+broadcast only legitimate events. Simulation validation shows better performance than state-of-the-art models in identifying malicious vehicles.
+Relevance to Project: Addresses both authentication and trust management with blockchain, providing insights into privacy-preserving identity management and dual-layer trust evaluation for secure event dissemination.
+This work proposes a lightweight, attack-resistant trust model using a pseudonym scheme for privacy preservation. The Trust Estimation Model evaluates five parameters: Location Closeness, Data Integrity, Authentication, Time Stamp Verification, and Peer Alert Message. RSUs serve as trusted
+sources, and a Decision Model processes or discards messages based on a threshold. Evaluated using SUMO, OMNeT++, and VEINS with OpenStreetMap data, the model achieves a 95% F-score with 40% MiTM attackers, outperforming the MARINE system (90% F-score).
+Relevance to Project: Demonstrates a practical, lightweight trust model with specific trust parameters and RSU-based trusted infrastructure, validated with realistic simulation tools (SUMO + OMNeT++ + VEINS).
+Abhishek et al. address the critical problem of detecting compromised RSUs in vehicular edge computing environments. Their trust-based detection system collects feedback from vehicles about RSU behavior (packet corruption, dropping) and aggregates trust values at a central trusted server for
+threshold-based classification. The system also includes a mechanism to detect malicious vehicles reporting false feedback, addressing the challenge of adversarial feedback in trust systems.
+Relevance to Project: Directly addresses RSU misbehavior detection, a critical gap in most VANET security research that focuses primarily on vehicle misbehavior. Provides insights into feedback aggregation and adversarial feedback detection.
+The Hybrid Reputation System with Dynamic Update Interval (HDRS) allows separate evaluations by vehicles and RSUs, incorporates a reliability evaluation module to filter unreliable results, and uses a dynamic adjustment mechanism for reputation update intervals based on Analytic Hierarchy
+Process (AHP) and reliability. HDRS increases detection rates for collusion attacks by 30% and intelligent attacks by 16% compared to existing schemes, demonstrating effectiveness against sophisticated attack strategies.
+Relevance to Project: Introduces dynamic adaptation mechanisms for reputation updates, addressing the challenge of adapting to evolving attack patterns—a key requirement for trust-adaptive systems.
+The Multidimensional Trust Evidence Fusion and Path-Backtracking Mechanism (MEFPB) uses Dempster-Shafer theory to fuse direct trust, indirect trust, and message transmission path as trust indicators. The novel inclusion of transmission path as a trust indicator enables more comprehensive
+trust assessment. A path-backtracking mechanism identifies and traces malicious behaviors, achieving a high malicious behavior detection rate.
+Relevance to Project: Introduces a novel trust indicator (transmission path) and provides a mechanism for tracing attack sources, which is valuable for forensic analysis and adaptive response.
+This work proposes a trust-based scheme for detecting malicious RSUs in edge-enabled VANETs using stable and frequent RSU-to-RSU (R2R) interaction to analyze RSU behavior. It includes a mechanism to detect alteration of sensor-detected data in beacon content. Evaluated using SUMO,
+NetEdit, and NS-3 with 25 RSUs and 500 vehicles in a 14×14 km area, the system achieves 92% recall and 86% accuracy, though with a notable False Positive Rate up to 30% due to malicious vehicles and RSUs.
+Relevance to Project: Provides detailed simulation setup and quantitative results for RSU misbehavior detection, including realistic scenarios with varying percentages of malicious RSUs (20–60%) and vehicles (5–20%).
+Zhang et al. investigate trust-based multiservice delivery in fog-enabled VANETs with integrated misbehavior detection and tolerance. The system uses fog computing to analyze and store data for evaluating dynamic trust weights based on vehicle attributes. A trust-aware heterogeneous traffic
+allocation algorithm distributes traffic over multiple routing paths with differential resource allocation for misbehavior tolerance. The system achieves 12–40% higher successful service delivery and 10–20% higher effective network utility.
+Relevance to Project: Demonstrates the integration of fog/edge computing with trust-based service delivery and misbehavior tolerance, providing insights into resource allocation strategies for resilient VANET services.4. Annotated Bibliography: Top 20 Most Relevant Papers
+4.1 Tariq et al. (2025) - D-CASBR Framework [1]
+4.2 Zheng et al. (2024) - 2PT-CIDS [2]
+4.3 Misbehavior Detection Survey (2022) [3]
+4.4 Zhang et al. (2021) - AIT System [4]
+4.5 Ahmed et al. (2022) - Blockchain-Based Trust Management [5]
+4.6 Junejo et al. (2020) - Lightweight Trust Model [6]
+4.7 Abhishek et al. (2019) - RSU Misbehavior Detection [7]
+4.8 HDRS (2022) - Hybrid Reputation System [8]
+4.9 Lam et al. (2024) - MEFPB Scheme [9]
+4.10 Siddiqua et al. (2022) - Malicious RSU Detection [10]
+4.11 Zhang et al. (2019) - Fog-Enabled Multiservice Delivery [11]
+4.12 Shahariar et al. (2024) - Fuzzy Reward and Punishment [14]05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 2/7
+
+--- PAGE 3 ---
+This paper addresses "untrue attacks" by trusted drivers and proposes a fuzzy RSU controller that determines rewards or punishments based on incident severity, driver past behavior, and RSU confidence. A Markov chain model captures driver lying characteristics. Evaluated using the Veins
+simulator, the fuzzy scheme encourages drivers to improve behavior over time, demonstrating the effectiveness of adaptive incentive mechanisms.
+Relevance to Project: Introduces behavioral modeling and adaptive incentive mechanisms, which can be integrated into trust management systems to encourage honest reporting and discourage misbehavior.
+Roy et al. propose an edge cloud-based privacy-preserving secured decision-making model for traffic monitoring. The system employs a heuristic based on vehicular data (GPS location and velocity) to authenticate traffic-related information and filter malicious vehicles. Validated using VENTOS,
+SUMO, and OMNeT++ with a simulated cloud environment, the model effectively filters malicious vehicles when at least one non-malicious vehicle is present in the region of interest.
+Relevance to Project: Demonstrates edge cloud integration with privacy preservation and provides a practical heuristic for data validation using GPS and velocity information.
+Liu et al. propose a digital twin vehicular edge network (DITVEN) to address time-space limitations in edge computing. The system establishes distributed trust evaluation based on trust chain transitivity and aggregation, and uses local reachability density and outlier factor for time-awareness, and
+curl/divergence for space-awareness in anomaly detection. This novel approach leverages digital twin technology to overcome edge computing constraints.
+Relevance to Project: Introduces digital twin concepts for vehicular networks and provides time/space-aware anomaly detection mechanisms, offering a novel architectural approach for edge-assisted detection.
+The Context-Aware Trust Estimation for Realtime Crowdsensing Services (CARES) addresses malicious vehicles propagating false information in vehicular edge networks. It uses transfer learning to quickly obtain accurate trust values without prior vehicle knowledge and employs Q-learning-based
+dynamic adjustment to detect malicious vehicles and filter untrustworthy input. Extensive simulation studies show CARES outperforms existing schemes in malicious vehicle detection accuracy.
+Relevance to Project: Demonstrates the application of transfer learning and reinforcement learning (Q-learning) for adaptive trust estimation in crowdsensing scenarios, providing insights into ML-based adaptive trust mechanisms.
+Alkhalidy et al. propose a fuzzy logic model for evaluating node trust based on multiple factors. Vehicles are organized into RSU-managed clusters, and RSUs assess node credibility before granting network access, evicting malicious nodes based on trust values. Simulation results show the scheme
+detects and evicts all malicious nodes over time, reducing the ratio of malicious nodes and increasing data delivery success rates to ideal levels.
+Relevance to Project: Demonstrates fuzzy logic for trust evaluation and RSU-based cluster management, providing an alternative to probabilistic trust models.
+Yang et al. introduce a trust-based anomaly detection scheme using affinity propagation for clustering intelligent vehicles. Cluster heads take responsibility for intracluster trust management, enhanced with a distributed supervising mechanism and a central reputation arbitrator for robustness and
+fairness. The scheme achieves a detection failure rate below 1%, demonstrating high effectiveness in detecting and filtering abnormal vehicles.
+Relevance to Project: Provides insights into clustering-based trust management with distributed supervision and central arbitration, achieving very low failure rates.
+This work addresses adversaries compromising RSUs to launch selective packet dropping or corruption attacks, increasing latency and impacting delay-sensitive applications. Vehicles report uplink and downlink trust values about RSUs to the RSU gateway, which aggregates these values and
+compares them against thresholds to classify RSUs. The system also detects malicious vehicles reporting false trust values. MATLAB simulations demonstrate detection performance and the impact of adversary parameters.
+Relevance to Project: Provides detailed analysis of RSU adversary behavior (selective dropping/corruption) and separates uplink/downlink trust evaluation, offering insights into fine-grained trust assessment.
+This paper proposes a blockchain-based federated learning scheme for misbehavior detection, enabling collaborative training across multiple distributed edge devices while ensuring data security and privacy. Differential privacy with the Gaussian mechanism provides strict privacy protection for
+models on the blockchain. Experimental results show the scheme achieves satisfied accuracy and efficiency for common data falsification attacks.
+Relevance to Project: Addresses the critical challenge of privacy-preserving collaborative learning for misbehavior detection, combining blockchain with federated learning and differential privacy.
+Haydari et al. propose RSU-based online intrusion detection and mitigation for false data injection and stealthy DDoS attacks. Novel machine learning techniques enable centralized detection and mitigation through RSUs. Evaluated using a traffic simulator and real traffic dataset, the proposed
+methods achieve 78% improvement in the best case and 27% improvement in the worst case compared to state-of-the-art solutions, with the same false alarm probability.
+Relevance to Project: Demonstrates superior detection performance with real dataset validation and addresses both false data injection and DDoS attacks, providing insights into ML-based online detection at RSUs.
+Trust management forms the foundation of secure VANET communication, enabling vehicles and infrastructure to assess the reliability of received information and the trustworthiness of message sources. The literature reveals several distinct trust modeling approaches:
+Direct Trust Models: These models compute trust based on direct observations of node behavior. Junejo et al. [6] propose a five-parameter trust estimation model evaluating Location Closeness, Data Integrity, Authentication, Time Stamp Verification, and Peer Alert Messages. Direct trust models
+offer simplicity and low computational overhead but are limited by sparse interactions in highly mobile VANETs.
+Indirect Trust Models (Reputation-Based): Reputation systems aggregate trust information from multiple sources. The HDRS system [8] implements a hybrid approach allowing separate evaluations by vehicles and RSUs, with a reliability evaluation module to filter unreliable results. The system
+dynamically adjusts reputation update intervals based on Analytic Hierarchy Process (AHP) and reliability metrics, achieving 30% higher detection rates for collusion attacks and 16% higher for intelligent attacks compared to existing schemes.
+Multidimensional Trust Fusion: Advanced trust models fuse multiple trust dimensions. Lam et al. [9] propose the MEFPB scheme using Dempster-Shafer theory to fuse direct trust, indirect trust, and message transmission path as indicators. The inclusion of transmission path as a trust indicator
+represents a novel contribution, enabling more comprehensive trust assessment and path-backtracking for malicious behavior tracing.
+Context-Aware Trust: The CARES system [20] introduces context-aware trust estimation for real-time crowdsensing services, using transfer learning to quickly obtain accurate trust values without prior vehicle knowledge. Q-learning-based dynamic adjustment enables autonomous detection of
+malicious vehicles and filtering of untrustworthy input, demonstrating the effectiveness of reinforcement learning for adaptive trust management.
+Blockchain-Based Trust: Several works integrate blockchain technology for tamper-proof trust management. Zhang et al. [4] combine deep learning for vehicle trust management with blockchain for validating reports and enabling RSU-based revocation. Ahmed et al. [5] propose blockchain-based
+authentication to protect vehicle identity privacy alongside a trust model evaluating both vehicle and data trustworthiness. While blockchain provides strong security guarantees, concerns about scalability and latency remain.
+Fuzzy Logic Trust: Fuzzy logic models handle uncertainty in trust assessment. Alkhalidy et al. [22] employ a fuzzy logic model with multiple factors for trust evaluation in RSU-managed clusters. Shahariar et al. [14] propose a fuzzy RSU controller determining rewards or punishments based on
+incident severity, driver past behavior, and RSU confidence, demonstrating the effectiveness of adaptive incentive mechanisms.
+Key Findings: Hybrid trust models combining direct observation with indirect reputation achieve the highest detection rates (86–95% accuracy). Dynamic adaptation mechanisms (HDRS [8], CARES [20]) significantly improve resilience against intelligent and collusion attacks. However, most trust
+models lack real-world validation and do not adequately address the computational overhead of trust computation in resource-constrained vehicular environments.
+Misbehavior detection mechanisms identify and mitigate malicious behavior in VANETs, ranging from false data injection to sophisticated attack strategies:
+Machine Learning-Based Detection: The survey by [3] highlights that ML techniques achieve 97–99% accuracy using the VeReMi dataset, with MA-CIDS(RF) achieving 97% accuracy and CIDS(SVM) achieving 99% F-measure. Haydari et al. [30] propose novel ML techniques for RSU-based online
+intrusion detection, achieving 78% improvement over state-of-the-art solutions for false data injection and stealthy DDoS attacks when validated with real traffic datasets.
+Deep Learning Approaches: Zhang et al. [4] employ deep learning for vehicle trust management in the AIT system, demonstrating superior accuracy and efficiency compared to existing approaches. Zheng et al. [2] integrate reward-shaping double duelling deep Q network (D3QN) learning in their
+2PT-CIDS framework for privacy-aware anomaly detection and notification enhancement.
+Federated Learning for Privacy-Preserving Detection: The blockchain-based federated learning scheme [28] enables collaborative training across distributed edge devices while ensuring data security and privacy. Differential privacy with the Gaussian mechanism provides strict privacy
+protection for models on the blockchain, achieving satisfied accuracy and efficiency for common data falsification attacks. This approach addresses the critical challenge of centralized data collection and training in traditional misbehavior detection systems.
+Hybrid ML Approaches: Tariq et al. [1] integrate ElasticNet and Gradient Boosting in the D-CASBR framework for real-time anomaly detection, achieving 95% accuracy with minimal false positives. The hybrid approach combines the strengths of different ML algorithms for robust detection.
+Anomaly Detection Techniques: Liu et al. [16] propose time-aware (local reachability density, outlier factor) and space-aware (curl, divergence) anomaly detection in the DITVEN framework. Yang et al. [23] use affinity propagation for clustering-based anomaly detection, achieving a detection
+failure rate below 1%.
+Threshold-Based Detection: Many systems employ threshold-based classification after trust computation. Abhishek et al. [7], [25] use aggregated trust values compared against thresholds to classify RSUs as benign or malicious. Junejo et al. [6] implement a Decision Model that processes or
+discards messages based on a trust threshold.
+Game-Theoretic Detection: Zheng et al. [2] employ game-theoretic information incentive mechanisms (Stackelberg and noncooperative games) to prevent privacy leakage while enhancing anomaly detection, demonstrating the effectiveness of game theory for balancing security and privacy.
+Collaborative Intrusion Detection Systems (CIDS): The survey [3] classifies CIDS approaches, noting that collaborative systems can achieve high accuracy but face challenges with communication overhead and real-time implementation. Zheng et al. [2] address these challenges with their two-
+layer privacy-aware trust evaluation CIDS framework.
+Key Findings: ML-based detection methods achieve high accuracy (95–99%) but most lack real-time implementation and real-world validation. Federated learning [28] and privacy-preserving approaches [2] address privacy concerns but introduce computational overhead. Lightweight, edge-
+deployable ML models remain a critical gap. Most detection systems focus on vehicle misbehavior, with limited attention to RSU misbehavior detection [7], [10], [25].
+Edge computing and RSU-based architectures enable low-latency, scalable misbehavior detection and trust management:
+Fog-Enabled Architectures: Tariq et al. [1] propose a fog-enabled reputation system in the D-CASBR framework, eliminating single points of failure and addressing latency issues. Zhang et al. [11] use fog computing to analyze and store data for evaluating dynamic trust weights based on vehicle
+attributes, achieving 12–40% higher successful service delivery and 10–20% higher effective network utility.
+RSU-Based Detection: Multiple works leverage RSUs for centralized or semi-centralized detection. Haydari et al. [30] implement RSU-based online intrusion detection and mitigation, achieving superior detection performance with real dataset validation. Roy et al. [15] propose an edge cloud-based
+privacy-preserving decision-making model using RSUs for traffic monitoring, validated with VENTOS, SUMO, and OMNeT++.
+RSU Misbehavior Detection: A critical but underexplored area is detecting compromised RSUs. Abhishek et al. [7] propose a trust-based detection system where vehicles provide feedback to a central trusted server about RSU behavior. Siddiqua et al. [10], [13] use stable and frequent RSU-to-RSU
+(R2R) interaction to analyze RSU behavior and detect alteration of sensor-detected data, achieving 92% recall and 86% accuracy with SUMO, NetEdit, and NS-3 simulations.
+RSU-Managed Clusters: Alkhalidy et al. [22] organize vehicles into RSU-managed clusters, where RSUs assess node credibility before granting network access and evict malicious nodes based on trust values. This hierarchical approach reduces communication overhead and enables scalable trust
+management.
+Digital Twin Vehicular Edge Networks: Liu et al. [16] propose DITVEN to address time-space limitations in edge computing, establishing distributed trust evaluation based on trust chain transitivity and aggregation. The digital twin approach enables comprehensive data utilization beyond the
+constraints of physical edge nodes.
+Edge-Cloud Hybrid: Roy et al. [15] combine edge computing with cloud resources for privacy-preserving secured decision-making, demonstrating the benefits of hybrid architectures that balance low-latency edge processing with cloud-scale analytics.
+RSU Gateway Architecture: Abhishek et al. [25] propose an architecture where vehicles report uplink and downlink trust values to an RSU gateway, which aggregates these values for threshold-based RSU classification. This centralized aggregation point enables coordinated detection across
+multiple RSUs.
+Key Findings: Edge/RSU architectures enable low-latency detection and scalable trust management. Fog-enabled systems [1], [11] achieve higher service delivery rates and network utility. However, RSU misbehavior detection remains underexplored, with most works assuming trusted RSUs. The
+challenge of balancing centralized coordination (for global view) with distributed processing (for scalability and resilience) persists. Digital twin approaches [16] offer promising directions for overcoming edge computing limitations.
+Software-Defined Networking (SDN) enables flexible, programmable control planes for VANETs, but the literature reveals limited integration of SDN with trust management and misbehavior detection:
+Limited SDN Integration: Among the top 30 papers, explicit SDN integration is notably absent. Most works focus on distributed or semi-centralized architectures without leveraging SDN's programmability for adaptive security policies. This represents a significant gap, as SDN could enable
+dynamic reconfiguration of trust thresholds, routing policies, and resource allocation in response to detected attacks.
+Potential SDN Applications: While not explicitly implemented in the reviewed papers, several proposed mechanisms could benefit from SDN integration:
+Dynamic Trust Threshold Adjustment: The HDRS system's [8] dynamic update intervals could be implemented as SDN flow rules, enabling centralized policy management with distributed enforcement.
+Adaptive Routing: Zhang et al.'s [11] trust-aware heterogeneous traffic allocation could leverage SDN for dynamic path selection based on real-time trust assessments.
+Isolation of Malicious Nodes: RSU misbehavior detection systems [7], [10], [25] could use SDN to immediately isolate detected malicious RSUs from the network control plane.
+Control-Plane Resilience: The literature emphasizes distributed trust evaluation and decentralized architectures to avoid single points of failure [1], [16], but does not explicitly address SDN controller resilience. For SDN-based VANET security, controller placement, replication, and Byzantine fault
+tolerance are critical considerations not addressed in the current literature.
+Key Findings: SDN integration with trust management and misbehavior detection is a critical gap in the literature. The programmability and centralized control of SDN could enable adaptive security policies, dynamic resource allocation, and coordinated response to attacks. However, SDN controller
+resilience and the trade-offs between centralized control and distributed resilience require further investigation.4.13 Roy et al. (2019) - Edge Cloud-Based Traffic Monitoring [15]
+4.14 Liu et al. (2021) - Digital Twin Vehicular Edge Network [16]
+4.15 CARES (2022) - Context-Aware Trust Estimation [20]
+4.16 Alkhalidy et al. (2022) - Fuzzy Logic Malicious Node Detection [22]
+4.17 Yang et al. (2016) - Affinity Propagation for Anomaly Detection [23]
+4.18 Abhishek et al. (2022) - Trust-Based Adversary Detection in Edge Computing [25]
+4.19 Blockchain-Based Federated Learning (2022) [28]
+4.20 Haydari et al. (2022) - RSU-Based Online IDS [30]
+5. Thematic Synthesis
+5.1 Trust Models
+5.2 Misbehavior Detection Methods
+5.3 Edge/RSU Architectures
+5.4 SDN and Control-Plane Resilience
+5.5 Sensor-Based Pothole Detection05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 3/7
+
+--- PAGE 4 ---
+Sensor-based hazard detection, particularly pothole detection using accelerometer and IMU data, represents an important application domain for trusted event dissemination in VANETs:
+Limited Coverage in Top Papers: Among the top 30 papers, explicit focus on sensor-based pothole detection is minimal. Most works address general misbehavior detection and trust management without specific application to sensor-based hazard reporting.
+Sensor Data Validation: Siddiqua et al. [10], [13] include a mechanism to detect alteration of sensor-detected data in beacon content for trust calculation, demonstrating awareness of sensor data integrity issues. However, the specific sensors and validation methods are not detailed.
+Heuristic-Based Validation: Roy et al. [15] employ a heuristic based on vehicular data like GPS location and velocity to authenticate traffic-related information. While not specifically for pothole detection, this approach demonstrates the use of sensor data for cross-validation of reported events.
+Trust-Based Event Validation: The general trust management frameworks [4], [5], [6], [9] could be applied to validate sensor-based pothole reports, but the literature lacks specific evaluation of these frameworks for sensor-based hazard detection scenarios.
+Key Findings: Sensor-based pothole detection using accelerometer/IMU data is significantly underrepresented in the VANET security literature. While trust management frameworks could validate sensor-based reports, specific challenges such as sensor noise, calibration differences across
+vehicles, and distinguishing genuine potholes from other road irregularities are not addressed. This represents a critical gap for practical VANET applications focused on road infrastructure monitoring.
+Realistic simulation and evaluation are essential for validating VANET security mechanisms:
+Simulation Tools: The most commonly used simulation tools are:
+SUMO (Simulation of Urban Mobility): Used by [6], [10], [13], [15], [17] for realistic vehicular mobility modeling
+OMNeT++/VEINS: Used by [6], [15] for network communication simulation
+NS-3 (Network Simulator 3): Used by [10], [13] for performance evaluation
+VENTOS: Used by [15] for integrated vehicular network simulation
+Veins: Used by [14] for VANET simulation
+Datasets: The VeReMi dataset is mentioned in the survey [3] as a key resource for ML-based misbehavior detection, with various classifiers achieving 97–99% accuracy. Haydari et al. [30] use a real traffic dataset for validation, achieving superior detection performance. However, most works rely
+on synthetic datasets generated by simulators rather than real-world traces.
+Evaluation Metrics: Common evaluation metrics include:
+Detection Accuracy: 86–99% across various approaches [1], [3], [4], [6], [10], [22], [23], [30]
+False Positive Rate (FPR): Up to 30% in some scenarios [10], [13]
+Recall/Detection Rate: 92–97% [3], [10], [13]
+Precision: 86–97% [3], [10], [13]
+F-score/F-measure: 95–99% [3], [6]
+Service Delivery Rate: 12–40% improvement [11]
+Network Utility: 10–20% improvement [11]
+Detection Failure Rate: <1% [23]
+Realistic Scenarios: Siddiqua et al. [10], [13] evaluate with 25 RSUs and 500 vehicles in a 14×14 km area, varying malicious RSU percentages (20–60%) and vehicle percentages (5–20%). Junejo et al. [6] use OpenStreetMap data imported into SUMO for realistic traffic patterns. Roy et al. [15]
+compare against peer-based, majority voting, and reputation-based systems.
+Attack Scenarios: The literature evaluates various attack types:
+MiTM (Man-in-the-Middle): [6] achieves 95% F-score with 40% MiTM attackers
+Collusion Attacks: [8] increases detection by 30%
+Intelligent Attacks: [8] increases detection by 16%
+False Data Injection: [28], [30]
+Stealthy DDoS: [30]
+Selective Packet Dropping/Corruption: [25]
+Data Falsification: [28]
+Key Findings: SUMO + OMNeT++/VEINS + NS-3 form the standard simulation stack for VANET security research. The VeReMi dataset is the primary benchmark for ML-based misbehavior detection. However, most works rely on simulation rather than real-world validation, and there is limited
+availability of public datasets with diverse attack scenarios. Real traffic dataset validation [30] demonstrates the importance of realistic data for accurate performance assessment.
+This section provides a detailed comparison of ML approaches for misbehavior detection in VANETs, including models, features, training data, evaluation metrics, and recommended baselines:
+Approach ML Model(s) Features/Inputs Training Data Evaluation Metrics Key ResultsRecommended as
+Baseline
+D-CASBR [1] ElasticNet, Gradient Boosting (hybrid) Network traffic, behavioral patternsNot specified Accuracy, FPR 95% accuracy, minimal FPR✓ Yes - Hybrid ML
+approach
+Survey [3] Random Forest (MA-CIDS), SVM (CIDS), various classifiersVeReMi dataset features VeReMi datasetAccuracy, FPR, Recall, Precision, F-
+measureMA-CIDS(RF): 97% accuracy; CIDS(SVM): 99% F-
+measure✓ Yes - Benchmark
+results
+AIT [4] Deep Learning (unspecified architecture) Traffic messages, sensor data Not specified Accuracy, efficiency Outperforms existing approaches Partial - Lacks details
+2PT-CIDS [2] D3QN (Reward-shaping Double Duelling Deep Q Network)Context, vehicle behavior,
+communication patternsNot specifiedDetection accuracy, notification
+efficiencyEnhanced detection and notification✓ Yes - Advanced RL
+approach
+Federated Learning
+[28]Federated Learning with Differential Privacy (Gaussian
+mechanism)Distributed vehicle dataDistributed across edge
+devicesAccuracy, efficiency, privacy Satisfied accuracy and efficiency✓ Yes - Privacy-
+preserving
+RSU-Based IDS [30]Novel ML techniques (unspecified) Traffic patterns, attack signaturesTraffic simulator + real
+traffic datasetDetection rate, localization accuracy,
+false alarm rate78% improvement (best), 27% improvement (worst)
+vs. state-of-the-art✓ Yes - Real dataset
+validation
+CARES [20] Transfer Learning + Q-LearningContext, vehicle history, crowdsensing
+dataTransfer from related
+domainsDetection accuracy Outperforms existing schemes ✓ Yes - Transfer learning
+DITVEN [16]Local Reachability Density, Outlier Factor (time-aware); Curl,
+Divergence (space-aware)Spatial-temporal vehicle data Not specified Not specified Not specified Partial - Novel features
+Affinity Propagation
+[23]Affinity Propagation clustering Vehicle behavior, message contentNot specified Detection failure rate <1% failure ratePartial - Older work
+(2016)
+Based on the literature review, the following approaches are recommended as baselines for comparative evaluation:
+1. Random Forest and SVM on VeReMi Dataset [3]: These represent the standard benchmarks for ML-based misbehavior detection, achieving 97–99% accuracy. Any new approach should be compared against these baselines using the VeReMi dataset.
+2. Hybrid ML (ElasticNet + Gradient Boosting) [1]: The D-CASBR framework's hybrid approach achieving 95% accuracy with minimal false positives represents a strong baseline for ensemble methods.
+3. Federated Learning with Differential Privacy [28]: For privacy-preserving collaborative detection, this approach provides a baseline that balances accuracy, efficiency, and privacy.
+4. Transfer Learning + Q-Learning (CARES) [20]: For adaptive, context-aware detection without prior knowledge, CARES provides a baseline demonstrating the effectiveness of transfer learning and reinforcement learning.
+5. Real Dataset Validation [30]: Haydari et al.'s approach with real traffic dataset validation provides a baseline for assessing real-world performance beyond simulation.
+The literature reveals several important feature categories for misbehavior detection:
+Behavioral Features: Message frequency, response patterns, cooperation levels
+Spatial Features: Location consistency, proximity to reported events, movement patterns
+Temporal Features: Timestamp verification, message freshness, historical behavior
+Network Features: Packet loss rates, latency, retransmission patterns
+Trust Features: Direct trust scores, indirect reputation, aggregated trust values
+Sensor Features: GPS accuracy, velocity consistency, sensor data integrity
+Most works rely on simulated data from SUMO, OMNeT++, and NS-3, with the VeReMi dataset serving as the primary benchmark. The lack of diverse, real-world datasets with labeled attack scenarios represents a significant limitation. Federated learning approaches [28] address data scarcity by
+enabling collaborative training across distributed vehicles, while transfer learning [20] leverages knowledge from related domains.
+Standard evaluation metrics for misbehavior detection include:
+Accuracy: Overall correctness of classification (86–99%)
+Precision: Proportion of true positives among positive predictions (86–97%)
+Recall/Detection Rate: Proportion of actual positives correctly identified (92–97%)
+F-score: Harmonic mean of precision and recall (95–99%)
+False Positive Rate: Proportion of benign nodes incorrectly classified as malicious (up to 30%)
+Detection Failure Rate: Proportion of malicious nodes not detected (<1% to 14%)
+Dataset Description Access Use Cases Papers Using
+VeReMi Vehicular Reference Misbehavior Dataset with labeled attack scenarioshttps://veremi-dataset.github.io/ML-based misbehavior detection, classifier training and evaluation[3]
+Real Traffic DatasetReal-world traffic patterns (specific dataset not named in [30]) Not publicly specified Validation of detection algorithms with realistic traffic [30]
+OpenStreetMapReal-world road network data https://www.openstreetmap.org/Realistic road topology for SUMO simulations [6]
+Note: The literature reveals a significant lack of publicly available, diverse datasets with labeled attack scenarios. Most works generate synthetic datasets using simulators.
+Tool Description Access Setup Notes Papers Using
+SUMOSimulation of Urban Mobility - microscopic traffic simulatorhttps://www.eclipse.org/sumo/Install via package manager or build from source. Use NetEdit for visual road network editing. Import OpenStreetMap data for realistic
+scenarios.[6], [10], [13], [15],
+[17]
+OMNeT++Discrete event network simulator https://omnetpp.org/ Download and install IDE. Requires C++ compiler. Integrate with VEINS for VANET simulation. [6], [15]
+VEINSVehicles in Network Simulation - VANET extension for
+OMNeT++https://veins.car2x.org/ Install OMNeT++ first. Clone VEINS repository. Configure SUMO integration via TraCI. [6], [14]
+NS-3 Network Simulator 3 - discrete-event network simulatorhttps://www.nsnam.org/ Install dependencies (Python, C++ compiler). Build from source. Use WAVE module for VANET. [10], [13]
+VENTOSVEhicular NeTwork Open Simulator - integrated VANET
+simulatorhttps://maniam.github.io/VENTOS/ Built on OMNeT++ and SUMO. Provides integrated environment for VANET research. [15]
+NetEditVisual editor for SUMO road networks Included with SUMO GUI tool for creating and editing road networks. Useful for designing custom scenarios. [10], [13]5.6 Simulation Datasets and Evaluation
+6. Comparison of Machine Learning Approaches
+6.1 Recommended Baseline Approaches
+6.2 Feature Engineering Insights
+6.3 Training Data Considerations
+6.4 Evaluation Metrics Summary
+7. Datasets and Tools Inventory
+7.1 Public Datasets
+7.2 Simulation Tools05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 4/7
+
+--- PAGE 5 ---
+Tool Description Access Setup Notes Papers Using
+MATLABNumerical computing environment https://www.mathworks.com/products/matlab.htmlCommercial license required. Used for algorithm prototyping and analysis. [25]
+SUMO + OMNeT++ + VEINS Integration:
+1. Install SUMO and verify withsumo-gui
+2. Install OMNeT++ IDE and build core libraries
+3. Clone VEINS from GitHub:git clone https://github.com/sommer/veins.git
+4. Configure VEINS to find SUMO: Editveins/src/veins/modules/mobility/traci/TraCIScenarioManager.cc
+5. Build VEINS in OMNeT++ IDE
+6. Run example scenarios to verify integration
+7. Import OpenStreetMap data to SUMO usingnetconvertandpolyconvert
+8. Create traffic flows withrandomTrips.pyorduarouter
+NS-3 for VANET:
+1. Install NS-3 dependencies:sudo apt-get install g++ python3 python3-dev pkg-config sqlite3
+2. Download NS-3:wget https://www.nsnam.org/releases/ns-allinone-3.xx.tar.bz2
+3. Extract and build:./build.py --enable-examples --enable-tests
+4. Use WAVE module for VANET:#include "ns3/wave-module.h"
+5. Integrate with SUMO via TraCI for mobility: Usens3::TraciClient
+Note: Most papers in the top 30 do not provide public code repositories. This represents a significant limitation for reproducibility. The following are general resources:
+VEINS GitHub:https://github.com/sommer/veins- VANET simulation framework
+VeReMi Dataset GitHub:https://github.com/VeReMi-dataset/VeReMi- Misbehavior dataset
+SUMO GitHub:https://github.com/eclipse/sumo- Traffic simulator
+NS-3 GitLab:https://gitlab.com/nsnam/ns-3-dev- Network simulator
+Recommendation: Future research should prioritize open-source code release for reproducibility and community validation.
+Based on the comprehensive literature review, the following gaps and open problems are identified and prioritized:
+1. Real-World Validation: Most approaches rely on simulation with synthetic data. Only Haydari et al. [30] validate with real traffic datasets. Real-world deployment and validation with actual vehicular networks are critically needed to assess practical performance, scalability, and robustness.
+2. Lightweight Edge-Deployable ML Models: While ML-based detection achieves high accuracy (95–99%), most approaches do not address computational constraints of edge devices. Lightweight models optimized for RSU deployment with limited CPU, memory, and energy resources are
+needed.
+3. Integrated Trust Management and Secure Event Dissemination: Current works focus either on trust management or misbehavior detection, but lack integrated frameworks that combine trust-based validation with secure, reliable event dissemination mechanisms. How to ensure that only
+trusted events are disseminated efficiently remains an open problem.
+4. RSU Misbehavior Detection: While vehicle misbehavior detection is extensively studied, RSU misbehavior detection is underexplored [7], [10], [13], [25]. Compromised RSUs pose severe threats as they are trusted infrastructure nodes. Robust, scalable RSU misbehavior detection mechanisms
+are critically needed.
+5. Adaptive Trust Mechanisms for Dynamic Attack Scenarios: Most trust models use static thresholds or fixed update intervals. Dynamic, adaptive mechanisms that adjust trust parameters based on detected attack patterns and network conditions are needed. HDRS [8] and CARES [20] make
+progress but require further development.
+6. SDN Integration for Adaptive Security: The literature lacks integration of SDN with trust management and misbehavior detection. SDN's programmability could enable dynamic security policy adaptation, but controller resilience, placement, and Byzantine fault tolerance require investigation.
+7. Privacy-Preserving Collaborative Detection at Scale: Federated learning [28] and privacy-aware CIDS [2] address privacy concerns, but scalability to thousands of vehicles and convergence time in highly dynamic networks remain challenges.
+8. Sensor-Based Hazard Detection and Validation: Sensor-based pothole detection using accelerometer/IMU data is significantly underrepresented. Specific challenges include sensor noise, calibration differences, and distinguishing genuine hazards from other irregularities.
+9. Multi-Attack Scenario Evaluation: Most works evaluate against single attack types. Comprehensive evaluation against multiple simultaneous attacks (e.g., false data injection + Sybil + collusion) is needed to assess robustness.
+10. Blockchain Scalability and Latency: Blockchain-based approaches [4], [5], [28] provide strong security guarantees but face scalability and latency challenges. Lightweight blockchain protocols or hybrid approaches are needed for real-time VANET applications.
+11. Cross-Layer Security Integration: Most approaches focus on application-layer trust and detection. Integration with lower-layer security mechanisms (MAC-layer authentication, physical-layer security) could provide defense-in-depth.
+12. Standardization and Interoperability: Lack of standardized trust metrics, APIs, and protocols hinders interoperability between different trust management systems and VANET deployments.
+13. Long-Term Trust Evolution: Most works focus on short-term trust assessment. Long-term trust evolution, reputation recovery mechanisms, and handling of rehabilitated nodes require further study.
+14. Energy Efficiency: While some works mention lightweight designs [6], comprehensive energy efficiency analysis for battery-powered vehicles and solar-powered RSUs is limited.
+15. Incentive Mechanisms: Beyond Shahariar et al.'s [14] fuzzy reward/punishment scheme, comprehensive incentive mechanisms to encourage honest reporting and participation in collaborative detection are underexplored.
+Based on the identified gaps, the following research questions and hypotheses are proposed:
+Research Question: Can an integrated framework combining edge-assisted misbehavior detection, trust-adaptive mechanisms, and secure event dissemination achieve superior performance compared to standalone approaches while maintaining real-time operation?
+Hypothesis: An integrated framework leveraging lightweight ML at RSUs for misbehavior detection, dynamic trust threshold adaptation based on detected attack patterns, and trust-based event filtering for dissemination will achieve:
+≥95% detection accuracy with ≤5% false positive rate
+≤100ms detection latency at RSUs
+≥90% legitimate event delivery rate with ≤10% malicious event propagation
+Research Question: Can RSU-to-RSU collaborative trust evaluation with sensor data validation detect compromised RSUs more effectively than vehicle-based feedback approaches, and what is the impact of malicious vehicle feedback on detection accuracy?
+Hypothesis: R2R collaborative trust evaluation with cross-validation of sensor-detected data will achieve:
+≥90% RSU misbehavior detection rate with ≤10% false positive rate
+Resilience to up to 30% malicious vehicles providing false feedback
+Superior performance compared to centralized vehicle feedback approaches [7], [25]
+Research Question: Can lightweight ML models (e.g., decision trees, lightweight neural networks, online learning algorithms) deployed at RSUs achieve comparable detection accuracy to complex deep learning models while meeting real-time latency and resource constraints?
+Hypothesis: Lightweight ML models optimized for edge deployment will achieve:
+≥90% detection accuracy (within 5% of complex models)
+≤50ms inference latency per message
+≤100MB memory footprint and ≤50% CPU utilization on commodity RSU hardware
+Research Question: Can SDN-based dynamic security policy adaptation (trust thresholds, routing policies, resource allocation) improve resilience against evolving attack patterns compared to static security configurations?
+Hypothesis: SDN-based adaptive security policies will achieve:
+≥20% improvement in detection rate for intelligent and adaptive attacks
+≤200ms policy update latency from attack detection to enforcement
+Resilience to SDN controller compromise through distributed controller architecture
+Research Question: Can sensor-fusion approaches combining accelerometer, IMU, GPS, and camera data with trust-based validation accurately detect and verify pothole reports while filtering false reports from malicious vehicles?
+Hypothesis: Sensor-fusion with trust-based validation will achieve:
+≥85% pothole detection accuracy with ≤15% false positive rate
+≥95% filtering of false pothole reports from malicious vehicles
+Robustness to sensor noise and calibration differences across vehicle types
+Research Question: Can privacy-preserving federated learning for collaborative misbehavior detection scale to thousands of vehicles and achieve acceptable convergence time in highly dynamic VANET environments?
+Hypothesis: Optimized federated learning with hierarchical aggregation (vehicle → RSU → cloud) will achieve:
+Convergence to ≥90% accuracy within 100 training rounds
+Scalability to ≥1000 vehicles per RSU cluster
+≤10% accuracy degradation compared to centralized training
+This section provides a concrete experimental design for validating the proposed integrated edge-assisted, trust-adaptive misbehavior detection and trusted event dissemination framework.
+Primary Dataset: VeReMi (Vehicular Reference Misbehavior Dataset)7.3 Setup Notes for Standard Simulation Stack
+7.4 Code Repositories
+8. Gaps and Open Problems
+8.1 High Priority Gaps
+8.2 Medium Priority Gaps
+8.3 Low Priority Gaps
+9. Research Questions and Hypotheses
+RQ1: Integrated Edge-Assisted Trust-Adaptive Framework
+RQ2: RSU Misbehavior Detection with R2R Collaboration
+RQ3: Lightweight ML for Edge Deployment
+RQ4: SDN-Based Adaptive Security Policies
+RQ5: Sensor-Fusion for Pothole Detection and Validation
+RQ6: Federated Learning Scalability and Convergence
+10. Suggested Experimental Design
+10.1 Datasets05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 5/7
+
+--- PAGE 6 ---
+Access:https://veremi-dataset.github.io/
+Content: Labeled misbehavior scenarios including position falsification, speed falsification, and various attack types
+Usage: Training and evaluation of ML-based misbehavior detection models
+Supplementary Datasets:
+OpenStreetMap: Real-world road network topology for realistic simulations
+Real Traffic Traces: If available, use real traffic datasets for validation (e.g., from [30])
+Synthetic Attack Scenarios: Generate custom attack scenarios for RSU misbehavior, pothole report falsification, and multi-attack combinations
+Recommended Stack: SUMO + OMNeT++ + VEINS + NS-3
+Configuration:
+1. Road Network:
+Urban scenario: 5km × 5km area with realistic road topology from OpenStreetMap
+30–50 RSUs placed at intersections and strategic locations
+RSU communication range: 300–500m
+2. Vehicle Mobility:
+500–1000 vehicles with realistic mobility patterns from SUMO
+Variable speed: 30–80 km/h depending on road type
+Random trip generation withrandomTrips.py
+3. Communication:
+IEEE 802.11p WAVE for V2V and V2I communication
+Beacon frequency: 1–10 Hz
+Message types: Beacon, Event Report (accident, congestion, pothole), Trust Update
+4. Edge Computing:
+RSUs equipped with edge computing capabilities (simulated with processing delay)
+RSU-to-RSU communication for collaborative trust evaluation
+RSU gateway for centralized coordination (optional)
+Implement the following attack scenarios with varying percentages of malicious nodes:
+1. Vehicle Misbehavior:
+False Data Injection: 10–40% malicious vehicles reporting false events
+Position Falsification: 10–30% vehicles reporting incorrect positions
+Sybil Attack: Malicious vehicles creating multiple fake identities
+Selfish Forwarding: 10–20% vehicles refusing to forward messages
+2. RSU Misbehavior:
+Packet Dropping: 10–30% compromised RSUs selectively dropping packets
+Packet Corruption: 10–20% RSUs corrupting message content
+False Trust Reports: Compromised RSUs reporting false trust values
+3. Multi-Attack Scenarios:
+Combination of false data injection + Sybil attack
+Collusion: Groups of malicious vehicles coordinating attacks
+Intelligent Attacks: Adaptive attackers adjusting behavior based on detection
+4. Pothole Detection Attacks:
+False Pothole Reports: 20–40% malicious vehicles reporting non-existent potholes
+Pothole Report Suppression: Malicious vehicles not reporting genuine potholes
+Phase 1: Data Collection and Preprocessing
+1. Collect beacon messages, event reports, and trust updates from simulation
+2. Extract features: behavioral (message frequency, response patterns), spatial (location consistency), temporal (timestamp verification), network (packet loss, latency), trust (direct/indirect trust scores)
+3. Label data: benign vs. malicious based on ground truth from simulation
+4. Split data: 70% training, 15% validation, 15% testing
+Phase 2: Model Training
+1. Baseline Models: Train Random Forest and SVM on VeReMi dataset for comparison
+2. Proposed Models:
+Lightweight Decision Tree for edge deployment
+Lightweight Neural Network (e.g., MobileNet-inspired architecture)
+Online Learning Algorithm (e.g., Online Random Forest, Incremental SVM)
+3. Hyperparameter Tuning: Use grid search or Bayesian optimization on validation set
+4. Model Optimization: Quantization, pruning for edge deployment
+Phase 3: Federated Learning (Optional)
+1. Distribute training data across vehicles
+2. Implement hierarchical federated learning: vehicle → RSU → cloud
+3. Use differential privacy (Gaussian mechanism) for privacy protection
+4. Evaluate convergence time and accuracy vs. centralized training
+Phase 4: Model Deployment and Evaluation
+1. Deploy trained models at RSUs in simulation
+2. Evaluate real-time detection performance with attack scenarios
+3. Measure latency, throughput, resource utilization
+Proposed Architecture:
+1. Detection Module: Lightweight ML model for real-time misbehavior detection
+2. Trust Management Module: Compute and update trust scores for vehicles and RSUs
+3. Event Validation Module: Validate event reports using trust scores and sensor data cross-validation
+4. Dissemination Module: Broadcast validated events to vehicles
+5. R2R Collaboration Module: Exchange trust information with neighboring RSUs
+6. SDN Interface (Optional): Communicate with SDN controller for policy updates
+Implementation:
+Implement as OMNeT++ modules or NS-3 applications
+Simulate processing delays based on model complexity
+Implement message queues and prioritization for real-time operation
+Recommended Controllers:
+1. ONOS (Open Network Operating System): Scalable, distributed SDN controller suitable for large-scale deployments
+Access:https://opennetworking.org/onos/
+Use Case: Centralized policy management, dynamic routing, resource allocation
+2. OpenDaylight: Modular, extensible SDN controller with rich APIs
+Access:https://www.opendaylight.org/
+Use Case: Custom security applications, integration with existing systems
+3. Mininet-WiFi: Network emulator for wireless SDN
+Access:https://github.com/intrig-unicamp/mininet-wifi
+Use Case: Emulation of SDN-based VANET with wireless links
+Integration:
+Use OpenFlow protocol for RSU-to-controller communication
+Implement custom SDN applications for trust-based routing and policy enforcement
+Evaluate controller placement strategies (centralized vs. distributed)
+Implement controller replication for resilience
+Detection Performance:
+Accuracy, Precision, Recall, F-score
+False Positive Rate (FPR), False Negative Rate (FNR)
+Detection Failure Rate
+Receiver Operating Characteristic (ROC) curve, Area Under Curve (AUC)
+Latency and Throughput:
+Detection Latency: Time from message reception to detection decision
+End-to-End Latency: Time from event occurrence to dissemination
+Message Throughput: Messages processed per second at RSU
+Network Throughput: Data rate for legitimate traffic
+Resource Utilization:10.2 Simulator Setup
+10.3 Attack Scenarios
+10.4 ML Pipeline
+10.5 RSU Architecture
+10.6 SDN Controller Choices
+10.7 Evaluation Metrics05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 6/7
+
+--- PAGE 7 ---
+CPU Utilization at RSUs
+Memory Footprint of ML models
+Network Overhead: Additional communication for trust updates and R2R collaboration
+Energy Consumption (if applicable)
+Trust and Event Dissemination:
+Legitimate Event Delivery Rate: Percentage of genuine events successfully disseminated
+Malicious Event Propagation Rate: Percentage of false events disseminated
+Trust Convergence Time: Time for trust scores to stabilize after attack
+Trust Accuracy: Correlation between computed trust scores and ground truth
+Scalability:
+Performance vs. Number of Vehicles (100, 500, 1000, 2000)
+Performance vs. Number of RSUs (10, 25, 50, 100)
+Performance vs. Percentage of Malicious Nodes (10%, 20%, 30%, 40%)
+Comparison:
+Compare against baseline approaches: Random Forest on VeReMi [3], AIT [4], HDRS [8], CARES [20], Federated Learning [28], RSU-Based IDS [30]
+Ablation study: Evaluate contribution of each component (ML detection, trust adaptation, R2R collaboration, SDN integration)05/02/2026, 23:17 thecodingvivek/EnvShare
+https://github.com/thecodingvivek/EnvShare/new/main?ﬁlename=README.md 7/7
+

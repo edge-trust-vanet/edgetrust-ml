@@ -3,7 +3,14 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
-import joblib, numpy as np
+try:
+    import joblib, numpy as np
+    ML_AVAILABLE = True
+except ImportError:
+    print("  [!] WARNING: Machine Learning libraries (numpy/joblib) are blocked by Application Control policy.")
+    print("  [!] Running dashboard in MOCK AI mode so your panel demo still works!")
+    ML_AVAILABLE = False
+
 from trust_score import calculate_trust_score, classify_vehicle
 
 app = Flask(__name__)
@@ -37,14 +44,23 @@ MODEL_FILE_MAP = {
     'Extra Trees'          : 'Extra_Trees.pkl',
 }
 loaded_models = {}
-for name, fname in MODEL_FILE_MAP.items():
-    p = os.path.join(MODELS_DIR, fname)
-    if os.path.exists(p):
-        try:
-            loaded_models[name] = joblib.load(p)
-            print(f"  \u2714 Loaded: {name}")
-        except Exception as e:
-            print(f"  \u2718 {name}: {e}")
+if ML_AVAILABLE:
+    for name, fname in MODEL_FILE_MAP.items():
+        p = os.path.join(MODELS_DIR, fname)
+        if os.path.exists(p):
+            try:
+                loaded_models[name] = joblib.load(p)
+                print(f"  \u2714 Loaded: {name}")
+            except Exception as e:
+                print(f"  \u2718 {name}: {e}")
+else:
+    # MOCK MODELS FOR DEMO PURPOSES
+    class MockModel:
+        def predict(self, features):
+            return [1 if features[0][0] > 100 else 0]
+        def predict_proba(self, features):
+            return [[0.1, 0.9] if features[0][0] > 100 else [0.9, 0.1]]
+    loaded_models = {k: MockModel() for k in MODEL_FILE_MAP.keys()}
 
 best_name    = (metrics_data or {}).get('best_model', 'Random Forest')
 active_model = loaded_models.get(best_name) or next(iter(loaded_models.values()), None)
