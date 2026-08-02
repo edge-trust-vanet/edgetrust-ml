@@ -22,18 +22,18 @@ print("=" * 55)
 print("  VeReMi Dataset — Preprocessing")
 print("=" * 55)
 
-csv_path = os.path.join(DATA_DIR, 'veremi_dataset.csv')
+csv_path = os.path.join(DATA_DIR, 'vanet_malicious_nodes.csv')
 if not os.path.exists(csv_path):
-    print(f"\n❌ Dataset not found at {csv_path}")
+    print(f"\n[ERROR] Dataset not found at {csv_path}")
     print("   Run: python scripts/generate_realistic_dataset.py first")
     exit(1)
 
 df = pd.read_csv(csv_path)
-print(f"\n📦 Loaded: {df.shape[0]} rows × {df.shape[1]} columns")
+print(f"\n[INFO] Loaded: {df.shape[0]} rows × {df.shape[1]} columns")
 
 FEATURES = ['speed', 'acceleration', 'position_x', 'position_y',
-            'heading', 'message_frequency', 'neighbor_count']
-TARGET   = 'label'
+            'direction', 'packet_drop_ratio', 'latency', 'signal_strength']
+TARGET   = 'is_malicious'
 
 df = df.dropna(subset=FEATURES + [TARGET])
 X  = df[FEATURES].values
@@ -62,6 +62,6 @@ joblib.dump(scaler, os.path.join(MDL_DIR, 'scaler.pkl'))
 
 print(f"\n   Train : {X_train.shape}")
 print(f"   Test  : {X_test.shape}")
-print(f"\n✅ Saved X_train, X_test, y_train, y_test → data/")
-print(f"✅ Saved scaler → models/scaler.pkl")
+print(f"\n[SUCCESS] Saved X_train, X_test, y_train, y_test → data/")
+print(f"[SUCCESS] Saved scaler → models/scaler.pkl")
 print("\nNext step: python scripts/train_model.py")

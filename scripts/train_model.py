@@ -14,6 +14,7 @@ Usage (from project root):
 import numpy as np, json, os, joblib
 from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier,
                               ExtraTreesClassifier, AdaBoostClassifier)
+from sklearn.model_selection import GridSearchCV
 from sklearn.svm      import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
@@ -36,7 +37,7 @@ print("=" * 65)
 # ── Load preprocessed data ────────────────────────────────
 for f in ['X_train.npy', 'X_test.npy', 'y_train.npy', 'y_test.npy']:
     if not os.path.exists(os.path.join(DATA_DIR, f)):
-        print(f"\n❌ Missing {f}. Run: python scripts/preprocess.py first")
+        print(f"\n[ERROR] Missing {f}. Run: python scripts/preprocess.py first")
         exit(1)
 
 X_train = np.load(os.path.join(DATA_DIR, 'X_train.npy'))
@@ -47,7 +48,17 @@ print(f"\n   Train: {X_train.shape}  |  Test: {X_test.shape}")
 
 # ── Model suite ───────────────────────────────────────────
 models = {
-    'Random Forest'        : RandomForestClassifier(n_estimators=100, random_state=42),
+    'Random Forest (GridSearch)' : GridSearchCV(
+        RandomForestClassifier(random_state=42),
+        param_grid={
+            'n_estimators': [50, 100],
+            'max_depth': [None, 10],
+            'min_samples_split': [2, 5]
+        },
+        cv=3,
+        n_jobs=-1,
+        scoring='f1_weighted'
+    ),
     'Gradient Boosting'    : GradientBoostingClassifier(n_estimators=100, max_depth=4, random_state=42),
     'Extra Trees'          : ExtraTreesClassifier(n_estimators=100, random_state=42),
     'AdaBoost'             : AdaBoostClassifier(n_estimators=50, random_state=42),
@@ -91,7 +102,7 @@ for k in all_metrics:
     all_metrics[k]['is_best'] = (k == best_name)
 
 print(f"\n{'='*65}")
-print(f"  🏆 BEST MODEL: {best_name}  (F1={all_metrics[best_name]['f1_score']}%)")
+print(f"  [BEST MODEL]: {best_name}  (F1={all_metrics[best_name]['f1_score']}%)")
 print(f"{'='*65}")
 
 # ── Save metrics ──────────────────────────────────────────
@@ -99,6 +110,6 @@ out = {'models': all_metrics, 'best_model': best_name, 'dataset': 'veremi_style'
 with open(os.path.join(RESULTS_DIR, 'model_metrics.json'), 'w') as f:
     json.dump(out, f, indent=2)
 
-print("✅ Metrics saved → results/model_metrics.json")
-print("✅ All models saved → models/*.pkl")
+print("[SUCCESS] Metrics saved → results/model_metrics.json")
+print("[SUCCESS] All models saved → models/*.pkl")
 print("\nRefresh the dashboard VeReMi Arena tab to see updated results.")
