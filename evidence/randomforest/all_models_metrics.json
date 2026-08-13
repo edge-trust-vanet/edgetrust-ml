@@ -1,0 +1,640 @@
+{
+  "dataset": "data/vanet_malicious_nodes.csv",
+  "features": [
+    "position_x",
+    "position_y",
+    "speed",
+    "direction",
+    "acceleration",
+    "packet_sent",
+    "packet_received",
+    "packet_drop_ratio",
+    "latency",
+    "message_retransmission_count",
+    "signal_strength",
+    "trust_score",
+    "neighbor_trust_score_avg",
+    "historical_trust_score"
+  ],
+  "target": "is_malicious",
+  "class_counts": {
+    "0": 3738,
+    "1": 1262
+  },
+  "exact_seed_42_holdout": {
+    "Random Forest": {
+      "accuracy": 0.956,
+      "weighted_f1": 0.9571,
+      "precision": 0.962541,
+      "recall": 0.956,
+      "false_positive_count": 44,
+      "false_negative_count": 0,
+      "true_positive_count": 252,
+      "true_negative_count": 704,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          0,
+          252
+        ]
+      ],
+      "fit_seconds": 0.26266,
+      "predict_seconds": 0.005338,
+      "predict_microseconds_per_sample": 5.33825,
+      "model_size_kb_pickle": 2503.59375
+    },
+    "Gradient Boosting": {
+      "accuracy": 0.953,
+      "weighted_f1": 0.954059,
+      "precision": 0.958543,
+      "recall": 0.953,
+      "false_positive_count": 43,
+      "false_negative_count": 4,
+      "true_positive_count": 248,
+      "true_negative_count": 705,
+      "confusion_matrix": [
+        [
+          705,
+          43
+        ],
+        [
+          4,
+          248
+        ]
+      ],
+      "fit_seconds": 1.023544,
+      "predict_seconds": 0.000851,
+      "predict_microseconds_per_sample": 0.85075,
+      "model_size_kb_pickle": 200.294922
+    },
+    "Extra Trees": {
+      "accuracy": 0.944,
+      "weighted_f1": 0.945176,
+      "precision": 0.949244,
+      "recall": 0.944,
+      "false_positive_count": 46,
+      "false_negative_count": 10,
+      "true_positive_count": 242,
+      "true_negative_count": 702,
+      "confusion_matrix": [
+        [
+          702,
+          46
+        ],
+        [
+          10,
+          242
+        ]
+      ],
+      "fit_seconds": 0.122253,
+      "predict_seconds": 0.007864,
+      "predict_microseconds_per_sample": 7.863667,
+      "model_size_kb_pickle": 9551.056641
+    },
+    "AdaBoost": {
+      "accuracy": 0.956,
+      "weighted_f1": 0.9571,
+      "precision": 0.962541,
+      "recall": 0.956,
+      "false_positive_count": 44,
+      "false_negative_count": 0,
+      "true_positive_count": 252,
+      "true_negative_count": 704,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          0,
+          252
+        ]
+      ],
+      "fit_seconds": 0.180131,
+      "predict_seconds": 0.002788,
+      "predict_microseconds_per_sample": 2.787708,
+      "model_size_kb_pickle": 27.262695
+    },
+    "Decision Tree": {
+      "accuracy": 0.946,
+      "weighted_f1": 0.947022,
+      "precision": 0.950353,
+      "recall": 0.946,
+      "false_positive_count": 43,
+      "false_negative_count": 11,
+      "true_positive_count": 241,
+      "true_negative_count": 705,
+      "confusion_matrix": [
+        [
+          705,
+          43
+        ],
+        [
+          11,
+          241
+        ]
+      ],
+      "fit_seconds": 0.009709,
+      "predict_seconds": 9.1e-05,
+      "predict_microseconds_per_sample": 0.09075,
+      "model_size_kb_pickle": 6.177734
+    },
+    "SVM (RBF)": {
+      "accuracy": 0.934,
+      "weighted_f1": 0.935035,
+      "precision": 0.937582,
+      "recall": 0.934,
+      "false_positive_count": 46,
+      "false_negative_count": 20,
+      "true_positive_count": 232,
+      "true_negative_count": 702,
+      "confusion_matrix": [
+        [
+          702,
+          46
+        ],
+        [
+          20,
+          232
+        ]
+      ],
+      "fit_seconds": 0.315211,
+      "predict_seconds": 0.023587,
+      "predict_microseconds_per_sample": 23.587417,
+      "model_size_kb_pickle": 121.716797
+    },
+    "K-Nearest Neighbors": {
+      "accuracy": 0.89,
+      "weighted_f1": 0.890286,
+      "precision": 0.890606,
+      "recall": 0.89,
+      "false_positive_count": 57,
+      "false_negative_count": 53,
+      "true_positive_count": 199,
+      "true_negative_count": 691,
+      "confusion_matrix": [
+        [
+          691,
+          57
+        ],
+        [
+          53,
+          199
+        ]
+      ],
+      "fit_seconds": 0.001095,
+      "predict_seconds": 0.036573,
+      "predict_microseconds_per_sample": 36.57275,
+      "model_size_kb_pickle": 564.831055
+    },
+    "Logistic Regression": {
+      "accuracy": 0.922,
+      "weighted_f1": 0.922203,
+      "precision": 0.922442,
+      "recall": 0.922,
+      "false_positive_count": 41,
+      "false_negative_count": 37,
+      "true_positive_count": 215,
+      "true_negative_count": 707,
+      "confusion_matrix": [
+        [
+          707,
+          41
+        ],
+        [
+          37,
+          215
+        ]
+      ],
+      "fit_seconds": 0.003931,
+      "predict_seconds": 0.00011,
+      "predict_microseconds_per_sample": 0.110208,
+      "model_size_kb_pickle": 0.761719
+    },
+    "Gaussian Naive Bayes": {
+      "accuracy": 0.936,
+      "weighted_f1": 0.937956,
+      "precision": 0.946585,
+      "recall": 0.936,
+      "false_positive_count": 60,
+      "false_negative_count": 4,
+      "true_positive_count": 248,
+      "true_negative_count": 688,
+      "confusion_matrix": [
+        [
+          688,
+          60
+        ],
+        [
+          4,
+          248
+        ]
+      ],
+      "fit_seconds": 0.000641,
+      "predict_seconds": 0.000133,
+      "predict_microseconds_per_sample": 0.133209,
+      "model_size_kb_pickle": 0.984375
+    }
+  },
+  "repeated_20_holdout_summary": {
+    "AdaBoost": {
+      "accuracy": {
+        "mean": 0.95455,
+        "std": 0.006581
+      },
+      "weighted_f1": {
+        "mean": 0.955721,
+        "std": 0.006298
+      },
+      "precision": {
+        "mean": 0.961452,
+        "std": 0.004939
+      },
+      "recall": {
+        "mean": 0.95455,
+        "std": 0.006581
+      },
+      "false_positive_count": {
+        "mean": 45.15,
+        "std": 6.49919
+      },
+      "false_negative_count": {
+        "mean": 0.3,
+        "std": 0.732695
+      },
+      "fit_seconds": {
+        "mean": 0.18143,
+        "std": 0.003378
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 2.846138,
+        "std": 0.063502
+      },
+      "model_size_kb_pickle": {
+        "mean": 27.262695,
+        "std": 0.0
+      },
+      "rank": {
+        "mean": 1.05,
+        "std": 0.223607
+      }
+    },
+    "Decision Tree": {
+      "accuracy": {
+        "mean": 0.9467,
+        "std": 0.008189
+      },
+      "weighted_f1": {
+        "mean": 0.947717,
+        "std": 0.008013
+      },
+      "precision": {
+        "mean": 0.951226,
+        "std": 0.007777
+      },
+      "recall": {
+        "mean": 0.9467,
+        "std": 0.008189
+      },
+      "false_positive_count": {
+        "mean": 42.8,
+        "std": 6.526061
+      },
+      "false_negative_count": {
+        "mean": 10.5,
+        "std": 5.256575
+      },
+      "fit_seconds": {
+        "mean": 0.009741,
+        "std": 0.000195
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 0.100964,
+        "std": 0.032877
+      },
+      "model_size_kb_pickle": {
+        "mean": 6.818359,
+        "std": 1.146967
+      },
+      "rank": {
+        "mean": 4.3,
+        "std": 0.656947
+      }
+    },
+    "Extra Trees": {
+      "accuracy": {
+        "mean": 0.9438,
+        "std": 0.007702
+      },
+      "weighted_f1": {
+        "mean": 0.944921,
+        "std": 0.00745
+      },
+      "precision": {
+        "mean": 0.948667,
+        "std": 0.006831
+      },
+      "recall": {
+        "mean": 0.9438,
+        "std": 0.007702
+      },
+      "false_positive_count": {
+        "mean": 44.9,
+        "std": 6.592659
+      },
+      "false_negative_count": {
+        "mean": 11.3,
+        "std": 3.585057
+      },
+      "fit_seconds": {
+        "mean": 0.122418,
+        "std": 0.001494
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 7.753144,
+        "std": 0.656385
+      },
+      "model_size_kb_pickle": {
+        "mean": 9517.126953,
+        "std": 152.344583
+      },
+      "rank": {
+        "mean": 4.55,
+        "std": 0.686333
+      }
+    },
+    "Gaussian Naive Bayes": {
+      "accuracy": {
+        "mean": 0.93185,
+        "std": 0.006588
+      },
+      "weighted_f1": {
+        "mean": 0.933927,
+        "std": 0.006224
+      },
+      "precision": {
+        "mean": 0.942593,
+        "std": 0.004807
+      },
+      "recall": {
+        "mean": 0.93185,
+        "std": 0.006588
+      },
+      "false_positive_count": {
+        "mean": 61.8,
+        "std": 6.677535
+      },
+      "false_negative_count": {
+        "mean": 6.35,
+        "std": 2.230766
+      },
+      "fit_seconds": {
+        "mean": 0.000613,
+        "std": 3e-05
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 0.128858,
+        "std": 0.022804
+      },
+      "model_size_kb_pickle": {
+        "mean": 0.984375,
+        "std": 0.0
+      },
+      "rank": {
+        "mean": 6.1,
+        "std": 0.552506
+      }
+    },
+    "Gradient Boosting": {
+      "accuracy": {
+        "mean": 0.952,
+        "std": 0.006936
+      },
+      "weighted_f1": {
+        "mean": 0.953153,
+        "std": 0.006669
+      },
+      "precision": {
+        "mean": 0.958209,
+        "std": 0.005622
+      },
+      "recall": {
+        "mean": 0.952,
+        "std": 0.006936
+      },
+      "false_positive_count": {
+        "mean": 44.7,
+        "std": 6.375116
+      },
+      "false_negative_count": {
+        "mean": 3.3,
+        "std": 1.949359
+      },
+      "fit_seconds": {
+        "mean": 0.943463,
+        "std": 0.039991
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 0.787833,
+        "std": 0.039639
+      },
+      "model_size_kb_pickle": {
+        "mean": 190.78252,
+        "std": 4.782639
+      },
+      "rank": {
+        "mean": 2.95,
+        "std": 0.825578
+      }
+    },
+    "K-Nearest Neighbors": {
+      "accuracy": {
+        "mean": 0.8961,
+        "std": 0.00721
+      },
+      "weighted_f1": {
+        "mean": 0.896262,
+        "std": 0.007443
+      },
+      "precision": {
+        "mean": 0.896773,
+        "std": 0.007976
+      },
+      "recall": {
+        "mean": 0.8961,
+        "std": 0.00721
+      },
+      "false_positive_count": {
+        "mean": 53.5,
+        "std": 6.303717
+      },
+      "false_negative_count": {
+        "mean": 50.4,
+        "std": 8.028895
+      },
+      "fit_seconds": {
+        "mean": 0.001033,
+        "std": 2.8e-05
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 35.306646,
+        "std": 3.425666
+      },
+      "model_size_kb_pickle": {
+        "mean": 564.831055,
+        "std": 0.0
+      },
+      "rank": {
+        "mean": 9.0,
+        "std": 0.0
+      }
+    },
+    "Logistic Regression": {
+      "accuracy": {
+        "mean": 0.9223,
+        "std": 0.007371
+      },
+      "weighted_f1": {
+        "mean": 0.922392,
+        "std": 0.007348
+      },
+      "precision": {
+        "mean": 0.922755,
+        "std": 0.007502
+      },
+      "recall": {
+        "mean": 0.9223,
+        "std": 0.007371
+      },
+      "false_positive_count": {
+        "mean": 39.9,
+        "std": 6.773788
+      },
+      "false_negative_count": {
+        "mean": 37.8,
+        "std": 6.354443
+      },
+      "fit_seconds": {
+        "mean": 0.003794,
+        "std": 0.000219
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 0.095456,
+        "std": 0.015786
+      },
+      "model_size_kb_pickle": {
+        "mean": 0.761719,
+        "std": 0.0
+      },
+      "rank": {
+        "mean": 7.85,
+        "std": 0.48936
+      }
+    },
+    "Random Forest": {
+      "accuracy": {
+        "mean": 0.95365,
+        "std": 0.006475
+      },
+      "weighted_f1": {
+        "mean": 0.954823,
+        "std": 0.006194
+      },
+      "precision": {
+        "mean": 0.960385,
+        "std": 0.004887
+      },
+      "recall": {
+        "mean": 0.95365,
+        "std": 0.006475
+      },
+      "false_positive_count": {
+        "mean": 45.15,
+        "std": 6.49919
+      },
+      "false_negative_count": {
+        "mean": 1.2,
+        "std": 1.196486
+      },
+      "fit_seconds": {
+        "mean": 0.271103,
+        "std": 0.004007
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 5.322788,
+        "std": 0.10557
+      },
+      "model_size_kb_pickle": {
+        "mean": 2527.686914,
+        "std": 59.367387
+      },
+      "rank": {
+        "mean": 1.65,
+        "std": 0.67082
+      }
+    },
+    "SVM (RBF)": {
+      "accuracy": {
+        "mean": 0.92755,
+        "std": 0.007134
+      },
+      "weighted_f1": {
+        "mean": 0.928467,
+        "std": 0.006846
+      },
+      "precision": {
+        "mean": 0.930476,
+        "std": 0.006297
+      },
+      "recall": {
+        "mean": 0.92755,
+        "std": 0.007134
+      },
+      "false_positive_count": {
+        "mean": 46.4,
+        "std": 7.379916
+      },
+      "false_negative_count": {
+        "mean": 26.05,
+        "std": 3.748333
+      },
+      "fit_seconds": {
+        "mean": 0.316461,
+        "std": 0.005552
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 24.248242,
+        "std": 1.490668
+      },
+      "model_size_kb_pickle": {
+        "mean": 121.278516,
+        "std": 2.234445
+      },
+      "rank": {
+        "mean": 7.0,
+        "std": 0.324443
+      }
+    }
+  },
+  "weighted_f1_win_counts_across_20_splits": {
+    "Random Forest": 9,
+    "Gradient Boosting": 1,
+    "Extra Trees": 0,
+    "AdaBoost": 19,
+    "Decision Tree": 0,
+    "SVM (RBF)": 0,
+    "K-Nearest Neighbors": 0,
+    "Logistic Regression": 0,
+    "Gaussian Naive Bayes": 0
+  },
+  "interpretation": [
+    "The seed-42 holdout reproduces the current project tie between Random Forest and AdaBoost.",
+    "The complete seed-42 comparison includes all nine classifiers used by scripts/analyze_vanet_nodes.py.",
+    "Across the 20 repeated splits, AdaBoost achieves slightly higher stability and lower error counts than Random Forest.",
+    "For edge deployment, AdaBoost is significantly faster and has a much smaller serialized model size compared to Random Forest.",
+    "However, Random Forest remains a strong candidate due to its ensemble feature-importance interpretability and robust performance across a variety of splits."
+  ]
+}

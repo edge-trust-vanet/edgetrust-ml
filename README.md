@@ -28,10 +28,17 @@ EdgeTrust-VANET solves this by operating directly at the network edge (RSU) usin
 
 ---
 
-## 📊 Dataset & Evaluation Accuracy
-We trained and evaluated the system against the realistic **`vanet_malicious_nodes.csv`** dataset containing 5,000 uniquely behaving vehicles (25.2% Attack Rate).
+## 📊 Dataset & Feature Selection
 
-**Data Leakage Prevention:** To ensure academic rigor, 4 retrospective "hindsight" attack labels (e.g., `false_packet_injection` counters) were strictly removed from the training pipeline. The model relies entirely on *real-time observable* behaviors, simulating a genuine RSU deployment limitation.
+We trained and evaluated the system against the realistic **`vanet_malicious_nodes.csv`** dataset containing 5,000 uniquely behaving vehicles (25.2% Attack Rate). The raw dataset contains 18 features in total, but our final model uses only the **14 proposed features**.
+
+### 🔍 Data Leakage Prevention
+
+The raw dataset contains **4 retrospective post-hoc attack counters**: `false_packet_injection`, `blackhole_attack_attempts`, `sybil_attack_attempts`, and `denial_of_service`.
+*   **Are they used in our active model?** **No.** They are programmatically dropped from our feature training list (`FEATURES`). The active system runs entirely on the **Proposed 14-feature set** (Mobility + Network + Trust).
+*   **Why are they dropped?** These counters represent retrospective logs recorded *after* an attack is already detected and confirmed. An active Roadside Unit (RSU) making real-time decision calculations does not have access to these summaries.
+*   **Why do we benchmark them?** In our feature ablation study ([`evidence/feature_selection/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/feature_selection/README.md)), combining these 4 leakage features with our proposed features (`Proposed + Leakage` - 18 features total) yields an artificial, perfect **100.0% F1 score**. We benchmark this configuration solely as a control group to demonstrate the data leakage trap and warn against circular reasoning in V2X machine learning research.
+
 
 ### Best Model: Random Forest 🏆
 Out of 9 state-of-the-art algorithms evaluated (SVM, KNN, Extra Trees, AdaBoost, etc.), our Random Forest ensemble achieved the best balance for imbalanced security datasets:
@@ -87,3 +94,16 @@ EdgeTrust-VANET/
     ├── trust_score.py                 # Mathematical trust calculation engine
     └── preprocess.py                  # Initial data cleaning utils
 ```
+
+---
+
+## 🎓 Research Justification Evidence
+
+This codebase includes reproducibility evidence packs to justify key design decisions and model selections for academic publication:
+
+*   **Model Selection Justification ([`evidence/randomforest/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/randomforest/README.md))**: Compares Random Forest against all other 8 classifiers across holdout metrics, 20-fold repeated split stability, and edge computational efficiency (predict latency, size).
+*   **Feature Selection Ablation Study ([`evidence/feature_selection/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/feature_selection/README.md))**: Ablation study across mobility, network, trust, and leakage features, justifying the 14-feature proposed set and proving the data leakage trap.
+*   **Weighted F1 vs Accuracy ([`evidence/weighted_f1/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/weighted_f1/README.md))**: Justification for F1 ranking over accuracy under class imbalance.
+*   **Trust Threshold Selection ([`evidence/trust_thresholds/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/trust_thresholds/README.md))**: Justification for the 0.70/0.40 warning/blocking boundaries and alpha values.
+
+

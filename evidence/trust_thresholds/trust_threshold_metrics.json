@@ -1,0 +1,370 @@
+{
+  "source_files": [
+    "scripts/trust_score.py",
+    "scripts/combined_decision.py",
+    "dashboard/app.py"
+  ],
+  "alpha": 0.7,
+  "selected_thresholds": {
+    "trusted": 0.7,
+    "blocked": 0.4
+  },
+  "formula": "new_trust = alpha * previous_trust + (1 - alpha) * evidence_score",
+  "attack_evidence": 0.1,
+  "benign_evidence": 0.95,
+  "attack_recovery_trajectory": [
+    {
+      "packet": 0,
+      "evidence": null,
+      "trust": 1.0,
+      "state": "Trusted"
+    },
+    {
+      "packet": 1,
+      "evidence": 0.1,
+      "trust": 0.73,
+      "state": "Trusted"
+    },
+    {
+      "packet": 2,
+      "evidence": 0.1,
+      "trust": 0.541,
+      "state": "Suspicious"
+    },
+    {
+      "packet": 3,
+      "evidence": 0.1,
+      "trust": 0.4087,
+      "state": "Suspicious"
+    },
+    {
+      "packet": 4,
+      "evidence": 0.1,
+      "trust": 0.3161,
+      "state": "Blocked"
+    },
+    {
+      "packet": 5,
+      "evidence": 0.1,
+      "trust": 0.2513,
+      "state": "Blocked"
+    },
+    {
+      "packet": 6,
+      "evidence": 0.1,
+      "trust": 0.2059,
+      "state": "Blocked"
+    },
+    {
+      "packet": 7,
+      "evidence": 0.1,
+      "trust": 0.1741,
+      "state": "Blocked"
+    },
+    {
+      "packet": 8,
+      "evidence": 0.1,
+      "trust": 0.1519,
+      "state": "Blocked"
+    },
+    {
+      "packet": 9,
+      "evidence": 0.95,
+      "trust": 0.3913,
+      "state": "Blocked"
+    },
+    {
+      "packet": 10,
+      "evidence": 0.95,
+      "trust": 0.5589,
+      "state": "Suspicious"
+    },
+    {
+      "packet": 11,
+      "evidence": 0.95,
+      "trust": 0.6762,
+      "state": "Suspicious"
+    },
+    {
+      "packet": 12,
+      "evidence": 0.95,
+      "trust": 0.7583,
+      "state": "Trusted"
+    },
+    {
+      "packet": 13,
+      "evidence": 0.95,
+      "trust": 0.8158,
+      "state": "Trusted"
+    },
+    {
+      "packet": 14,
+      "evidence": 0.95,
+      "trust": 0.8561,
+      "state": "Trusted"
+    },
+    {
+      "packet": 15,
+      "evidence": 0.95,
+      "trust": 0.8843,
+      "state": "Trusted"
+    },
+    {
+      "packet": 16,
+      "evidence": 0.95,
+      "trust": 0.904,
+      "state": "Trusted"
+    },
+    {
+      "packet": 17,
+      "evidence": 0.95,
+      "trust": 0.9178,
+      "state": "Trusted"
+    },
+    {
+      "packet": 18,
+      "evidence": 0.95,
+      "trust": 0.9275,
+      "state": "Trusted"
+    },
+    {
+      "packet": 19,
+      "evidence": 0.95,
+      "trust": 0.9343,
+      "state": "Trusted"
+    },
+    {
+      "packet": 20,
+      "evidence": 0.95,
+      "trust": 0.939,
+      "state": "Trusted"
+    },
+    {
+      "packet": 21,
+      "evidence": 0.95,
+      "trust": 0.9423,
+      "state": "Trusted"
+    },
+    {
+      "packet": 22,
+      "evidence": 0.95,
+      "trust": 0.9446,
+      "state": "Trusted"
+    },
+    {
+      "packet": 23,
+      "evidence": 0.95,
+      "trust": 0.9462,
+      "state": "Trusted"
+    },
+    {
+      "packet": 24,
+      "evidence": 0.95,
+      "trust": 0.9473,
+      "state": "Trusted"
+    },
+    {
+      "packet": 25,
+      "evidence": 0.95,
+      "trust": 0.9481,
+      "state": "Trusted"
+    },
+    {
+      "packet": 26,
+      "evidence": 0.95,
+      "trust": 0.9487,
+      "state": "Trusted"
+    },
+    {
+      "packet": 27,
+      "evidence": 0.95,
+      "trust": 0.9491,
+      "state": "Trusted"
+    },
+    {
+      "packet": 28,
+      "evidence": 0.95,
+      "trust": 0.9494,
+      "state": "Trusted"
+    }
+  ],
+  "threshold_comparison": [
+    {
+      "threshold_pair": "0.70 / 0.40",
+      "trusted_threshold": 0.7,
+      "blocked_threshold": 0.4,
+      "suspicious_packet_under_attack": 2,
+      "blocked_packet_under_attack": 4,
+      "trusted_recovery_packet": 12,
+      "recovery_packets_after_attack": 4
+    },
+    {
+      "threshold_pair": "0.80 / 0.50",
+      "trusted_threshold": 0.8,
+      "blocked_threshold": 0.5,
+      "suspicious_packet_under_attack": 1,
+      "blocked_packet_under_attack": 3,
+      "trusted_recovery_packet": 13,
+      "recovery_packets_after_attack": 5
+    },
+    {
+      "threshold_pair": "0.60 / 0.30",
+      "trusted_threshold": 0.6,
+      "blocked_threshold": 0.3,
+      "suspicious_packet_under_attack": 2,
+      "blocked_packet_under_attack": 5,
+      "trusted_recovery_packet": 11,
+      "recovery_packets_after_attack": 3
+    },
+    {
+      "threshold_pair": "0.75 / 0.35",
+      "trusted_threshold": 0.75,
+      "blocked_threshold": 0.35,
+      "suspicious_packet_under_attack": 1,
+      "blocked_packet_under_attack": 4,
+      "trusted_recovery_packet": 12,
+      "recovery_packets_after_attack": 4
+    },
+    {
+      "threshold_pair": "0.65 / 0.45",
+      "trusted_threshold": 0.65,
+      "blocked_threshold": 0.45,
+      "suspicious_packet_under_attack": 2,
+      "blocked_packet_under_attack": 3,
+      "trusted_recovery_packet": 11,
+      "recovery_packets_after_attack": 3
+    }
+  ],
+  "noisy_benign_state_counts": [
+    {
+      "scenario": "Benign stable",
+      "threshold_pair": "0.70 / 0.40",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.9501
+    },
+    {
+      "scenario": "Benign stable",
+      "threshold_pair": "0.80 / 0.50",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.9501
+    },
+    {
+      "scenario": "Benign stable",
+      "threshold_pair": "0.60 / 0.30",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.9501
+    },
+    {
+      "scenario": "Benign stable",
+      "threshold_pair": "0.75 / 0.35",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.9501
+    },
+    {
+      "scenario": "Benign stable",
+      "threshold_pair": "0.65 / 0.45",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.9501
+    },
+    {
+      "scenario": "Benign noisy",
+      "threshold_pair": "0.70 / 0.40",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.7044
+    },
+    {
+      "scenario": "Benign noisy",
+      "threshold_pair": "0.80 / 0.50",
+      "trusted_count": 7,
+      "suspicious_count": 13,
+      "blocked_count": 0,
+      "minimum_trust": 0.7044
+    },
+    {
+      "scenario": "Benign noisy",
+      "threshold_pair": "0.60 / 0.30",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.7044
+    },
+    {
+      "scenario": "Benign noisy",
+      "threshold_pair": "0.75 / 0.35",
+      "trusted_count": 17,
+      "suspicious_count": 3,
+      "blocked_count": 0,
+      "minimum_trust": 0.7044
+    },
+    {
+      "scenario": "Benign noisy",
+      "threshold_pair": "0.65 / 0.45",
+      "trusted_count": 20,
+      "suspicious_count": 0,
+      "blocked_count": 0,
+      "minimum_trust": 0.7044
+    },
+    {
+      "scenario": "Sustained attack",
+      "threshold_pair": "0.70 / 0.40",
+      "trusted_count": 1,
+      "suspicious_count": 2,
+      "blocked_count": 17,
+      "minimum_trust": 0.1008
+    },
+    {
+      "scenario": "Sustained attack",
+      "threshold_pair": "0.80 / 0.50",
+      "trusted_count": 0,
+      "suspicious_count": 2,
+      "blocked_count": 18,
+      "minimum_trust": 0.1008
+    },
+    {
+      "scenario": "Sustained attack",
+      "threshold_pair": "0.60 / 0.30",
+      "trusted_count": 1,
+      "suspicious_count": 3,
+      "blocked_count": 16,
+      "minimum_trust": 0.1008
+    },
+    {
+      "scenario": "Sustained attack",
+      "threshold_pair": "0.75 / 0.35",
+      "trusted_count": 0,
+      "suspicious_count": 3,
+      "blocked_count": 17,
+      "minimum_trust": 0.1008
+    },
+    {
+      "scenario": "Sustained attack",
+      "threshold_pair": "0.65 / 0.45",
+      "trusted_count": 1,
+      "suspicious_count": 1,
+      "blocked_count": 18,
+      "minimum_trust": 0.1008
+    }
+  ],
+  "dashboard_policy": {
+    "block": "trust < 0.40 and ML prediction is malicious",
+    "warn": "trust < 0.40 or ML prediction is malicious, unless block applies",
+    "accept": "trust >= 0.40 and ML prediction is normal"
+  },
+  "interpretation": [
+    "With alpha=0.7 and malicious evidence=0.1, trust moves from 1.0 to 0.73 after one packet, 0.541 after two, and 0.379 after three; the selected boundaries therefore create a Trusted -> Suspicious -> Blocked progression within three updates.",
+    "The 0.70 boundary creates an early warning state before the stricter 0.40 blocking boundary is crossed.",
+    "The dashboard does not block on trust alone; it requires low trust and an ML-malicious prediction, reducing the risk of blocking a vehicle from a single noisy trust signal."
+  ]
+}

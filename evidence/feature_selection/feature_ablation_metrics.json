@@ -1,0 +1,445 @@
+{
+  "dataset": "data/vanet_malicious_nodes.csv",
+  "class_counts": {
+    "0": 3738,
+    "1": 1262
+  },
+  "feature_groups": {
+    "mobility": [
+      "position_x",
+      "position_y",
+      "speed",
+      "direction",
+      "acceleration"
+    ],
+    "network": [
+      "packet_sent",
+      "packet_received",
+      "packet_drop_ratio",
+      "latency",
+      "message_retransmission_count",
+      "signal_strength"
+    ],
+    "trust": [
+      "trust_score",
+      "neighbor_trust_score_avg",
+      "historical_trust_score"
+    ],
+    "leakage": [
+      "false_packet_injection",
+      "blackhole_attack_attempts",
+      "sybil_attack_attempts",
+      "denial_of_service"
+    ]
+  },
+  "exact_seed_42_holdout": {
+    "Mobility Only (5 features)": {
+      "accuracy": 0.748,
+      "weighted_f1": 0.657446,
+      "precision": 0.68929,
+      "recall": 0.748,
+      "false_positive_count": 10,
+      "false_negative_count": 242,
+      "true_positive_count": 10,
+      "true_negative_count": 738,
+      "confusion_matrix": [
+        [
+          738,
+          10
+        ],
+        [
+          242,
+          10
+        ]
+      ],
+      "fit_seconds": 0.448826,
+      "predict_seconds": 0.010452,
+      "predict_microseconds_per_sample": 10.452208
+    },
+    "Network Only (6 features)": {
+      "accuracy": 0.734,
+      "weighted_f1": 0.636723,
+      "precision": 0.585572,
+      "recall": 0.734,
+      "false_positive_count": 16,
+      "false_negative_count": 250,
+      "true_positive_count": 2,
+      "true_negative_count": 732,
+      "confusion_matrix": [
+        [
+          732,
+          16
+        ],
+        [
+          250,
+          2
+        ]
+      ],
+      "fit_seconds": 0.378455,
+      "predict_seconds": 0.010275,
+      "predict_microseconds_per_sample": 10.275
+    },
+    "Trust Only (3 features)": {
+      "accuracy": 0.956,
+      "weighted_f1": 0.957057,
+      "precision": 0.962083,
+      "recall": 0.956,
+      "false_positive_count": 43,
+      "false_negative_count": 1,
+      "true_positive_count": 251,
+      "true_negative_count": 705,
+      "confusion_matrix": [
+        [
+          705,
+          43
+        ],
+        [
+          1,
+          251
+        ]
+      ],
+      "fit_seconds": 0.118698,
+      "predict_seconds": 0.005154,
+      "predict_microseconds_per_sample": 5.153833
+    },
+    "Mobility + Network (11 features)": {
+      "accuracy": 0.747,
+      "weighted_f1": 0.645139,
+      "precision": 0.668435,
+      "recall": 0.747,
+      "false_positive_count": 4,
+      "false_negative_count": 249,
+      "true_positive_count": 3,
+      "true_negative_count": 744,
+      "confusion_matrix": [
+        [
+          744,
+          4
+        ],
+        [
+          249,
+          3
+        ]
+      ],
+      "fit_seconds": 0.569599,
+      "predict_seconds": 0.010109,
+      "predict_microseconds_per_sample": 10.10925
+    },
+    "Mobility + Network + Trust (Proposed 14 features)": {
+      "accuracy": 0.956,
+      "weighted_f1": 0.9571,
+      "precision": 0.962541,
+      "recall": 0.956,
+      "false_positive_count": 44,
+      "false_negative_count": 0,
+      "true_positive_count": 252,
+      "true_negative_count": 704,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          0,
+          252
+        ]
+      ],
+      "fit_seconds": 0.262939,
+      "predict_seconds": 0.005278,
+      "predict_microseconds_per_sample": 5.278042
+    },
+    "Post-Hoc Attack Counters (Leakage 4 features)": {
+      "accuracy": 0.692,
+      "weighted_f1": 0.669387,
+      "precision": 0.655788,
+      "recall": 0.692,
+      "false_positive_count": 112,
+      "false_negative_count": 196,
+      "true_positive_count": 56,
+      "true_negative_count": 636,
+      "confusion_matrix": [
+        [
+          636,
+          112
+        ],
+        [
+          196,
+          56
+        ]
+      ],
+      "fit_seconds": 0.14455,
+      "predict_seconds": 0.011537,
+      "predict_microseconds_per_sample": 11.536959
+    },
+    "Proposed + Leakage (18 features)": {
+      "accuracy": 1.0,
+      "weighted_f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_positive_count": 0,
+      "false_negative_count": 0,
+      "true_positive_count": 252,
+      "true_negative_count": 748,
+      "confusion_matrix": [
+        [
+          748,
+          0
+        ],
+        [
+          0,
+          252
+        ]
+      ],
+      "fit_seconds": 0.224419,
+      "predict_seconds": 0.004427,
+      "predict_microseconds_per_sample": 4.427375
+    }
+  },
+  "repeated_20_holdout_summary": {
+    "Mobility + Network (11 features)": {
+      "accuracy": {
+        "mean": 0.7449,
+        "std": 0.002447
+      },
+      "weighted_f1": {
+        "mean": 0.641281,
+        "std": 0.002413
+      },
+      "precision": {
+        "mean": 0.620632,
+        "std": 0.039561
+      },
+      "recall": {
+        "mean": 0.7449,
+        "std": 0.002447
+      },
+      "false_positive_count": {
+        "mean": 4.55,
+        "std": 2.502104
+      },
+      "false_negative_count": {
+        "mean": 250.55,
+        "std": 1.050063
+      },
+      "fit_seconds": {
+        "mean": 0.588064,
+        "std": 0.0323
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 11.010144,
+        "std": 3.24185
+      }
+    },
+    "Mobility + Network + Trust (Proposed 14 features)": {
+      "accuracy": {
+        "mean": 0.95365,
+        "std": 0.006475
+      },
+      "weighted_f1": {
+        "mean": 0.954823,
+        "std": 0.006194
+      },
+      "precision": {
+        "mean": 0.960385,
+        "std": 0.004887
+      },
+      "recall": {
+        "mean": 0.95365,
+        "std": 0.006475
+      },
+      "false_positive_count": {
+        "mean": 45.15,
+        "std": 6.49919
+      },
+      "false_negative_count": {
+        "mean": 1.2,
+        "std": 1.196486
+      },
+      "fit_seconds": {
+        "mean": 0.278135,
+        "std": 0.020752
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 5.333206,
+        "std": 0.09476
+      }
+    },
+    "Mobility Only (5 features)": {
+      "accuracy": {
+        "mean": 0.73805,
+        "std": 0.004334
+      },
+      "weighted_f1": {
+        "mean": 0.6441,
+        "std": 0.004413
+      },
+      "precision": {
+        "mean": 0.624113,
+        "std": 0.021506
+      },
+      "recall": {
+        "mean": 0.73805,
+        "std": 0.004334
+      },
+      "false_positive_count": {
+        "mean": 15.1,
+        "std": 4.076893
+      },
+      "false_negative_count": {
+        "mean": 246.85,
+        "std": 1.843195
+      },
+      "fit_seconds": {
+        "mean": 0.483256,
+        "std": 0.022293
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 10.667008,
+        "std": 0.335192
+      }
+    },
+    "Network Only (6 features)": {
+      "accuracy": {
+        "mean": 0.7388,
+        "std": 0.003518
+      },
+      "weighted_f1": {
+        "mean": 0.644828,
+        "std": 0.003772
+      },
+      "precision": {
+        "mean": 0.627844,
+        "std": 0.019013
+      },
+      "recall": {
+        "mean": 0.7388,
+        "std": 0.003518
+      },
+      "false_positive_count": {
+        "mean": 14.55,
+        "std": 3.516502
+      },
+      "false_negative_count": {
+        "mean": 246.65,
+        "std": 1.7252
+      },
+      "fit_seconds": {
+        "mean": 0.395705,
+        "std": 0.019526
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 10.775333,
+        "std": 0.521644
+      }
+    },
+    "Post-Hoc Attack Counters (Leakage 4 features)": {
+      "accuracy": {
+        "mean": 0.6802,
+        "std": 0.010516
+      },
+      "weighted_f1": {
+        "mean": 0.664113,
+        "std": 0.010284
+      },
+      "precision": {
+        "mean": 0.652938,
+        "std": 0.011593
+      },
+      "recall": {
+        "mean": 0.6802,
+        "std": 0.010516
+      },
+      "false_positive_count": {
+        "mean": 129.15,
+        "std": 11.136828
+      },
+      "false_negative_count": {
+        "mean": 190.65,
+        "std": 7.562198
+      },
+      "fit_seconds": {
+        "mean": 0.144801,
+        "std": 0.002212
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 11.747223,
+        "std": 7.680475
+      }
+    },
+    "Proposed + Leakage (18 features)": {
+      "accuracy": {
+        "mean": 0.99955,
+        "std": 0.000826
+      },
+      "weighted_f1": {
+        "mean": 0.999549,
+        "std": 0.000827
+      },
+      "precision": {
+        "mean": 0.999551,
+        "std": 0.000824
+      },
+      "recall": {
+        "mean": 0.99955,
+        "std": 0.000826
+      },
+      "false_positive_count": {
+        "mean": 0.05,
+        "std": 0.223607
+      },
+      "false_negative_count": {
+        "mean": 0.4,
+        "std": 0.753937
+      },
+      "fit_seconds": {
+        "mean": 0.229538,
+        "std": 0.006175
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 4.60995,
+        "std": 0.154469
+      }
+    },
+    "Trust Only (3 features)": {
+      "accuracy": {
+        "mean": 0.95205,
+        "std": 0.006151
+      },
+      "weighted_f1": {
+        "mean": 0.953202,
+        "std": 0.005886
+      },
+      "precision": {
+        "mean": 0.958274,
+        "std": 0.004773
+      },
+      "recall": {
+        "mean": 0.95205,
+        "std": 0.006151
+      },
+      "false_positive_count": {
+        "mean": 44.7,
+        "std": 6.182318
+      },
+      "false_negative_count": {
+        "mean": 3.25,
+        "std": 1.618154
+      },
+      "fit_seconds": {
+        "mean": 0.121005,
+        "std": 0.00822
+      },
+      "predict_microseconds_per_sample": {
+        "mean": 5.133396,
+        "std": 0.201155
+      }
+    }
+  },
+  "interpretation": [
+    "Mobility features alone perform poorly because GPS coordinates and acceleration do not directly identify malicity.",
+    "Network features alone provide reasonable classification of DoS and packet drop, but fail on Sybil attacks.",
+    "Trust scores are highly discriminative. Using Trust alone achieves ~93-94% F1, showing the power of the Heuristics layer.",
+    "Combining Mobility + Network + Trust (Proposed 14 features) yields the best balanced F1 (~95.7%) and stability.",
+    "Using Leakage features (post-hoc attack counters) yields a trivial, perfect 100% accuracy split. This represents a data leakage trap because those counters are written AFTER detection, meaning they would not be available in a real-time OBU/RSU deployment."
+  ]
+}

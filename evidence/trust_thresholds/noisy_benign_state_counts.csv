@@ -1,0 +1,16 @@
+scenario,threshold_pair,trusted_count,suspicious_count,blocked_count,minimum_trust
+Benign stable,0.70 / 0.40,20,0,0,0.9501
+Benign stable,0.80 / 0.50,20,0,0,0.9501
+Benign stable,0.60 / 0.30,20,0,0,0.9501
+Benign stable,0.75 / 0.35,20,0,0,0.9501
+Benign stable,0.65 / 0.45,20,0,0,0.9501
+Benign noisy,0.70 / 0.40,20,0,0,0.7044
+Benign noisy,0.80 / 0.50,7,13,0,0.7044
+Benign noisy,0.60 / 0.30,20,0,0,0.7044
+Benign noisy,0.75 / 0.35,17,3,0,0.7044
+Benign noisy,0.65 / 0.45,20,0,0,0.7044
+Sustained attack,0.70 / 0.40,1,2,17,0.1008
+Sustained attack,0.80 / 0.50,0,2,18,0.1008
+Sustained attack,0.60 / 0.30,1,3,16,0.1008
+Sustained attack,0.75 / 0.35,0,3,17,0.1008
+Sustained attack,0.65 / 0.45,1,1,18,0.1008
