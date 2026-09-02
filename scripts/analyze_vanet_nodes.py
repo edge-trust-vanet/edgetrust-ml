@@ -46,19 +46,28 @@ from sklearn.model_selection import train_test_split
 # Splits dataset into training set (80%) and test set (20%)
 # stratify=y ensures both splits have same ratio of malicious/normal
 
-# ── scikit-learn: The 9 ML Models ────────────────────────────────
-# We test 9 different approaches to find which is best for our data
+# ── The ML Models Suite (9 Traditional + Modern / Unique Algorithms) ───
 from sklearn.ensemble import (
     RandomForestClassifier,       # Model 1: Ensemble of decision trees
     GradientBoostingClassifier,   # Model 2: Trees that learn from mistakes
     ExtraTreesClassifier,         # Model 3: More randomized version of RF
     AdaBoostClassifier,           # Model 4: Focuses on hard-to-classify samples
+    HistGradientBoostingClassifier, # New: Fast binned histogram gradient boosting
+    StackingClassifier,           # New: Heterogeneous meta-ensemble
+    VotingClassifier,             # New: Soft-voting consensus blend
 )
 from sklearn.svm import SVC                    # Model 5: Support Vector Machine
 from sklearn.neighbors import KNeighborsClassifier  # Model 6: K-Nearest Neighbors
 from sklearn.linear_model import LogisticRegression  # Model 7: Linear classifier
 from sklearn.tree import DecisionTreeClassifier       # Model 8: Single decision tree
 from sklearn.naive_bayes import GaussianNB            # Model 9: Probabilistic classifier
+from sklearn.neural_network import MLPClassifier      # New: Deep tabular neural network
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis # New: Generative Bayes classifier
+
+# Modern GBDT libraries
+import xgboost as xgb                          # New: eXtreme Gradient Boosting
+import lightgbm as lgb                         # New: Light Gradient Boosting Machine
+import catboost as cb                          # New: Categorical Oblivious Tree Boosting
 
 # ── scikit-learn: Evaluation Metrics ─────────────────────────────
 from sklearn.metrics import (
@@ -237,11 +246,11 @@ for feat, imp in top:
 #  - GNB: Uses probability distributions (Bayes theorem)
 
 print("\n" + "─" * 65)
-print("  🤖 Training 9 Models on VANET Malicious Nodes Dataset")
+print("  🤖 Training All ML Models (9 Existing + 8 New/Unique Models)")
 print("─" * 65)
 
 models = {
-    # Ensemble methods — combine many weak learners into one strong one
+    # ── 1. Existing Traditional Tree & Ensemble Baselines ───────────────
     'Random Forest': RandomForestClassifier(
         n_estimators=100,   # 100 decision trees vote on each prediction
         random_state=42     # Reproducible results
@@ -259,39 +268,95 @@ models = {
         n_estimators=50,    # 50 weak classifiers, each learning from previous errors
         random_state=42
     ),
-
-    # Single interpretable model
     'Decision Tree': DecisionTreeClassifier(
         max_depth=10,       # Limit depth to prevent memorizing training data
         random_state=42
     ),
 
-    # Kernel-based: finds non-linear decision boundaries
+    # ── 2. Existing Non-Tree Baselines ──────────────────────────────────
     'SVM (RBF)': SVC(
         kernel='rbf',         # Radial Basis Function — maps data to higher dimension
         probability=True,     # Enable predict_proba() for confidence scores
         random_state=42
     ),
-
-    # Distance-based: classify by looking at 5 nearest neighbors
     'K-Nearest Neighbors': KNeighborsClassifier(
         n_neighbors=5         # A vehicle's class = majority class of 5 closest training points
     ),
-
-    # Linear: fast and interpretable, good baseline
     'Logistic Regression': LogisticRegression(
         max_iter=1000,        # More iterations for convergence on scaled data
         random_state=42
     ),
-
-    # Probabilistic: tiny and ultra fast — good for edge deployment
     'Gaussian Naive Bayes': GaussianNB(),
-    # Assumes features are independent and normally distributed
-    # Very fast, works well when trust features are already well-separated
+
+    # ── 3. New & Unique Modern Gradient Boosted Decision Trees ──────────
+    'XGBoost': xgb.XGBClassifier(
+        n_estimators=150,     # Regularized GBDT with 2nd order Taylor gradient
+        max_depth=5,
+        learning_rate=0.08,
+        subsample=0.85,
+        colsample_bytree=0.85,
+        random_state=42,
+        eval_metric='logloss'
+    ),
+    'LightGBM': lgb.LGBMClassifier(
+        n_estimators=150,     # Fast leaf-wise tree growth with GOSS & histogram binning
+        max_depth=5,
+        learning_rate=0.08,
+        num_leaves=31,
+        subsample=0.85,
+        random_state=42,
+        verbose=-1
+    ),
+    'CatBoost': cb.CatBoostClassifier(
+        iterations=200,       # Symmetric/oblivious decision trees to prevent target shift
+        depth=5,
+        learning_rate=0.08,
+        l2_leaf_reg=3,
+        random_seed=42,
+        verbose=0
+    ),
+    'Hist Gradient Boosting': HistGradientBoostingClassifier(
+        max_iter=150,         # High-throughput integer-binned continuous features
+        max_depth=5,
+        learning_rate=0.08,
+        random_state=42
+    ),
+
+    # ── 4. New & Unique Deep Learning & Generative Architectures ────────
+    'MLP Neural Network': MLPClassifier(
+        hidden_layer_sizes=(128, 64), # Deep Tabular representation learning
+        max_iter=600,
+        activation='relu',
+        solver='adam',
+        alpha=1e-4,
+        random_state=42
+    ),
+    'Linear Discriminant Analysis': LinearDiscriminantAnalysis(), # Generative Bayesian linear classifier
+
+    # ── 5. New & Unique Heterogeneous Meta-Ensembles ────────────────────
+    'Stacking Ensemble': StackingClassifier(
+        estimators=[
+            ('rf', RandomForestClassifier(n_estimators=80, random_state=42)),
+            ('xgb', xgb.XGBClassifier(n_estimators=80, max_depth=4, learning_rate=0.08, random_state=42, eval_metric='logloss')),
+            ('cb', cb.CatBoostClassifier(iterations=80, depth=4, learning_rate=0.08, random_seed=42, verbose=0)),
+            ('ada', AdaBoostClassifier(n_estimators=50, random_state=42)),
+        ],
+        final_estimator=LogisticRegression(random_state=42),
+        cv=5
+    ),
+    'Voting Ensemble': VotingClassifier(
+        estimators=[
+            ('rf', RandomForestClassifier(n_estimators=100, random_state=42)),
+            ('ada', AdaBoostClassifier(n_estimators=50, random_state=42)),
+            ('xgb', xgb.XGBClassifier(n_estimators=100, max_depth=4, learning_rate=0.08, random_state=42, eval_metric='logloss')),
+            ('cb', cb.CatBoostClassifier(iterations=100, depth=4, learning_rate=0.08, random_seed=42, verbose=0)),
+        ],
+        voting='soft'
+    ),
 }
 
 # ── Train each model and record metrics ──────────────────────────
-all_metrics = {}  # Will hold results for all 9 models
+all_metrics = {}  # Will hold results for all models
 
 for name, model in models.items():
     print(f"\n▶  {name} ...", end=' ', flush=True)
@@ -304,29 +369,10 @@ for name, model in models.items():
 
     # ── Calculate 4 key evaluation metrics ───────────────────────
     acc  = accuracy_score(y_test, y_pred)
-    # Accuracy = (correct predictions) / (total predictions)
-    # Can be misleading if classes are imbalanced!
-
     f1   = f1_score(y_test, y_pred, average='weighted')
-    # F1 = harmonic mean of Precision and Recall
-    # 'weighted' accounts for class imbalance (more normal than malicious)
-    # F1 is our PRIMARY metric for ranking models
-
     prec = precision_score(y_test, y_pred, average='weighted', zero_division=0)
-    # Precision = TP / (TP + FP)
-    # "Of all vehicles we FLAGGED as malicious, how many actually were?"
-    # Low precision = too many innocent vehicles being blocked (bad!)
-
     rec  = recall_score(y_test, y_pred, average='weighted', zero_division=0)
-    # Recall = TP / (TP + FN)
-    # "Of all ACTUAL malicious vehicles, how many did we catch?"
-    # Low recall = malicious vehicles slipping through undetected (dangerous!)
-
     cm   = confusion_matrix(y_test, y_pred).tolist()
-    # cm[0][0] = True Negatives  (correctly identified as Normal)
-    # cm[0][1] = False Positives (Normal wrongly flagged as Malicious)
-    # cm[1][0] = False Negatives (Malicious wrongly passed as Normal — WORST!)
-    # cm[1][1] = True Positives  (correctly identified as Malicious)
 
     # Store all metrics for this model
     all_metrics[name] = {
@@ -335,26 +381,17 @@ for name, model in models.items():
         'precision'       : round(float(prec) * 100, 2),
         'recall'          : round(float(rec)  * 100, 2),
         'false_alert_rate': round((1 - float(prec)) * 100, 2),
-        # False Alert Rate = how often we wrongly block a normal vehicle
         'confusion_matrix': cm,
     }
     print(f"Acc={acc*100:.2f}%  F1={f1*100:.2f}%  Prec={prec*100:.2f}%  Rec={rec*100:.2f}%")
 
     # Save the trained model to disk as a .pkl file
-    # This lets the dashboard load it instantly without retraining
     safe_name = name.replace(' ', '_').replace('(', '').replace(')', '')
     joblib.dump(model, os.path.join(MODELS_DIR, f'vanet_{safe_name}.pkl'))
-    # File names: vanet_Random_Forest.pkl, vanet_SVM_RBF.pkl, etc.
 
 # ═══════════════════════════════════════════════════════════════════
 #  STEP 6: SELECT THE BEST MODEL
 # ═══════════════════════════════════════════════════════════════════
-#
-#  We rank by F1 Score (not Accuracy) because:
-#  - Accuracy can be misleading with imbalanced datasets
-#  - F1 penalizes BOTH false positives AND false negatives equally
-#  - For a security system, we care about both: don't miss attacks,
-#    don't block innocent vehicles
 
 best_name = max(all_metrics, key=lambda k: all_metrics[k]['f1_score'])
 
@@ -369,19 +406,15 @@ print(f"{'='*65}")
 # ═══════════════════════════════════════════════════════════════════
 #  STEP 7: SAVE METRICS FOR THE DASHBOARD
 # ═══════════════════════════════════════════════════════════════════
-#
-#  The dashboard reads vanet_model_metrics.json at startup and uses it
-#  to render all the model cards, charts, and the best model spotlight.
-#  feature_importance powers the feature importance bar chart.
 
 output = {
-    'models'             : all_metrics,              # All 9 models with full metrics
-    'best_model'         : best_name,                # Name of the winning model
-    'dataset'            : 'vanet_malicious_nodes',  # Dataset identifier
-    'n_features'         : len(FEATURES),            # 18
+    'models'             : all_metrics,
+    'best_model'         : best_name,
+    'dataset'            : 'vanet_malicious_nodes',
+    'n_features'         : len(FEATURES),
     'feature_importance' : {
-        k: round(v * 100, 3)                         # Convert to percentage
-        for k, v in top                              # top = sorted list from Step 4
+        k: round(v * 100, 3)
+        for k, v in top
     },
 }
 
@@ -399,7 +432,6 @@ names  = list(all_metrics.keys())
 accs   = [all_metrics[n]['accuracy']  for n in names]
 f1s    = [all_metrics[n]['f1_score']  for n in names]
 colors = ['#1d4ed8' if all_metrics[n]['is_best'] else '#334155' for n in names]
-# Blue = best model, dark grey = others
 
 # Short labels for x-axis (long names won't fit)
 short = [n.replace('K-Nearest Neighbors','KNN')
@@ -410,13 +442,21 @@ short = [n.replace('K-Nearest Neighbors','KNN')
           .replace('Random Forest','RF')
           .replace('Decision Tree','DT')
           .replace('AdaBoost','ADA')
-          .replace('SVM (RBF)','SVM') for n in names]
+          .replace('SVM (RBF)','SVM')
+          .replace('XGBoost','XGB')
+          .replace('LightGBM','LGBM')
+          .replace('CatBoost','CAT')
+          .replace('MLP Neural Network','MLP')
+          .replace('Hist Gradient Boosting','HGB')
+          .replace('Linear Discriminant Analysis','LDA')
+          .replace('Stacking Ensemble','STACK')
+          .replace('Voting Ensemble','VOTE') for n in names]
 
 # Chart 1: Side-by-side bar chart (Accuracy + F1) ─────────────────
-fig, axes = plt.subplots(1, 2, figsize=(14, 5))
-fig.suptitle('VANET Malicious Nodes — All 9 Model Comparison',
+fig, axes = plt.subplots(1, 2, figsize=(18, 6))
+fig.suptitle('VANET Malicious Nodes — All Model Comparison (Existing & New Architectures)',
              fontsize=13, fontweight='bold', color='white')
-fig.patch.set_facecolor('#0d1321')  # Dark background to match dashboard
+fig.patch.set_facecolor('#0d1321')
 x = np.arange(len(names))
 
 for ax, vals, title in [
@@ -427,13 +467,13 @@ for ax, vals, title in [
     ax.set_facecolor('#0d1321')
     ax.set_title(title, color='white', fontsize=11)
     ax.set_xticks(x)
-    ax.set_xticklabels(short, fontsize=9, color='#94a3b8',
-                       rotation=20, ha='right')
+    ax.set_xticklabels(short, fontsize=8, color='#94a3b8',
+                       rotation=35, ha='right')
     ax.tick_params(colors='#94a3b8')
     ax.spines[:].set_color('#1e293b')
     low = max(50, min(vals) - 5)
     ax.set_ylim(low, 102)
-    ax.bar_label(bars, fmt='%.1f', fontsize=8, color='#cbd5e1', padding=2)
+    ax.bar_label(bars, fmt='%.1f', fontsize=7.5, color='#cbd5e1', padding=2)
 
 plt.tight_layout()
 plt.savefig(os.path.join(RESULTS_DIR, 'vanet_comparison.png'),

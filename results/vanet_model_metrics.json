@@ -37,19 +37,19 @@
       "is_best": false
     },
     "Extra Trees": {
-      "accuracy": 94.5,
-      "f1_score": 94.62,
-      "precision": 95.04,
-      "recall": 94.5,
-      "false_alert_rate": 4.96,
+      "accuracy": 94.4,
+      "f1_score": 94.52,
+      "precision": 94.92,
+      "recall": 94.4,
+      "false_alert_rate": 5.08,
       "confusion_matrix": [
         [
           702,
           46
         ],
         [
-          9,
-          243
+          10,
+          242
         ]
       ],
       "is_best": false
@@ -161,25 +161,169 @@
         ]
       ],
       "is_best": false
+    },
+    "XGBoost": {
+      "accuracy": 95.3,
+      "f1_score": 95.41,
+      "precision": 95.9,
+      "recall": 95.3,
+      "false_alert_rate": 4.1,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          3,
+          249
+        ]
+      ],
+      "is_best": false
+    },
+    "LightGBM": {
+      "accuracy": 94.9,
+      "f1_score": 95.01,
+      "precision": 95.47,
+      "recall": 94.9,
+      "false_alert_rate": 4.53,
+      "confusion_matrix": [
+        [
+          703,
+          45
+        ],
+        [
+          6,
+          246
+        ]
+      ],
+      "is_best": false
+    },
+    "CatBoost": {
+      "accuracy": 95.4,
+      "f1_score": 95.51,
+      "precision": 96.02,
+      "recall": 95.4,
+      "false_alert_rate": 3.98,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          2,
+          250
+        ]
+      ],
+      "is_best": false
+    },
+    "Hist Gradient Boosting": {
+      "accuracy": 95.3,
+      "f1_score": 95.42,
+      "precision": 95.99,
+      "recall": 95.3,
+      "false_alert_rate": 4.01,
+      "confusion_matrix": [
+        [
+          702,
+          46
+        ],
+        [
+          1,
+          251
+        ]
+      ],
+      "is_best": false
+    },
+    "MLP Neural Network": {
+      "accuracy": 91.4,
+      "f1_score": 91.41,
+      "precision": 91.42,
+      "recall": 91.4,
+      "false_alert_rate": 8.58,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          42,
+          210
+        ]
+      ],
+      "is_best": false
+    },
+    "Linear Discriminant Analysis": {
+      "accuracy": 94.6,
+      "f1_score": 94.72,
+      "precision": 95.16,
+      "recall": 94.6,
+      "false_alert_rate": 4.84,
+      "confusion_matrix": [
+        [
+          702,
+          46
+        ],
+        [
+          8,
+          244
+        ]
+      ],
+      "is_best": false
+    },
+    "Stacking Ensemble": {
+      "accuracy": 95.5,
+      "f1_score": 95.61,
+      "precision": 96.14,
+      "recall": 95.5,
+      "false_alert_rate": 3.86,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          1,
+          251
+        ]
+      ],
+      "is_best": false
+    },
+    "Voting Ensemble": {
+      "accuracy": 95.5,
+      "f1_score": 95.61,
+      "precision": 96.14,
+      "recall": 95.5,
+      "false_alert_rate": 3.86,
+      "confusion_matrix": [
+        [
+          704,
+          44
+        ],
+        [
+          1,
+          251
+        ]
+      ],
+      "is_best": false
     }
   },
   "best_model": "Random Forest",
   "dataset": "vanet_malicious_nodes",
   "n_features": 14,
   "feature_importance": {
-    "trust_score": 37.103,
-    "neighbor_trust_score_avg": 23.957,
-    "historical_trust_score": 21.776,
-    "latency": 1.84,
-    "position_y": 1.803,
-    "position_x": 1.772,
-    "packet_received": 1.735,
-    "signal_strength": 1.688,
-    "direction": 1.685,
-    "acceleration": 1.668,
-    "speed": 1.48,
-    "packet_sent": 1.409,
-    "packet_drop_ratio": 1.351,
-    "message_retransmission_count": 0.734
+    "trust_score": 36.988,
+    "neighbor_trust_score_avg": 24.067,
+    "historical_trust_score": 21.77,
+    "latency": 1.832,
+    "position_y": 1.814,
+    "packet_received": 1.754,
+    "position_x": 1.753,
+    "direction": 1.696,
+    "signal_strength": 1.678,
+    "acceleration": 1.675,
+    "speed": 1.483,
+    "packet_sent": 1.399,
+    "packet_drop_ratio": 1.347,
+    "message_retransmission_count": 0.743
   }
 }
