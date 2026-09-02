@@ -106,15 +106,23 @@ def build_why_best(name, bm, all_m):
     pr   = sum(1 for v in others.values() if v['precision'] > bm['precision']) + 1
     rr   = sum(1 for v in others.values() if v['recall']    > bm['recall'])    + 1
     notes = {
-        'Random Forest'        : 'Ensemble of 100 decision trees — handles noisy sensor data robustly and resists overfitting.',
-        'Extra Trees'          : 'Extremely randomized trees — faster training with equally robust generalization.',
-        'Gradient Boosting'    : 'Iterative boosting corrects errors each round — excellent at detecting subtle attacks.',
-        'AdaBoost'             : 'Weights misclassified examples more each round — strong on borderline cases.',
-        'SVM (RBF)'            : 'Maximum-margin hyperplane with RBF kernel — highly effective in high-dimensional feature space.',
-        'K-Nearest Neighbors'  : 'Non-parametric — classifies based on neighborhood behavior in feature space.',
-        'Logistic Regression'  : 'Linear, highly interpretable — strong baseline for binary classification.',
-        'Decision Tree'        : 'Fully interpretable — rules can be extracted for deployment on resource-constrained RSUs.',
-        'Gaussian Naive Bayes' : 'Probabilistic — extremely lightweight for resource-constrained roadside units.',
+        'Random Forest'              : 'Ensemble of 100 decision trees — handles noisy sensor data robustly and resists overfitting.',
+        'Extra Trees'                : 'Extremely randomized trees — faster training with equally robust generalization.',
+        'Gradient Boosting'          : 'Iterative boosting corrects errors each round — excellent at detecting subtle attacks.',
+        'AdaBoost'                   : 'Weights misclassified examples more each round — strong on borderline cases.',
+        'SVM (RBF)'                  : 'Maximum-margin hyperplane with RBF kernel — highly effective in high-dimensional feature space.',
+        'K-Nearest Neighbors'        : 'Non-parametric — classifies based on neighborhood behavior in feature space.',
+        'Logistic Regression'        : 'Linear, highly interpretable — strong baseline for binary classification.',
+        'Decision Tree'              : 'Fully interpretable — rules can be extracted for deployment on resource-constrained RSUs.',
+        'Gaussian Naive Bayes'       : 'Probabilistic — extremely lightweight for resource-constrained roadside units.',
+        'XGBoost'                    : 'eXtreme Gradient Boosting with regularized objective and 2nd-order Taylor loss approximation — optimal tabular robustness.',
+        'LightGBM'                   : 'Leaf-wise tree growth with GOSS & histogram binning — ultra-fast sub-millisecond inference for RSU edge units.',
+        'CatBoost'                   : 'Symmetric/oblivious decision trees with ordered boosting — eliminates target shift and enables compiled edge execution.',
+        'Hist Gradient Boosting'     : 'Histogram-based binning for continuous features — high-throughput gradient boosting with low memory footprint.',
+        'MLP Neural Network'         : 'Deep tabular multi-layer perceptron — learns non-linear latent embeddings across kinematics and radio telemetry.',
+        'Linear Discriminant Analysis': 'Generative Bayesian linear classifier — maximizes class separation with ultra-low computational overhead.',
+        'Stacking Ensemble'          : 'Heterogeneous meta-ensemble fusing complementary tree, boosting, and linear learners to detect diverse attack vectors.',
+        'Voting Ensemble'            : 'Soft-voting consensus blend combining top-performing diverse classifiers for maximum prediction stability.',
     }
     return [
         f"Ranked #{f1r} of {total} by F1 Score ({bm['f1_score']}%) — the primary metric for imbalanced security datasets.",

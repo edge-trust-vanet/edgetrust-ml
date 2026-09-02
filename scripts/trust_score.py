@@ -38,6 +38,36 @@ class HybridTrustEngine:
         else:
             return "Blocked"
 
+
+def calculate_trust_score(trust_data):
+    """
+    Computes weighted composite trust score from real-time trust factors:
+    - message_consistency (weight: 0.30)
+    - behavior_history (weight: 0.30)
+    - neighbor_validation (weight: 0.20)
+    - plausibility (weight: 0.20)
+    """
+    weights = {
+        'message_consistency': 0.30,
+        'behavior_history': 0.30,
+        'neighbor_validation': 0.20,
+        'plausibility': 0.20,
+    }
+    total = sum(float(trust_data.get(k, 0.5)) * w for k, w in weights.items())
+    return round(float(total), 4)
+
+
+def classify_vehicle(trust_score):
+    """
+    Classifies a vehicle based on its current trust score threshold.
+    """
+    if trust_score >= 0.70:
+        return "Trusted"
+    elif trust_score >= 0.40:
+        return "Suspicious"
+    else:
+        return "Blocked"
+
 # --- Test functionality ---
 if __name__ == "__main__":
     engine = HybridTrustEngine(alpha=0.7)

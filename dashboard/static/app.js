@@ -227,6 +227,14 @@ function modelType(name) {
     'AdaBoost': 'Boosting Ensemble',
     'Gradient Boosting': 'Boosting · Iterative',
     'Extra Trees': 'Randomized Trees',
+    'XGBoost': 'Regularized GBDT',
+    'LightGBM': 'Fast Histogram GBDT',
+    'CatBoost': 'Symmetric Tree GBDT',
+    'Hist Gradient Boosting': 'Histogram-Binned GBDT',
+    'MLP Neural Network': 'Deep Tabular Neural Net',
+    'Linear Discriminant Analysis': 'Generative · Linear Bayes',
+    'Stacking Ensemble': 'Meta-Learner Ensemble',
+    'Voting Ensemble': 'Soft Blend Ensemble',
   })[name] || 'ML Classifier';
 }
 

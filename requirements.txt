@@ -4,3 +4,6 @@ flask
 flask-cors
 matplotlib
 seaborn
+xgboost
+lightgbm
+catboost
