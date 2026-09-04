@@ -17,6 +17,7 @@ import joblib, os
 BASE     = os.path.join(os.path.dirname(__file__), '..')
 DATA_DIR = os.path.join(BASE, 'data')
 MDL_DIR  = os.path.join(BASE, 'models')
+os.makedirs(MDL_DIR, exist_ok=True)
 
 print("=" * 55)
 print("  VeReMi Dataset — Preprocessing")

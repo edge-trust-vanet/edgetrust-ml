@@ -1,0 +1,152 @@
+{
+  "total_extracted_records": 75,
+  "unique_nodes": 6,
+  "benign_count": 44,
+  "malicious_count": 31,
+  "evaluations": {
+    "AdaBoost": {
+      "accuracy": 58.67,
+      "f1_score": 43.38,
+      "precision": 34.42,
+      "recall": 58.67,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "accuracy": 58.67,
+      "f1_score": 43.38,
+      "precision": 34.42,
+      "recall": 58.67,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ]
+    },
+    "Extra Trees": {
+      "accuracy": 58.67,
+      "f1_score": 43.38,
+      "precision": 34.42,
+      "recall": 58.67,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ]
+    },
+    "Gaussian Naive Bayes": {
+      "accuracy": 58.67,
+      "f1_score": 43.38,
+      "precision": 34.42,
+      "recall": 58.67,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ]
+    },
+    "Gradient Boosting": {
+      "accuracy": 36.0,
+      "f1_score": 34.97,
+      "precision": 38.32,
+      "recall": 36.0,
+      "confusion_matrix": [
+        [
+          11,
+          33
+        ],
+        [
+          15,
+          16
+        ]
+      ]
+    },
+    "K-Nearest Neighbors": {
+      "accuracy": 68.0,
+      "f1_score": 66.08,
+      "precision": 68.09,
+      "recall": 68.0,
+      "confusion_matrix": [
+        [
+          38,
+          6
+        ],
+        [
+          18,
+          13
+        ]
+      ]
+    },
+    "Logistic Regression": {
+      "accuracy": 58.67,
+      "f1_score": 43.38,
+      "precision": 34.42,
+      "recall": 58.67,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ]
+    },
+    "Random Forest GridSearch": {
+      "accuracy": 29.33,
+      "f1_score": 28.7,
+      "precision": 28.14,
+      "recall": 29.33,
+      "confusion_matrix": [
+        [
+          19,
+          25
+        ],
+        [
+          28,
+          3
+        ]
+      ]
+    },
+    "SVM RBF": {
+      "accuracy": 58.67,
+      "f1_score": 43.38,
+      "precision": 34.42,
+      "recall": 58.67,
+      "confusion_matrix": [
+        [
+          44,
+          0
+        ],
+        [
+          31,
+          0
+        ]
+      ]
+    }
+  }
+}
