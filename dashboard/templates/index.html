@@ -33,6 +33,7 @@
       <button class="nav-tab active"  onclick="showSection('evaluator', this)">🚗 Evaluator</button>
       <button class="nav-tab"         onclick="showSection('arena',     this)">🏆 VeReMi Arena</button>
       <button class="nav-tab"         onclick="showSection('vanet',     this)">🌐 VANET Nodes</button>
+      <button class="nav-tab"         onclick="showSection('live-demo', this)" style="background:rgba(59,130,246,0.15);border:1px solid #3b82f6;color:#60a5fa;font-weight:600">📡 Live Panel Demo</button>
     </nav>
     <div class="status-pill"><span class="status-dot pulse"></span>Model Active</div>
     <div class="clock" id="clock">--:--:--</div>
@@ -237,6 +238,148 @@
       <div class="spotlight-body" id="vanet-spotlight"><p class="log-empty">Loading…</p></div>
     </section>
   </div>
+</main>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 4 — LIVE PANEL DEMO & SIMULATION VISUALIZER
+══════════════════════════════════════════════════════ -->
+<main class="main" id="sec-live-demo" style="display:none; flex-direction:column; gap:20px;">
+  <!-- Control Bar -->
+  <section class="card" style="padding:16px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; background:linear-gradient(135deg, rgba(17,24,39,0.9), rgba(15,23,42,0.9)); border:1px solid rgba(59,130,246,0.3);">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div style="width:40px; height:40px; border-radius:10px; background:rgba(59,130,246,0.2); display:flex; align-items:center; justify-content:center; color:#3b82f6;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      </div>
+      <div>
+        <h2 style="font-size:1.1rem; font-weight:700; margin:0; color:#fff;">Live Simulation Inspection Deck</h2>
+        <p style="font-size:0.78rem; color:#94a3b8; margin:2px 0 0;">Connected to live SUMO & OMNeT++ 802.11p telemetry feed</p>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <button id="btn-play-pause" onclick="togglePlay()" class="btn-demo" style="background:#2563eb; color:#fff; padding:7px 14px; border-radius:6px; border:none; cursor:pointer; font-weight:600;">▶ Play</button>
+      <button onclick="stepPrev()" class="btn-demo" style="background:rgba(255,255,255,0.06); color:#cbd5e1; padding:7px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); cursor:pointer;">⏮ Prev</button>
+      <button onclick="stepNext()" class="btn-demo" style="background:rgba(255,255,255,0.06); color:#cbd5e1; padding:7px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); cursor:pointer;">⏭ Next</button>
+      <div style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.04); padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+        <span style="font-size:0.75rem; color:#94a3b8;">Speed:</span>
+        <select id="sim-speed" onchange="changeSpeed(this.value)" style="background:transparent; color:#fff; border:none; font-size:0.8rem; cursor:pointer; outline:none;">
+          <option value="1500" style="background:#1e293b;">0.5x (Slow-Mo)</option>
+          <option value="800" selected style="background:#1e293b;">1x (Normal)</option>
+          <option value="350" style="background:#1e293b;">2x (Fast)</option>
+          <option value="120" style="background:#1e293b;">5x (Ultra)</option>
+        </select>
+      </div>
+      <button onclick="jumpToFirstAttack()" class="btn-demo" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#f87171; font-weight:600; padding:7px 14px; border-radius:6px; cursor:pointer;">🚨 Jump to Attack (Node 2)</button>
+      <button onclick="fetchSimFeed()" class="btn-demo" style="background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#34d399; padding:7px 14px; border-radius:6px; cursor:pointer;">🔄 Refresh CSV</button>
+    </div>
+  </section>
+
+  <!-- Simulation Canvas and AI Decision HUD -->
+  <div style="display:grid; grid-template-columns: 1.45fr 1fr; gap:20px;">
+    <!-- 2D Canvas Map Card -->
+    <section class="card" style="padding:16px;">
+      <div class="card-header" style="padding:0 0 12px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="font-size:0.95rem;">🗺 4-Way Intersection & 802.11p Radio Coverage</h2>
+        <span id="pkt-counter-badge" style="font-size:0.75rem; font-family:'JetBrains Mono', monospace; background:rgba(59,130,246,0.15); color:#60a5fa; padding:3px 8px; border-radius:4px;">Packet 0 / 0</span>
+      </div>
+      <div style="position:relative; width:100%; margin-top:10px;">
+        <canvas id="simCanvas" width="680" height="500" style="background:#0b1120; border-radius:8px; width:100%; height:auto; display:block; border:1px solid rgba(255,255,255,0.08);"></canvas>
+      </div>
+      <div style="display:flex; justify-content:center; gap:20px; margin-top:12px; font-size:0.75rem; color:#94a3b8; flex-wrap:wrap;">
+        <span><strong style="color:#06b6d4;">◉ RSU Tower</strong> (Intersection Center)</span>
+        <span><strong style="color:#10b981;">● Legitimate Car</strong> (Routine BSM)</span>
+        <span><strong style="color:#ef4444;">● Attacker Car</strong> (FDI / Blackhole)</span>
+        <span><strong style="color:#38bdf8; border-bottom:1px dashed #38bdf8;">◌ 85m Coverage</strong> (Radio Zone)</span>
+      </div>
+    </section>
+
+    <!-- Real-Time Edge AI Decision Card -->
+    <section class="card" style="padding:16px; display:flex; flex-direction:column; gap:14px;">
+      <div class="card-header" style="padding:0 0 12px; border-bottom:1px solid rgba(255,255,255,0.06);">
+        <h2 style="font-size:0.95rem;">🛡 Real-Time AdaBoost + EdgeTrust Decision</h2>
+      </div>
+
+      <!-- Decision Banner -->
+      <div id="demo-decision-card" style="padding:16px; border-radius:10px; background:rgba(16,185,129,0.1); border:1px solid #10b981; text-align:center;">
+        <p style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; margin:0 0 4px; color:#94a3b8;">Hybrid Security Verdict</p>
+        <div id="demo-decision-title" style="font-size:1.8rem; font-weight:800; color:#10b981; font-family:'JetBrains Mono', monospace;">ACCEPT</div>
+        <div id="demo-attack-type" style="display:inline-block; font-size:0.75rem; padding:3px 10px; border-radius:20px; background:rgba(255,255,255,0.06); margin-top:6px; color:#cbd5e1;">Normal Routine Telemetry</div>
+      </div>
+
+      <!-- AdaBoost AI Meter -->
+      <div style="background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; margin-bottom:6px;">
+          <span style="color:#cbd5e1;">🤖 AdaBoost Malicious Probability</span>
+          <span id="demo-adaboost-pct" style="font-family:'JetBrains Mono', monospace; font-weight:700; color:#10b981;">12.4%</span>
+        </div>
+        <div style="background:#1e293b; height:10px; border-radius:5px; overflow:hidden;">
+          <div id="demo-adaboost-fill" style="width:12%; height:100%; background:#10b981; transition:width 0.3s ease, background 0.3s ease;"></div>
+        </div>
+        <div style="font-size:0.7rem; color:#64748b; margin-top:4px; display:flex; justify-content:space-between;">
+          <span>0% (Legitimate)</span>
+          <span>Threshold: 50%</span>
+          <span>100% (Attacker)</span>
+        </div>
+      </div>
+
+      <!-- Trust Score Meter -->
+      <div style="background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; margin-bottom:6px;">
+          <span style="color:#cbd5e1;">📊 Node Trust Score (Direct + Hist)</span>
+          <span id="demo-trust-score" style="font-family:'JetBrains Mono', monospace; font-weight:700; color:#10b981;">0.9540</span>
+        </div>
+        <div style="background:#1e293b; height:10px; border-radius:5px; overflow:hidden;">
+          <div id="demo-trust-fill" style="width:95%; height:100%; background:#10b981; transition:width 0.3s ease, background 0.3s ease;"></div>
+        </div>
+        <div style="font-size:0.7rem; color:#64748b; margin-top:4px; display:flex; justify-content:space-between;">
+          <span>0.0 (Untrusted)</span>
+          <span style="color:#f59e0b;">Block Threshold: 0.40</span>
+          <span>1.0 (Trusted)</span>
+        </div>
+      </div>
+
+      <!-- Telemetry Inspector Grid -->
+      <div style="background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.75rem;">
+        <div><span style="color:#64748b;">Vehicle ID:</span> <strong id="demo-v-id" style="color:#fff;">V1</strong></div>
+        <div><span style="color:#64748b;">Speed:</span> <strong id="demo-v-speed" style="color:#fff;">0.0 m/s</strong></div>
+        <div><span style="color:#64748b;">Reported Pos:</span> <strong id="demo-v-pos" style="color:#fff;">(0, 0)</strong></div>
+        <div><span style="color:#64748b;">Dist to RSU:</span> <strong id="demo-v-dist" style="color:#fff;">0 m</strong></div>
+        <div><span style="color:#64748b;">Signal (RSSI):</span> <strong id="demo-v-rssi" style="color:#fff;">-80 dBm</strong></div>
+        <div><span style="color:#64748b;">Drop Ratio:</span> <strong id="demo-v-drop" style="color:#fff;">0.00</strong></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Live Packet History Table -->
+  <section class="card" style="padding:16px;">
+    <div class="card-header" style="padding:0 0 12px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="font-size:0.95rem;">📋 Telemetry Packet Stream (Click to Inspect)</h2>
+      <div style="display:flex; gap:6px;">
+        <button onclick="filterFeed('all', this)" class="btn-demo active" style="font-size:0.72rem; padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.08); color:#fff; cursor:pointer;">All</button>
+        <button onclick="filterFeed('malicious', this)" class="btn-demo" style="font-size:0.72rem; padding:4px 10px; border-radius:4px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:#f87171; cursor:pointer;">Attacks Only</button>
+        <button onclick="filterFeed('blocked', this)" class="btn-demo" style="font-size:0.72rem; padding:4px 10px; border-radius:4px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:#ef4444; cursor:pointer;">Blocked Only</button>
+      </div>
+    </div>
+    <div style="max-height:220px; overflow-y:auto; margin-top:10px;">
+      <table class="table" style="font-size:0.78rem; width:100%;">
+        <thead>
+          <tr style="position:sticky; top:0; background:#111827; border-bottom:1px solid rgba(255,255,255,0.1);">
+            <th style="padding:8px;">#</th>
+            <th style="padding:8px;">Vehicle</th>
+            <th style="padding:8px;">Speed</th>
+            <th style="padding:8px;">Coordinates</th>
+            <th style="padding:8px;">Signal</th>
+            <th style="padding:8px;">Trust</th>
+            <th style="padding:8px;">Attack Vector</th>
+            <th style="padding:8px;">AdaBoost Pred</th>
+            <th style="padding:8px;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="demo-table-body">
+          <tr><td colspan="9" class="log-empty">Loading telemetry stream...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </main>
 
 <script src="/static/app.js"></script>

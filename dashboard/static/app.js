@@ -13,14 +13,17 @@ function updateSlider(sid, vid) {
 
 // ── Section Nav ───────────────────────────────────────────
 function showSection(name, btn) {
-  ['evaluator', 'arena', 'vanet'].forEach(s => {
-    document.getElementById('sec-' + s).style.display = 'none';
+  ['evaluator', 'arena', 'vanet', 'live-demo'].forEach(s => {
+    const el = document.getElementById('sec-' + s);
+    if (el) el.style.display = 'none';
   });
-  document.getElementById('sec-' + name).style.display = 'flex';
+  const target = document.getElementById('sec-' + name);
+  if (target) target.style.display = 'flex';
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
   if (name === 'arena') loadArena();
   if (name === 'vanet') loadVanet();
+  if (name === 'live-demo') initLiveDemo();
 }
 
 // ── Stats ─────────────────────────────────────────────────
@@ -427,3 +430,404 @@ function renderFeatureImportance(fi) {
 // ── Init ──────────────────────────────────────────────────
 buildPerfChart();
 refreshStats();
+
+// ══════════════════════════════════════════════════════════
+// ── SECTION 4: LIVE PANEL DEMO CONTROLLER & VISUALIZER ───
+// ══════════════════════════════════════════════════════════
+let simFeed = null;
+let currentPktIdx = 0;
+let isPlaying = false;
+let playTimer = null;
+let simSpeed = 800;
+let feedFilter = 'all';
+
+async function initLiveDemo() {
+  if (!simFeed) {
+    await fetchSimFeed();
+  } else {
+    displayPacket(currentPktIdx);
+  }
+}
+
+async function fetchSimFeed() {
+  try {
+    const res = await fetch('/api/live_sim_feed');
+    if (!res.ok) {
+      alert('Could not fetch simulation feed. Please ensure simulation has run.');
+      return;
+    }
+    simFeed = await res.json();
+    renderFeedTable();
+    if (simFeed.packets && simFeed.packets.length > 0) {
+      displayPacket(0);
+    }
+  } catch (e) {
+    console.error('Error fetching live simulation feed:', e);
+  }
+}
+
+function togglePlay() {
+  const btn = document.getElementById('btn-play-pause');
+  if (isPlaying) {
+    clearInterval(playTimer);
+    isPlaying = false;
+    btn.textContent = '▶ Play';
+    btn.style.background = '#2563eb';
+  } else {
+    if (!simFeed || !simFeed.packets.length) return;
+    isPlaying = true;
+    btn.textContent = '⏸ Pause';
+    btn.style.background = '#f59e0b';
+    playTimer = setInterval(() => {
+      stepNext();
+    }, simSpeed);
+  }
+}
+
+function changeSpeed(val) {
+  simSpeed = parseInt(val);
+  if (isPlaying) {
+    clearInterval(playTimer);
+    playTimer = setInterval(stepNext, simSpeed);
+  }
+}
+
+function stepNext() {
+  if (!simFeed || !simFeed.packets.length) return;
+  currentPktIdx = (currentPktIdx + 1) % simFeed.packets.length;
+  displayPacket(currentPktIdx);
+}
+
+function stepPrev() {
+  if (!simFeed || !simFeed.packets.length) return;
+  currentPktIdx = (currentPktIdx - 1 + simFeed.packets.length) % simFeed.packets.length;
+  displayPacket(currentPktIdx);
+}
+
+function jumpToFirstAttack() {
+  if (!simFeed || !simFeed.packets.length) return;
+  const attackIdx = simFeed.packets.findIndex(p => p.is_malicious === 1 || p.verdict === 'BLOCK');
+  if (attackIdx !== -1) {
+    if (isPlaying) togglePlay(); // Pause for panel explanation
+    currentPktIdx = attackIdx;
+    displayPacket(currentPktIdx);
+  } else {
+    alert('No attack packets found in current feed.');
+  }
+}
+
+function selectPacket(idx) {
+  if (isPlaying) togglePlay();
+  currentPktIdx = idx;
+  displayPacket(currentPktIdx);
+}
+
+function displayPacket(idx) {
+  if (!simFeed || !simFeed.packets[idx]) return;
+  const p = simFeed.packets[idx];
+
+  // Update badge & title
+  document.getElementById('pkt-counter-badge').textContent = `Packet ${p.packet_id} / ${simFeed.total_packets} (Node ${p.node_id})`;
+
+  // Decision Card & Colors
+  const decTitle = document.getElementById('demo-decision-title');
+  const decCard  = document.getElementById('demo-decision-card');
+  const atkTag   = document.getElementById('demo-attack-type');
+
+  decTitle.textContent = p.verdict;
+  atkTag.textContent   = p.attack_name;
+
+  if (p.verdict === 'BLOCK') {
+    decTitle.style.color = '#ef4444';
+    decCard.style.background = 'rgba(239, 68, 68, 0.15)';
+    decCard.style.borderColor = '#ef4444';
+    atkTag.style.color = '#f87171';
+    atkTag.style.background = 'rgba(239, 68, 68, 0.25)';
+  } else if (p.verdict === 'WARN') {
+    decTitle.style.color = '#f59e0b';
+    decCard.style.background = 'rgba(245, 158, 11, 0.15)';
+    decCard.style.borderColor = '#f59e0b';
+    atkTag.style.color = '#fbbf24';
+    atkTag.style.background = 'rgba(245, 158, 11, 0.25)';
+  } else {
+    decTitle.style.color = '#10b981';
+    decCard.style.background = 'rgba(16, 185, 129, 0.12)';
+    decCard.style.borderColor = '#10b981';
+    atkTag.style.color = '#34d399';
+    atkTag.style.background = 'rgba(16, 185, 129, 0.2)';
+  }
+
+  // AdaBoost Meter
+  const adaPct = (p.ml_confidence * 100).toFixed(1);
+  document.getElementById('demo-adaboost-pct').textContent = adaPct + '%';
+  const adaFill = document.getElementById('demo-adaboost-fill');
+  adaFill.style.width = Math.min(100, Math.max(5, adaPct)) + '%';
+  adaFill.style.background = p.ml_confidence > 0.5 ? '#ef4444' : (p.ml_confidence > 0.3 ? '#f59e0b' : '#10b981');
+  document.getElementById('demo-adaboost-pct').style.color = adaFill.style.background;
+
+  // Trust Score Meter
+  document.getElementById('demo-trust-score').textContent = p.trust_score.toFixed(4);
+  const trustFill = document.getElementById('demo-trust-fill');
+  const trustPct = Math.min(100, Math.max(5, p.trust_score * 100));
+  trustFill.style.width = trustPct + '%';
+  trustFill.style.background = p.trust_score < 0.40 ? '#ef4444' : (p.trust_score < 0.70 ? '#f59e0b' : '#10b981');
+  document.getElementById('demo-trust-score').style.color = trustFill.style.background;
+
+  // Telemetry Grid
+  document.getElementById('demo-v-id').textContent    = 'Vehicle ' + p.node_id;
+  document.getElementById('demo-v-speed').textContent = p.speed.toFixed(1) + ' m/s (' + (p.speed * 3.6).toFixed(1) + ' km/h)';
+  document.getElementById('demo-v-pos').textContent   = `(${p.position_x.toFixed(1)}, ${p.position_y.toFixed(1)})`;
+  document.getElementById('demo-v-dist').textContent  = p.dist_to_rsu.toFixed(1) + ' m ' + (p.in_coverage ? '✓ (In Range)' : '⚠ (Out)');
+  document.getElementById('demo-v-rssi').textContent  = p.signal_strength.toFixed(1) + ' dBm';
+  document.getElementById('demo-v-drop').textContent  = (p.packet_drop_ratio * 100).toFixed(1) + '%';
+
+  // Highlight active table row
+  document.querySelectorAll('#demo-table-body tr').forEach(tr => tr.style.background = 'transparent');
+  const activeRow = document.getElementById('row-pkt-' + p.packet_id);
+  if (activeRow) {
+    activeRow.style.background = 'rgba(59, 130, 246, 0.25)';
+    activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Draw 2D Simulation Canvas
+  renderSimCanvas(p);
+}
+
+function renderSimCanvas(p) {
+  const canvas = document.getElementById('simCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Coordinate projection from OMNeT++ (X: 10..140, Y: 10..120) to Canvas (680x500)
+  const minX = 15, maxX = 145;
+  const minY = 15, maxY = 120;
+  function toCanvasX(x) { return 40 + ((x - minX) / (maxX - minX)) * (w - 80); }
+  function toCanvasY(y) { return (h - 40) - ((y - minY) / (maxY - minY)) * (h - 80); }
+
+  const rsuX = toCanvasX(58.0);
+  const rsuY = toCanvasY(49.0);
+
+  // 1. Draw Road Network (4-way intersection)
+  ctx.fillStyle = '#1e293b';
+  // Horizontal Road (East-West)
+  ctx.fillRect(0, rsuY - 32, w, 64);
+  // Vertical Road (North-South)
+  ctx.fillRect(rsuX - 32, 0, 64, h);
+
+  // Road markings (yellow dashed lines)
+  ctx.strokeStyle = '#eab308';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([8, 8]);
+
+  // Horizontal lane center
+  ctx.beginPath();
+  ctx.moveTo(0, rsuY);
+  ctx.lineTo(rsuX - 32, rsuY);
+  ctx.moveTo(rsuX + 32, rsuY);
+  ctx.lineTo(w, rsuY);
+  ctx.stroke();
+
+  // Vertical lane center
+  ctx.beginPath();
+  ctx.moveTo(rsuX, 0);
+  ctx.lineTo(rsuX, rsuY - 32);
+  ctx.moveTo(rsuX, rsuY + 32);
+  ctx.lineTo(rsuX, h);
+  ctx.stroke();
+  ctx.setLineDash([]); // Reset line dash
+
+  // Intersection boundary box
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+  ctx.strokeRect(rsuX - 32, rsuY - 32, 64, 64);
+
+  // 2. Draw 85m Radio Coverage Zone
+  const coverageRadiusPx = ((85.0) / (maxX - minX)) * (w - 80);
+  ctx.beginPath();
+  ctx.arc(rsuX, rsuY, coverageRadiusPx, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(6, 182, 212, 0.06)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(6, 182, 212, 0.4)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 6]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 3. Draw All Background Vehicles in the Stream
+  const latestVehicles = {};
+  simFeed.packets.slice(0, currentPktIdx + 1).forEach(pkt => {
+    latestVehicles[pkt.node_id] = pkt;
+  });
+
+  Object.values(latestVehicles).forEach(v => {
+    if (v.node_id === p.node_id) return; // Drawn as active later
+    const vx = toCanvasX(v.position_x);
+    const vy = toCanvasY(v.position_y);
+
+    ctx.fillStyle = (v.is_malicious === 1) ? '#ef4444' : '#10b981';
+    ctx.beginPath();
+    ctx.arc(vx, vy, 7, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.fillText('V' + v.node_id, vx - 7, vy - 10);
+  });
+
+  // 4. Draw Active Vehicle & Glowing Halo
+  const curX = toCanvasX(p.position_x);
+  const curY = toCanvasY(p.position_y);
+  const isAttack = (p.is_malicious === 1 || p.verdict === 'BLOCK');
+
+  // Halo pulse
+  ctx.beginPath();
+  ctx.arc(curX, curY, 16, 0, Math.PI * 2);
+  ctx.fillStyle = isAttack ? 'rgba(239, 68, 68, 0.35)' : 'rgba(16, 185, 129, 0.35)';
+  ctx.fill();
+
+  // Vehicle Body
+  ctx.beginPath();
+  ctx.arc(curX, curY, 9, 0, Math.PI * 2);
+  ctx.fillStyle = isAttack ? '#ef4444' : '#10b981';
+  ctx.fill();
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 1.8;
+  ctx.stroke();
+
+  // Active Vehicle Label
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillText('V' + p.node_id, curX - 8, curY - 14);
+
+  // 5. Draw DIRECTION ARROWS (From Vehicle -> RSU)
+  const arrowColor = isAttack ? '#ef4444' : (p.verdict === 'WARN' ? '#f59e0b' : '#10b981');
+  ctx.strokeStyle = arrowColor;
+  ctx.fillStyle   = arrowColor;
+  ctx.lineWidth   = isAttack ? 3.5 : 2.5;
+
+  // Draw arrow line
+  ctx.beginPath();
+  ctx.moveTo(curX, curY);
+  ctx.lineTo(rsuX, rsuY);
+  ctx.stroke();
+
+  // Arrowhead calculation pointing at RSU
+  const angle = Math.atan2(rsuY - curY, rsuX - curX);
+  const headLen = 14;
+  const arrowTipX = rsuX - 16 * Math.cos(angle);
+  const arrowTipY = rsuY - 16 * Math.sin(angle);
+
+  ctx.beginPath();
+  ctx.moveTo(arrowTipX, arrowTipY);
+  ctx.lineTo(arrowTipX - headLen * Math.cos(angle - Math.PI / 6), arrowTipY - headLen * Math.sin(angle - Math.PI / 6));
+  ctx.lineTo(arrowTipX - headLen * Math.cos(angle + Math.PI / 6), arrowTipY - headLen * Math.sin(angle + Math.PI / 6));
+  ctx.closePath();
+  ctx.fill();
+
+  // If BLOCK, draw radiating blue safety advisory waves from RSU
+  if (p.verdict === 'BLOCK') {
+    ctx.strokeStyle = 'rgba(59, 130, 246, 0.8)';
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.arc(rsuX, rsuY, 35, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(rsuX, rsuY, 60, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // 6. Draw Central RSU Tower Icon
+  ctx.fillStyle = '#06b6d4';
+  ctx.beginPath();
+  ctx.arc(rsuX, rsuY, 12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = '#0891b2';
+  ctx.beginPath();
+  ctx.arc(rsuX, rsuY, 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#06b6d4';
+  ctx.font = 'bold 11px Inter, sans-serif';
+  ctx.fillText('RSU 0 [Edge AI]', rsuX - 44, rsuY + 24);
+
+  // 7. Render Lingering Speech Bubbles on Canvas
+  // Vehicle Bubble
+  const vMsg = isAttack ? `🚨 FDI: Falsified Accident (+28m, 0 m/s)` : `💬 V2V: Routine Telemetry (${p.speed.toFixed(1)} m/s)`;
+  drawCanvasBubble(ctx, curX, curY - 26, vMsg, isAttack ? '#ef4444' : '#10b981');
+
+  // RSU Decision Bubble
+  const rsuMsg = (p.verdict === 'BLOCK') ? `🛡 AdaBoost: BLOCK [Malicious ${(p.ml_confidence * 100).toFixed(0)}%]` :
+                 (p.verdict === 'WARN'  ? `⚠️ AdaBoost: WARN [Suspicious]` : `✓ AdaBoost: ACCEPT [Verified]`);
+  drawCanvasBubble(ctx, rsuX, rsuY - 26, rsuMsg, arrowColor);
+}
+
+function drawCanvasBubble(ctx, x, y, text, color) {
+  ctx.font = '11px Inter, sans-serif';
+  const textWidth = ctx.measureText(text).width;
+  const bubbleW = textWidth + 16;
+  const bubbleH = 22;
+  const bx = x - bubbleW / 2;
+  const by = y - bubbleH;
+
+  // Bubble background
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.roundRect(bx, by, bubbleW, bubbleH, 6);
+  ctx.fill();
+  ctx.stroke();
+
+  // Pointer triangle
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+  ctx.beginPath();
+  ctx.moveTo(x - 5, by + bubbleH);
+  ctx.lineTo(x, by + bubbleH + 5);
+  ctx.lineTo(x + 5, by + bubbleH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Text
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(text, bx + 8, by + 15);
+}
+
+function renderFeedTable() {
+  const tbody = document.getElementById('demo-table-body');
+  if (!simFeed || !simFeed.packets.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="log-empty">No telemetry records available.</td></tr>';
+    return;
+  }
+
+  let list = simFeed.packets;
+  if (feedFilter === 'malicious') list = list.filter(p => p.is_malicious === 1);
+  if (feedFilter === 'blocked')   list = list.filter(p => p.verdict === 'BLOCK');
+
+  tbody.innerHTML = list.map(p => `
+    <tr id="row-pkt-${p.packet_id}" onclick="selectPacket(${p.packet_id - 1})" style="cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.04);">
+      <td style="padding:6px 8px; font-family:'JetBrains Mono';">${p.packet_id}</td>
+      <td style="padding:6px 8px;"><strong>V${p.node_id}</strong></td>
+      <td style="padding:6px 8px;">${p.speed.toFixed(1)} m/s</td>
+      <td style="padding:6px 8px; font-size:0.72rem; color:#94a3b8;">(${p.position_x.toFixed(0)}, ${p.position_y.toFixed(0)})</td>
+      <td style="padding:6px 8px;">${p.signal_strength.toFixed(1)} dBm</td>
+      <td style="padding:6px 8px;"><span style="color:${p.trust_score < 0.4 ? '#ef4444' : '#10b981'}">${p.trust_score.toFixed(3)}</span></td>
+      <td style="padding:6px 8px;"><span style="color:${p.is_malicious ? '#f87171' : '#cbd5e1'}">${p.attack_name}</span></td>
+      <td style="padding:6px 8px;"><strong>${(p.ml_confidence * 100).toFixed(1)}%</strong></td>
+      <td style="padding:6px 8px;"><span class="table-badge ${p.verdict.toLowerCase()}">${p.verdict}</span></td>
+    </tr>
+  `).join('');
+}
+
+function filterFeed(filter, btn) {
+  feedFilter = filter;
+  document.querySelectorAll('.btn-demo').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderFeedTable();
+}
