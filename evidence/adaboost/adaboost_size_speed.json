@@ -1,0 +1,42 @@
+{
+  "chosen_model": "AdaBoost",
+  "selection_rule": "Among models with 20-split weighted F1 \u2265 95.4%, choose the smallest serialized model that still infers in under 10 \u00b5s/sample.",
+  "adaboost": {
+    "weighted_f1_mean": 95.57,
+    "size_kb": 28.2,
+    "latency_us": 3.89,
+    "fn_mean": 0.3
+  },
+  "vs_random_forest": {
+    "size_reduction": "89.7\u00d7 smaller",
+    "speedup": "1.51\u00d7 faster",
+    "f1_delta_pp": 0.09
+  },
+  "vs_extra_trees": {
+    "size_reduction": "337.6\u00d7 smaller",
+    "speedup": "2.17\u00d7 faster"
+  },
+  "vs_voting_ensemble": {
+    "size_reduction": "96.4\u00d7 smaller",
+    "speedup": "2.98\u00d7 faster"
+  },
+  "high_f1_models": [
+    "AdaBoost",
+    "Voting Ensemble",
+    "Stacking Ensemble",
+    "Random Forest",
+    "CatBoost",
+    "XGBoost"
+  ],
+  "models_in_compact_fast_high_f1_region": [
+    "AdaBoost"
+  ],
+  "why": [
+    "AdaBoost and Random Forest tie on the seed-42 holdout (95.71% F1, 0 missed attacks).",
+    "Across 20 stratified splits AdaBoost has the highest mean F1 (95.57%) and the fewest missed attacks (0.30 FN).",
+    "AdaBoost stores 50 decision stumps (depth-1 trees), so the pickle is ~28 KB versus 2.5 MB for Random Forest and 9.5 MB for Extra Trees.",
+    "Tiny models (LR, GNB, DT) are smaller/faster but drop below the 95.4% F1 band and miss far more attacks.",
+    "Modern GBDT models (XGBoost, CatBoost, LightGBM) can be faster, but they are 4\u20139\u00d7 larger and slightly worse on F1 / FN.",
+    "Stacking and Voting match accuracy only by shipping multiple full ensembles, which is too large and too slow for an RSU."
+  ]
+}
