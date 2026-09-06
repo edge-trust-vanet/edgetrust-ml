@@ -1,0 +1,7 @@
+alpha,is_chosen,suspicious_packet,blocked_packet,trust_after_1_attack,trust_after_4_attack,stays_trusted_after_one_glitch,min_trust_single_glitch,recovery_packet,recovery_packets_after_attack,noisy_trusted,noisy_suspicious,noisy_blocked,noisy_min_trust
+0.3,False,,1,0.37,0.1073,False,0.37,10,2,15,5,0,0.5957
+0.5,False,1.0,2,0.55,0.1562,False,0.55,10,2,16,4,0,0.6522
+0.6,False,1.0,3,0.64,0.2166,False,0.64,11,3,18,2,0,0.6786
+0.7,True,2.0,4,0.73,0.3161,True,0.73,12,4,20,0,0,0.7044
+0.8,False,2.0,5,0.82,0.4686,True,0.82,13,5,20,0,0,0.7328
+0.9,False,4.0,11,0.91,0.6905,True,0.91,14,6,20,0,0,0.7864

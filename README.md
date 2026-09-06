@@ -104,6 +104,7 @@ This codebase includes reproducibility evidence packs to justify key design deci
 *   **Model Selection Justification ([`evidence/randomforest/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/randomforest/README.md))**: Compares Random Forest against all other 8 classifiers across holdout metrics, 20-fold repeated split stability, and edge computational efficiency (predict latency, size).
 *   **Feature Selection Ablation Study ([`evidence/feature_selection/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/feature_selection/README.md))**: Ablation study across mobility, network, trust, and leakage features, justifying the 14-feature proposed set and proving the data leakage trap.
 *   **Weighted F1 vs Accuracy ([`evidence/weighted_f1/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/weighted_f1/README.md))**: Justification for F1 ranking over accuracy under class imbalance.
-*   **Trust Threshold Selection ([`evidence/trust_thresholds/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/trust_thresholds/README.md))**: Justification for the 0.70/0.40 warning/blocking boundaries and alpha values.
+*   **Trust Threshold Selection ([`evidence/trust_thresholds/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/trust_thresholds/README.md))**: Justification for the 0.70/0.40 warning/blocking boundaries.
+*   **Trust Alpha Selection ([`evidence/trust_alpha/`](file:///Users/vivekchitturi/Desktop/edgetrust-ml/evidence/trust_alpha/README.md))**: Sensitivity of the EMA update \(T_t = \alpha T_{t-1} + (1-\alpha) E_t\) showing why α = 0.7.
 
 
