@@ -4,26 +4,25 @@
 \section{Dataset \& ML}
 \begin{frame}{2. Dataset \& Feature Engineering}
     \framesubtitle{Rubric: Methodology -- Datasets \& Preprocessing}
+    \small
     \begin{itemize}
-        \item \textbf{Unified Research Dataset:} \textbf{23{,}970 records} across 26 attributes, combining:
+        \item \textbf{Published Research Dataset (Kaggle):} Open-sourced on \href{https://www.kaggle.com/datasets/mouniksai/vehicular-misbehavior-dataset-edgetrust-vanet/data}{\textbf{\underline{Kaggle}}} (\texttt{EdgeTrust-VANET}) for community reproducibility and open-access V2X benchmarking.
+        
+        \item \textbf{Multi-Source ETL Pipeline (23{,}970 records):} Ingested, standardized, and harmonized 3 heterogeneous VANET simulation sources into a unified schema:
         \begin{itemize}
-            \item \textbf{VeReMi Reference (Primary, 72.9\%):} 17{,}470 records from authentic 802.11p BSM simulations in Luxembourg LuST urban scenario (Types 1, 2, 4, 8, 16 across low/med/high densities).
-            \item \textbf{EdgeTrust-VANET (Secondary, 20.9\%):} 5{,}000 records (DoS, Sybil, Blackhole, Packet Injection).
-            \item \textbf{V-RADD Augmentation (6.3\%):} 1{,}500 records of Grayhole (selective forwarding) and Replay.
+            \item \textbf{VeReMi (72.9\%)} + \textbf{EdgeTrust-VANET (20.9\%)} + \textbf{V-RADD (6.3\%)} [70.6\% Benign, 29.4\% Malicious].
         \end{itemize}
-        \item \textbf{Class Distribution:} 70.6\% Benign (16{,}917) vs. 29.4\% Malicious (7{,}053) -- realistic attack density.
-        \item \textbf{14 Real-Time, Leakage-Free Features (RSU-Observable):}
+        
+        \item \textbf{14 RSU-Observable Features Derived (Zero Leakage):}
         \begin{itemize}
-            \item \textbf{Mobility (5):} \texttt{position\_x}, \texttt{position\_y}, \texttt{speed}, \texttt{direction}, \texttt{acceleration}
-            \item \textbf{Network (6):} \texttt{packet\_sent}, \texttt{packet\_received}, \texttt{packet\_drop\_ratio}, \texttt{latency}, \texttt{retransmission\_count}, \texttt{signal\_strength} (dBm)
-            \item \textbf{Trust (3):} \texttt{trust\_score}, \texttt{neighbor\_trust\_score\_avg}, \texttt{historical\_trust\_score}
+            \item \textbf{Mobility (5):} Coordinates ($x, y$), speed, heading, acceleration.
+            \item \textbf{Network (6):} Packets sent/received, drop ratio, latency, retransmissions, RSSI.
+            \item \textbf{Trust Engine (3):} Direct trust ($T_t$), 300\,m KD-Tree neighbor avg, historical trust.
         \end{itemize}
-        \item \textbf{Leakage Prevention \& Group Splitting:}
-        \begin{itemize}
-            \item \textbf{Removed} 4 retrospective counters (\texttt{false\_packet\_injection}, \texttt{blackhole\_attack\_attempts}, etc.) -- audit proves they cause real-time model collapse (100\% $\rightarrow$ 86.05\% F1).
-            \item Partitioned via \textbf{Group-based vehicle splitting} (\texttt{node\_id}) with \textbf{zero vehicle/trajectory overlap} across Train (70\%), Validation (15\%), and Holdout Test (15\%).
-        \end{itemize}
-        \item \textbf{Result:} Genuine, deployable \textbf{97.74\% Weighted F1} on unseen trajectories, and \textbf{90.99\% Live Accuracy} in OMNeT++/Veins RSU deployment.
+        
+        \item \textbf{Audit \& Group Splitting:} Purged 4 post-hoc counters that cause live collapse (100\% $\rightarrow$ 86.05\% F1); enforced zero trajectory overlap via \textbf{GroupKFold by Vehicle ID} (70/15/15).
+        
+        \item \textbf{Result:} Genuine \textbf{97.74\% Weighted F1} on unseen vehicles; verified \textbf{90.99\% Live Accuracy} in OMNeT++/Veins RSU deployment.
     \end{itemize}
 \end{frame}
 
