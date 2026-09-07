@@ -1,0 +1,94 @@
+{
+  "dataset_shape": [
+    23970,
+    26
+  ],
+  "correlations_pearson": {
+    "position_x": 0.1539,
+    "position_y": 0.0532,
+    "speed": -0.1179,
+    "direction": -0.0059,
+    "acceleration": -0.0168,
+    "packet_sent": 0.1214,
+    "packet_received": 0.1418,
+    "packet_drop_ratio": -0.102,
+    "latency": 0.2482,
+    "retransmission_count": 0.0479,
+    "signal_strength": -0.0902,
+    "trust_score": -0.391,
+    "neighbor_trust_score_avg": -0.2385,
+    "historical_trust_score": -0.4236,
+    "false_packet_injection": 0.0068,
+    "blackhole_attack_attempts": 0.0269,
+    "sybil_attack_attempts": -0.019,
+    "denial_of_service": -0.0247
+  },
+  "correlations_spearman": {
+    "position_x": 0.1471,
+    "position_y": 0.0688,
+    "speed": -0.1072,
+    "direction": -0.0082,
+    "acceleration": -0.0116,
+    "packet_sent": 0.1404,
+    "packet_received": 0.125,
+    "packet_drop_ratio": -0.0776,
+    "latency": 0.1495,
+    "retransmission_count": 0.0463,
+    "signal_strength": -0.1018,
+    "trust_score": -0.4461,
+    "neighbor_trust_score_avg": -0.2013,
+    "historical_trust_score": -0.4953,
+    "false_packet_injection": 0.402,
+    "blackhole_attack_attempts": 0.0744,
+    "sybil_attack_attempts": -0.0255,
+    "denial_of_service": -0.0366
+  },
+  "mutual_information": {
+    "position_x": 0.3172,
+    "position_y": 0.2881,
+    "speed": 0.1126,
+    "direction": 0.0568,
+    "acceleration": 0.0184,
+    "packet_sent": 0.0239,
+    "packet_received": 0.0202,
+    "packet_drop_ratio": 0.0264,
+    "latency": 0.0444,
+    "retransmission_count": 0.0059,
+    "signal_strength": 0.0163,
+    "trust_score": 0.1868,
+    "neighbor_trust_score_avg": 0.2498,
+    "historical_trust_score": 0.2644,
+    "false_packet_injection": 0.2741,
+    "blackhole_attack_attempts": 0.0111,
+    "sybil_attack_attempts": 0.0,
+    "denial_of_service": 0.0
+  },
+  "model_a_leakage_free": {
+    "accuracy": 97.90996784565917,
+    "f1_score": 97.89409255726345,
+    "precision": 97.91342474848302,
+    "recall": 97.90996784565917,
+    "roc_auc": 99.05642342490125
+  },
+  "model_b_leaked_eval": {
+    "accuracy": 100.0,
+    "f1_score": 100.0,
+    "precision": 100.0,
+    "recall": 100.0,
+    "roc_auc": 100.0
+  },
+  "model_b_real_deploy": {
+    "accuracy": 87.54019292604501,
+    "f1_score": 86.05280997908467,
+    "precision": 89.3342199548077,
+    "recall": 87.54019292604501,
+    "roc_auc": 96.89677472270944
+  },
+  "splitting_audit": {
+    "random_row_split_f1": 99.29,
+    "random_row_split_acc": 99.29,
+    "group_vehicle_split_f1": 97.89,
+    "group_vehicle_split_acc": 97.91,
+    "generalization_gap": 1.39
+  }
+}
