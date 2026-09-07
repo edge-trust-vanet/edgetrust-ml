@@ -1,0 +1,175 @@
+% =====================================================
+% SLIDE: DATASET & FEATURE ENGINEERING
+% =====================================================
+\section{Dataset \& ML}
+\begin{frame}{2. Dataset \& Feature Engineering}
+    \framesubtitle{Rubric: Methodology -- Datasets \& Preprocessing}
+    \begin{itemize}
+        \item \textbf{Unified Research Dataset:} \textbf{23{,}970 records} across 26 attributes, combining:
+        \begin{itemize}
+            \item \textbf{VeReMi Reference (Primary, 72.9\%):} 17{,}470 records from authentic 802.11p BSM simulations in Luxembourg LuST urban scenario (Types 1, 2, 4, 8, 16 across low/med/high densities).
+            \item \textbf{EdgeTrust-VANET (Secondary, 20.9\%):} 5{,}000 records (DoS, Sybil, Blackhole, Packet Injection).
+            \item \textbf{V-RADD Augmentation (6.3\%):} 1{,}500 records of Grayhole (selective forwarding) and Replay.
+        \end{itemize}
+        \item \textbf{Class Distribution:} 70.6\% Benign (16{,}917) vs. 29.4\% Malicious (7{,}053) -- realistic attack density.
+        \item \textbf{14 Real-Time, Leakage-Free Features (RSU-Observable):}
+        \begin{itemize}
+            \item \textbf{Mobility (5):} \texttt{position\_x}, \texttt{position\_y}, \texttt{speed}, \texttt{direction}, \texttt{acceleration}
+            \item \textbf{Network (6):} \texttt{packet\_sent}, \texttt{packet\_received}, \texttt{packet\_drop\_ratio}, \texttt{latency}, \texttt{retransmission\_count}, \texttt{signal\_strength} (dBm)
+            \item \textbf{Trust (3):} \texttt{trust\_score}, \texttt{neighbor\_trust\_score\_avg}, \texttt{historical\_trust\_score}
+        \end{itemize}
+        \item \textbf{Leakage Prevention \& Group Splitting:}
+        \begin{itemize}
+            \item \textbf{Removed} 4 retrospective counters (\texttt{false\_packet\_injection}, \texttt{blackhole\_attack\_attempts}, etc.) -- audit proves they cause real-time model collapse (100\% $\rightarrow$ 86.05\% F1).
+            \item Partitioned via \textbf{Group-based vehicle splitting} (\texttt{node\_id}) with \textbf{zero vehicle/trajectory overlap} across Train (70\%), Validation (15\%), and Holdout Test (15\%).
+        \end{itemize}
+        \item \textbf{Result:} Genuine, deployable \textbf{97.74\% Weighted F1} on unseen trajectories, and \textbf{90.99\% Live Accuracy} in OMNeT++/Veins RSU deployment.
+    \end{itemize}
+\end{frame}
+
+% =====================================================
+% SLIDE: ML MODEL TRAINING & RESULTS
+% =====================================================
+\begin{frame}{3. ML Model Training \& Benchmark Results}
+    \framesubtitle{Rubric: Core Algorithms \& Evaluation Metrics}
+    \begin{columns}
+        \column{0.44\textwidth}
+        \footnotesize
+        \begin{itemize}
+            \item Benchmarked \textbf{17 ML models} across 5 families: Tree Ensembles, Modern GBDTs (XGBoost, LightGBM, CatBoost, HistGB), Linear/Kernel/Instance (SVM, KNN, LogReg, LDA), MLP Neural Net, and Stacking/Voting Ensembles.
+            \item Validated on \textbf{2{,}331 live RSU-extracted telemetry samples} (1{,}349 attack, 982 legitimate packets) in OMNeT++ / Veins:
+            \begin{itemize}
+                \item \textbf{\#1 Top Champion:} \textbf{Random Forest} -- \textbf{90.99\% Live Acc}, \textbf{90.97\% Live F1}, 90.59\% ROC-AUC, lowest missed attack rate (\textbf{6.89\%}).
+                \item \textbf{Runner-up Ensembles:} Extra Trees (90.95\% Acc) and KNN (90.48\% Acc).
+                \item \textbf{Ultra-High Throughput Edge Leaders:} Logistic Regression \& LDA -- \textbf{89.28\% Live F1}, \textbf{82.8 $\mu$s} latency, \textbf{12{,}084 pkt/s}, \textbf{1.0 KB} size.
+                \item \textbf{Best Edge GBDT:} CatBoost -- \textbf{79.79\% F1}, 90.77\% ROC-AUC, \textbf{118.3 $\mu$s}, \textbf{8{,}452 pkt/s}, 248 KB.
+            \end{itemize}
+        \end{itemize}
+        \column{0.56\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{vanet_comparison.png}
+    \end{columns}
+\end{frame}
+
+% =====================================================
+% SLIDE: FEATURE IMPORTANCE & TRUST FORMULA
+% =====================================================
+\begin{frame}{4. Feature Importance \& Edge Trust Score Formula}
+    \framesubtitle{Rubric: Mathematical Model / Formulation}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{vanet_feature_importance.png}
+        \column{0.45\textwidth}
+        \footnotesize
+        \begin{itemize}
+            \item \textbf{Trust features dominate (55.86\%):} \texttt{historical\_trust\_score} (27.21\%), \texttt{neighbor\_trust\_score\_avg} (14.36\%), and \texttt{trust\_score} (14.29\%) explain more than half of all model decisions.
+            \item \textbf{Kinematic \& network signals (44.14\%):} Spatial consistency ($p_x, p_y$: 28.48\%), speed (3.57\%), heading (2.71\%), packet drop ratio (2.50\%), and latency (1.93\%).
+        \end{itemize}
+        \vspace{0.2cm}
+        \textbf{Heuristic Trust Update (EMA):}
+        \[
+        T_t = \alpha \cdot T_{t-1} + (1-\alpha)\cdot E_t
+        \]
+        {\scriptsize $T_t$: current trust, $T_{t-1}$: historical trust, \\ $\alpha = 0.70$ (memory retention factor), \\ $E_t \in [0, 1]$: observable real-time evidence:
+        \[
+        E_t = 0.35 E_{\text{mobility}} + 0.30 E_{\text{delivery}} + 0.20 E_{\text{latency}} + 0.15 E_{\text{channel}}
+        \]
+        Spatial neighbor trust computed via 300m KD-Tree.}
+    \end{columns}
+\end{frame}
+
+% =====================================================
+% ADDITIONAL SLIDE: ALPHA TRUST UPDATE ANALYSIS
+% =====================================================
+\begin{frame}{Why $\alpha = 0.70$ in the Hybrid Trust Update}
+    \framesubtitle{Rubric: Sensitivity Analysis \& Parameter Justification}
+    \begin{columns}
+        \column{0.62\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,keepaspectratio]{alpha_trust_update.png}
+        \column{0.38\textwidth}
+        \footnotesize
+        \begin{itemize}
+            \item \textbf{Sensitivity Trade-off:}
+            \begin{itemize}
+                \item $\alpha = 0.3$: Too responsive; transient channel fading/noise causes false punishment.
+                \item $\alpha = 0.9$: Too sluggish; requires $>15$ malicious packets before flagging.
+                \item $\mathbf{\alpha = 0.70}$ \textbf{(Optimal):} Swiftly degrades malicious trust below the \textbf{0.40 Blocked threshold by Packet 4}, while absorbing isolated benign telemetry noise.
+            \end{itemize}
+            \item Prevents sudden false disconnects for honest ambulances and braking vehicles.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% =====================================================
+% ADDITIONAL SLIDE: EDGE RSU TRADE-OFF ANALYSIS
+% =====================================================
+\begin{frame}{Edge RSU Deployment: Accuracy vs. Speed \& Footprint}
+    \framesubtitle{Rubric: Hardware Feasibility \& Microcontroller Deployment}
+    \begin{columns}
+        \column{0.62\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,keepaspectratio]{edge_rsu_tradeoff.png}
+        \column{0.38\textwidth}
+        \footnotesize
+        \begin{itemize}
+            \item \textbf{RSU Hardware Trade-off:}
+            \begin{itemize}
+                \item \textbf{Multi-Core Edge Servers:} \textbf{Random Forest} provides maximum detection accuracy (\textbf{90.99\% Live Acc}, \textbf{90.97\% F1}) and lowest missed attacks (6.89\%).
+                \item \textbf{Ultra-Constrained RSUs:} \textbf{Logistic Regression \& LDA} execute in \textbf{82.8 $\mu$s} ($>12{,}000$ pkt/s) with a tiny \textbf{1.0 KB} memory footprint and \textbf{89.28\% Live F1}.
+                \item \textbf{Balanced GBDT:} \textbf{CatBoost} delivers \textbf{8{,}452 pkt/s} at \textbf{118 $\mu$s} latency and \textbf{248 KB} footprint with 90.77\% ROC-AUC.
+            \end{itemize}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% =====================================================
+% ADDITIONAL SLIDE: LIVE RSU ERROR TRADE-OFF (FAR vs MAR)
+% =====================================================
+\begin{frame}{Live RSU Security Reliability: False Alarms vs. Missed Attacks}
+    \framesubtitle{Rubric: Safety-Critical Real-Time Performance on 2{,}331 OMNeT++ Packets}
+    \begin{columns}
+        \column{0.62\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,keepaspectratio]{live_rsu_error_tradeoff.png}
+        \column{0.38\textwidth}
+        \footnotesize
+        \begin{itemize}
+            \item \textbf{Safety vs. Availability:}
+            \begin{itemize}
+                \item \textbf{Secure Operating Zone:} Random Forest, ExtraTrees, KNN, LogReg, and LDA achieve both False Alarm Rate $<15\%$ and Missed Attack Rate $<10\%$.
+                \item \textbf{Radio Jitter Sensitivity:} Unregularized Decision Trees, SVM, and MLP suffer from $>97\%$ False Alarms under raw RF fading, proving deep neural nets are unsuited without spatial trust filtering.
+            \end{itemize}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% =====================================================
+% ADDITIONAL SLIDE: ADABOOST EDGE ANALYSIS (OPTIONAL)
+% =====================================================
+\begin{frame}{Edge Model Benchmark: AdaBoost vs. Remaining Classifiers}
+    \framesubtitle{Rubric: Hardware Feasibility \& Lightweight Edge Inference}
+    \centering
+    \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{adaboost_edge_analysis.png}
+\end{frame}
+
+% =====================================================
+% SLIDE: TECHNICAL KNOWLEDGE & DESIGN DECISIONS
+% =====================================================
+\section{Technical Knowledge}
+\begin{frame}{10. Technical Knowledge \& Design Decisions}
+    \framesubtitle{Rubric: Understanding of Methodology, Implementation \& Design Choices}
+    \begin{itemize}
+        \item \textbf{Why Tree Ensembles Win in Live VANETs:} Physical vehicular telemetry exhibits hard non-linear boundaries (e.g. packet drop ratio $> 0.40$, trust $< 0.40$). Bagging in Random Forest aggregates 150 orthogonal trees, effectively filtering non-Gaussian radio noise and achieving the lowest missed attack rate (\textbf{6.89\%}).
+        \item \textbf{Eliminating Trajectory Leakage:} Random row splitting inflates scores (99.29\% F1) due to temporal autocorrelation. Enforcing \textbf{Group-based vehicle splitting (\texttt{node\_id})} guarantees zero vehicle overlap and honest generalization.
+        \item \textbf{Why $\alpha = 0.70$ in EMA Trust Engine:} Balances historical vehicle stability with rapid anomaly reaction; persistently penalizes attackers within 4 packets without overreacting to single-packet sensor jitter.
+        \item \textbf{Two-Tier RSU Hybrid Architecture:}
+        \begin{itemize}
+            \item Tier 1: Real-time heuristic trust engine executes in $O(1)$ time on every received 802.11p beacon.
+            \item Tier 2: 14-feature ML model predicts transmission integrity.
+            \item \textbf{Safety Policy:} Requires \textbf{both} low trust ($< 0.40$) \textbf{and} ML malicious prediction to \textbf{BLOCK}, ensuring legitimate traffic is never falsely disconnected.
+        \end{itemize}
+        \item \textbf{Class Imbalance \& Validation Protocol:} Handled 70.6\% normal vs 29.4\% malicious distribution via Weighted F1 optimization and 5-Fold Stratified Group Cross-Validation (\textbf{96.95\% $\pm$ 1.12\%}).
+    \end{itemize}
+\end{frame}
