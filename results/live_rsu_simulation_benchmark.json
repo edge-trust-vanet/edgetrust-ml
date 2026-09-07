@@ -1,6 +1,7 @@
 {
-  "dataset_name": "OMNeT++ / Veins Live RSU Simulation Telemetry",
-  "sample_count": 2331,
+  "environment": "OMNeT++ / Veins Live RSU Simulation",
+  "description": "Validation performed on Split Dataset; Testing performed on Live RSU Environment",
+  "live_test_packets": 2331,
   "attack_packets": 1349,
   "legitimate_packets": 982,
   "models": [
@@ -15,7 +16,7 @@
       "latency": 23499.6,
       "throughput": 42,
       "size_kb": 6441.0,
-      "train_acc": 97.77
+      "val_acc": 97.77
     },
     {
       "rank": 2,
@@ -28,7 +29,7 @@
       "latency": 24162.8,
       "throughput": 41,
       "size_kb": 11314.0,
-      "train_acc": 92.43
+      "val_acc": 92.43
     },
     {
       "rank": 3,
@@ -41,7 +42,7 @@
       "latency": 13903.8,
       "throughput": 71,
       "size_kb": 5045.0,
-      "train_acc": 90.96
+      "val_acc": 90.96
     },
     {
       "rank": 4,
@@ -54,7 +55,7 @@
       "latency": 82.8,
       "throughput": 12084,
       "size_kb": 1.0,
-      "train_acc": 88.08
+      "val_acc": 88.08
     },
     {
       "rank": 5,
@@ -67,7 +68,7 @@
       "latency": 94.9,
       "throughput": 10536,
       "size_kb": 1.6,
-      "train_acc": 87.93
+      "val_acc": 87.93
     },
     {
       "rank": 6,
@@ -80,7 +81,7 @@
       "latency": 5040.1,
       "throughput": 198,
       "size_kb": 38.9,
-      "train_acc": 88.25
+      "val_acc": 88.25
     },
     {
       "rank": 7,
@@ -93,7 +94,7 @@
       "latency": 39873.5,
       "throughput": 25,
       "size_kb": 3905.0,
-      "train_acc": 97.2
+      "val_acc": 97.2
     },
     {
       "rank": 8,
@@ -106,7 +107,7 @@
       "latency": 118.3,
       "throughput": 8452,
       "size_kb": 248.0,
-      "train_acc": 97.29
+      "val_acc": 97.29
     },
     {
       "rank": 9,
@@ -119,7 +120,7 @@
       "latency": 536.9,
       "throughput": 1862,
       "size_kb": 669.0,
-      "train_acc": 97.74
+      "val_acc": 97.74
     },
     {
       "rank": 10,
@@ -132,7 +133,7 @@
       "latency": 3880.7,
       "throughput": 257,
       "size_kb": 653.0,
-      "train_acc": 97.4
+      "val_acc": 97.4
     },
     {
       "rank": 11,
@@ -145,7 +146,7 @@
       "latency": 280.2,
       "throughput": 3568,
       "size_kb": 464.0,
-      "train_acc": 97.29
+      "val_acc": 97.29
     },
     {
       "rank": 12,
@@ -158,7 +159,7 @@
       "latency": 38560.3,
       "throughput": 25,
       "size_kb": 2256.0,
-      "train_acc": 97.51
+      "val_acc": 97.51
     },
     {
       "rank": 13,
@@ -171,7 +172,7 @@
       "latency": 237.8,
       "throughput": 4205,
       "size_kb": 535.0,
-      "train_acc": 97.17
+      "val_acc": 97.17
     },
     {
       "rank": 14,
@@ -184,7 +185,7 @@
       "latency": 119.1,
       "throughput": 8393,
       "size_kb": 392.0,
-      "train_acc": 96.13
+      "val_acc": 96.13
     },
     {
       "rank": 15,
@@ -197,7 +198,7 @@
       "latency": 83.6,
       "throughput": 11963,
       "size_kb": 1.2,
-      "train_acc": 82.17
+      "val_acc": 82.17
     },
     {
       "rank": 16,
@@ -210,7 +211,7 @@
       "latency": 255.4,
       "throughput": 3915,
       "size_kb": 742.0,
-      "train_acc": 90.03
+      "val_acc": 90.03
     },
     {
       "rank": 17,
@@ -223,7 +224,7 @@
       "latency": 70.9,
       "throughput": 14110,
       "size_kb": 18.1,
-      "train_acc": 96.84
+      "val_acc": 96.84
     }
   ]
 }
