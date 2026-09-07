@@ -1,0 +1,469 @@
+{
+  "dataset": "unified_edgetrust_dataset",
+  "n_total_samples": 23970,
+  "n_train_samples": 20431,
+  "n_test_samples": 3539,
+  "n_features": 14,
+  "features": [
+    "position_x",
+    "position_y",
+    "speed",
+    "direction",
+    "acceleration",
+    "packet_sent",
+    "packet_received",
+    "packet_drop_ratio",
+    "latency",
+    "retransmission_count",
+    "signal_strength",
+    "trust_score",
+    "neighbor_trust_score_avg",
+    "historical_trust_score"
+  ],
+  "best_model": "Random Forest",
+  "cross_val_5fold_mean": 96.95,
+  "cross_val_5fold_std": 1.12,
+  "feature_importance": {
+    "historical_trust_score": 27.209,
+    "position_y": 14.726,
+    "neighbor_trust_score_avg": 14.36,
+    "trust_score": 14.294,
+    "position_x": 13.751,
+    "speed": 3.571,
+    "direction": 2.713,
+    "packet_drop_ratio": 2.501,
+    "latency": 1.932,
+    "packet_received": 1.9,
+    "packet_sent": 1.624,
+    "signal_strength": 0.721,
+    "acceleration": 0.453,
+    "retransmission_count": 0.246
+  },
+  "models": {
+    "Random Forest": {
+      "accuracy": 97.77,
+      "f1_score": 97.74,
+      "f1_macro": 97.01,
+      "precision": 97.81,
+      "recall": 97.77,
+      "roc_auc": 98.7,
+      "pr_auc": 97.97,
+      "false_alert_rate": 0.23,
+      "missed_attack_rate": 8.01,
+      "latency_us": 13441.88,
+      "size_kb": 6441.4,
+      "train_time_s": 0.58,
+      "confusion_matrix": [
+        [
+          2622,
+          6
+        ],
+        [
+          73,
+          838
+        ]
+      ],
+      "is_best": true
+    },
+    "Extra Trees": {
+      "accuracy": 92.43,
+      "f1_score": 91.96,
+      "f1_macro": 88.95,
+      "precision": 93.13,
+      "recall": 92.43,
+      "roc_auc": 98.54,
+      "pr_auc": 97.15,
+      "false_alert_rate": 0.0,
+      "missed_attack_rate": 29.42,
+      "latency_us": 13469.02,
+      "size_kb": 11314.2,
+      "train_time_s": 0.2,
+      "confusion_matrix": [
+        [
+          2628,
+          0
+        ],
+        [
+          268,
+          643
+        ]
+      ],
+      "is_best": false
+    },
+    "Decision Tree": {
+      "accuracy": 96.84,
+      "f1_score": 96.79,
+      "f1_macro": 95.74,
+      "precision": 96.86,
+      "recall": 96.84,
+      "roc_auc": 95.84,
+      "pr_auc": 94.15,
+      "false_alert_rate": 0.68,
+      "missed_attack_rate": 10.32,
+      "latency_us": 49.67,
+      "size_kb": 18.1,
+      "train_time_s": 0.13,
+      "confusion_matrix": [
+        [
+          2610,
+          18
+        ],
+        [
+          94,
+          817
+        ]
+      ],
+      "is_best": false
+    },
+    "XGBoost": {
+      "accuracy": 97.29,
+      "f1_score": 97.24,
+      "f1_macro": 96.34,
+      "precision": 97.35,
+      "recall": 97.29,
+      "roc_auc": 98.28,
+      "pr_auc": 97.47,
+      "false_alert_rate": 0.23,
+      "missed_attack_rate": 9.88,
+      "latency_us": 177.6,
+      "size_kb": 464.8,
+      "train_time_s": 0.35,
+      "confusion_matrix": [
+        [
+          2622,
+          6
+        ],
+        [
+          90,
+          821
+        ]
+      ],
+      "is_best": false
+    },
+    "LightGBM": {
+      "accuracy": 97.74,
+      "f1_score": 97.71,
+      "f1_macro": 96.97,
+      "precision": 97.77,
+      "recall": 97.74,
+      "roc_auc": 98.52,
+      "pr_auc": 97.73,
+      "false_alert_rate": 0.27,
+      "missed_attack_rate": 8.01,
+      "latency_us": 329.38,
+      "size_kb": 669.4,
+      "train_time_s": 0.76,
+      "confusion_matrix": [
+        [
+          2621,
+          7
+        ],
+        [
+          73,
+          838
+        ]
+      ],
+      "is_best": false
+    },
+    "CatBoost": {
+      "accuracy": 97.29,
+      "f1_score": 97.24,
+      "f1_macro": 96.34,
+      "precision": 97.35,
+      "recall": 97.29,
+      "roc_auc": 97.81,
+      "pr_auc": 97.13,
+      "false_alert_rate": 0.23,
+      "missed_attack_rate": 9.88,
+      "latency_us": 89.52,
+      "size_kb": 248.6,
+      "train_time_s": 0.88,
+      "confusion_matrix": [
+        [
+          2622,
+          6
+        ],
+        [
+          90,
+          821
+        ]
+      ],
+      "is_best": false
+    },
+    "Hist Gradient Boosting": {
+      "accuracy": 97.4,
+      "f1_score": 97.37,
+      "f1_macro": 96.51,
+      "precision": 97.43,
+      "recall": 97.4,
+      "roc_auc": 98.64,
+      "pr_auc": 97.92,
+      "false_alert_rate": 0.42,
+      "missed_attack_rate": 8.89,
+      "latency_us": 7374.92,
+      "size_kb": 653.8,
+      "train_time_s": 1.74,
+      "confusion_matrix": [
+        [
+          2617,
+          11
+        ],
+        [
+          81,
+          830
+        ]
+      ],
+      "is_best": false
+    },
+    "Gradient Boosting": {
+      "accuracy": 97.17,
+      "f1_score": 97.13,
+      "f1_macro": 96.19,
+      "precision": 97.23,
+      "recall": 97.17,
+      "roc_auc": 98.4,
+      "pr_auc": 97.49,
+      "false_alert_rate": 0.34,
+      "missed_attack_rate": 9.99,
+      "latency_us": 129.58,
+      "size_kb": 535.6,
+      "train_time_s": 7.58,
+      "confusion_matrix": [
+        [
+          2619,
+          9
+        ],
+        [
+          91,
+          820
+        ]
+      ],
+      "is_best": false
+    },
+    "AdaBoost": {
+      "accuracy": 88.25,
+      "f1_score": 87.13,
+      "f1_macro": 81.96,
+      "precision": 89.2,
+      "recall": 88.25,
+      "roc_auc": 94.51,
+      "pr_auc": 88.94,
+      "false_alert_rate": 0.84,
+      "missed_attack_rate": 43.25,
+      "latency_us": 3220.23,
+      "size_kb": 38.9,
+      "train_time_s": 0.91,
+      "confusion_matrix": [
+        [
+          2606,
+          22
+        ],
+        [
+          394,
+          517
+        ]
+      ],
+      "is_best": false
+    },
+    "SVM (RBF)": {
+      "accuracy": 90.03,
+      "f1_score": 89.19,
+      "f1_macro": 84.94,
+      "precision": 91.03,
+      "recall": 90.03,
+      "roc_auc": 91.51,
+      "pr_auc": 89.66,
+      "false_alert_rate": 0.27,
+      "missed_attack_rate": 37.98,
+      "latency_us": 242.25,
+      "size_kb": 742.6,
+      "train_time_s": 17.87,
+      "confusion_matrix": [
+        [
+          2621,
+          7
+        ],
+        [
+          346,
+          565
+        ]
+      ],
+      "is_best": false
+    },
+    "K-Nearest Neighbors": {
+      "accuracy": 90.96,
+      "f1_score": 90.65,
+      "f1_macro": 87.4,
+      "precision": 90.88,
+      "recall": 90.96,
+      "roc_auc": 93.23,
+      "pr_auc": 88.9,
+      "false_alert_rate": 2.97,
+      "missed_attack_rate": 26.56,
+      "latency_us": 15329.6,
+      "size_kb": 5045.7,
+      "train_time_s": 0.01,
+      "confusion_matrix": [
+        [
+          2550,
+          78
+        ],
+        [
+          242,
+          669
+        ]
+      ],
+      "is_best": false
+    },
+    "Logistic Regression": {
+      "accuracy": 88.08,
+      "f1_score": 86.78,
+      "f1_macro": 81.33,
+      "precision": 89.52,
+      "recall": 88.08,
+      "roc_auc": 82.89,
+      "pr_auc": 77.3,
+      "false_alert_rate": 0.23,
+      "missed_attack_rate": 45.66,
+      "latency_us": 65.15,
+      "size_kb": 1.0,
+      "train_time_s": 0.06,
+      "confusion_matrix": [
+        [
+          2622,
+          6
+        ],
+        [
+          416,
+          495
+        ]
+      ],
+      "is_best": false
+    },
+    "Gaussian Naive Bayes": {
+      "accuracy": 82.17,
+      "f1_score": 81.12,
+      "f1_macro": 74.12,
+      "precision": 81.21,
+      "recall": 82.17,
+      "roc_auc": 79.94,
+      "pr_auc": 70.29,
+      "false_alert_rate": 7.12,
+      "missed_attack_rate": 48.74,
+      "latency_us": 65.17,
+      "size_kb": 1.2,
+      "train_time_s": 0.0,
+      "confusion_matrix": [
+        [
+          2441,
+          187
+        ],
+        [
+          444,
+          467
+        ]
+      ],
+      "is_best": false
+    },
+    "Linear Discriminant Analysis": {
+      "accuracy": 87.93,
+      "f1_score": 86.58,
+      "f1_macro": 81.02,
+      "precision": 89.48,
+      "recall": 87.93,
+      "roc_auc": 81.65,
+      "pr_auc": 76.66,
+      "false_alert_rate": 0.15,
+      "missed_attack_rate": 46.43,
+      "latency_us": 68.06,
+      "size_kb": 1.6,
+      "train_time_s": 0.02,
+      "confusion_matrix": [
+        [
+          2624,
+          4
+        ],
+        [
+          423,
+          488
+        ]
+      ],
+      "is_best": false
+    },
+    "MLP Neural Network": {
+      "accuracy": 96.13,
+      "f1_score": 96.11,
+      "f1_macro": 94.89,
+      "precision": 96.11,
+      "recall": 96.13,
+      "roc_auc": 97.34,
+      "pr_auc": 96.03,
+      "false_alert_rate": 2.17,
+      "missed_attack_rate": 8.78,
+      "latency_us": 76.88,
+      "size_kb": 392.4,
+      "train_time_s": 51.54,
+      "confusion_matrix": [
+        [
+          2571,
+          57
+        ],
+        [
+          80,
+          831
+        ]
+      ],
+      "is_best": false
+    },
+    "Stacking Ensemble": {
+      "accuracy": 97.51,
+      "f1_score": 97.48,
+      "f1_macro": 96.65,
+      "precision": 97.57,
+      "recall": 97.51,
+      "roc_auc": 98.73,
+      "pr_auc": 97.88,
+      "false_alert_rate": 0.19,
+      "missed_attack_rate": 9.11,
+      "latency_us": 14522.71,
+      "size_kb": 2256.5,
+      "train_time_s": 6.73,
+      "confusion_matrix": [
+        [
+          2623,
+          5
+        ],
+        [
+          83,
+          828
+        ]
+      ],
+      "is_best": false
+    },
+    "Voting Ensemble": {
+      "accuracy": 97.2,
+      "f1_score": 97.15,
+      "f1_macro": 96.21,
+      "precision": 97.29,
+      "recall": 97.2,
+      "roc_auc": 98.63,
+      "pr_auc": 97.76,
+      "false_alert_rate": 0.08,
+      "missed_attack_rate": 10.65,
+      "latency_us": 14174.37,
+      "size_kb": 3905.7,
+      "train_time_s": 1.59,
+      "confusion_matrix": [
+        [
+          2626,
+          2
+        ],
+        [
+          97,
+          814
+        ]
+      ],
+      "is_best": false
+    }
+  }
+}
