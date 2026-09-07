@@ -23,32 +23,36 @@ RESULTS_DIR = os.path.join(BASE_DIR, 'results')
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # ── Live OMNeT++ / Veins RSU Simulation Data ──────────────────────
+# ── Live OMNeT++ / Veins RSU Simulation Test Data ───────────────────
+# Validation Acc is from the Split Dataset (results/unified_model_metrics.json, 3,539 samples)
+# Live Acc/F1/Latency is from Live OMNeT++/Veins RSU Simulation (2,331 packets)
 LIVE_DATA = [
-    {"rank": 1,  "name": "Random Forest",          "live_acc": 90.99, "live_f1": 90.97, "live_auc": 90.59, "far": 11.91, "mar": 6.89,  "latency": 23499.6, "throughput": 42,    "size_kb": 6441.0, "train_acc": 97.77},
-    {"rank": 2,  "name": "Extra Trees",            "live_acc": 90.95, "live_f1": 90.94, "live_auc": 92.17, "far": 11.71, "mar": 7.12,  "latency": 24162.8, "throughput": 41,    "size_kb": 11314.0,"train_acc": 92.43},
-    {"rank": 3,  "name": "K-Nearest Neighbors",    "live_acc": 90.48, "live_f1": 90.48, "live_auc": 90.88, "far": 11.30, "mar": 8.23,  "latency": 13903.8, "throughput": 71,    "size_kb": 5045.0, "train_acc": 90.96},
-    {"rank": 4,  "name": "Logistic Regression",    "live_acc": 89.27, "live_f1": 89.28, "live_auc": 88.79, "far": 12.42, "mar": 9.49,  "latency": 82.8,    "throughput": 12084, "size_kb": 1.0,    "train_acc": 88.08},
-    {"rank": 5,  "name": "Linear Discriminant",     "live_acc": 89.27, "live_f1": 89.28, "live_auc": 88.87, "far": 12.42, "mar": 9.49,  "latency": 94.9,    "throughput": 10536, "size_kb": 1.6,    "train_acc": 87.93},
-    {"rank": 6,  "name": "AdaBoost",               "live_acc": 86.06, "live_f1": 86.14, "live_auc": 91.25, "far": 9.27,  "mar": 17.35, "latency": 5040.1,  "throughput": 198,   "size_kb": 38.9,   "train_acc": 88.25},
-    {"rank": 7,  "name": "Voting Ensemble",        "live_acc": 83.27, "live_f1": 82.72, "live_auc": 90.36, "far": 33.20, "mar": 4.74,  "latency": 39873.5, "throughput": 25,    "size_kb": 3905.0, "train_acc": 97.20},
-    {"rank": 8,  "name": "CatBoost",               "live_acc": 80.69, "live_f1": 79.79, "live_auc": 90.77, "far": 39.82, "mar": 4.37,  "latency": 118.3,   "throughput": 8452,  "size_kb": 248.0,  "train_acc": 97.29},
-    {"rank": 9,  "name": "LightGBM",               "live_acc": 72.42, "live_f1": 69.32, "live_auc": 89.77, "far": 61.10, "mar": 3.19,  "latency": 536.9,   "throughput": 1862,  "size_kb": 669.0,  "train_acc": 97.74},
-    {"rank": 10, "name": "Hist Gradient Boosting", "live_acc": 71.69, "live_f1": 68.28, "live_auc": 89.50, "far": 63.03, "mar": 3.04,  "latency": 3880.7,  "throughput": 257,   "size_kb": 653.0,  "train_acc": 97.40},
-    {"rank": 11, "name": "XGBoost",                "live_acc": 71.56, "live_f1": 68.23, "live_auc": 89.32, "far": 62.73, "mar": 3.48,  "latency": 280.2,   "throughput": 3568,  "size_kb": 464.0,  "train_acc": 97.29},
-    {"rank": 12, "name": "Stacking Ensemble",      "live_acc": 69.24, "live_f1": 64.47, "live_auc": 91.76, "far": 70.16, "mar": 2.08,  "latency": 38560.3, "throughput": 25,    "size_kb": 2256.0, "train_acc": 97.51},
-    {"rank": 13, "name": "Gradient Boosting",      "live_acc": 67.14, "live_f1": 60.67, "live_auc": 89.90, "far": 76.88, "mar": 0.82,  "latency": 237.8,   "throughput": 4205,  "size_kb": 535.0,  "train_acc": 97.17},
-    {"rank": 14, "name": "MLP Neural Network",     "live_acc": 58.99, "live_f1": 44.90, "live_auc": 76.14, "far": 97.35, "mar": 0.00,  "latency": 119.1,   "throughput": 8393,  "size_kb": 392.0,  "train_acc": 96.13},
-    {"rank": 15, "name": "Gaussian Naive Bayes",   "live_acc": 58.13, "live_f1": 43.24, "live_auc": 90.17, "far": 99.08, "mar": 0.22,  "latency": 83.6,    "throughput": 11963, "size_kb": 1.2,    "train_acc": 82.17},
-    {"rank": 16, "name": "SVM (RBF)",              "live_acc": 58.04, "live_f1": 42.82, "live_auc": 87.82, "far": 99.59, "mar": 0.00,  "latency": 255.4,   "throughput": 3915,  "size_kb": 742.0,  "train_acc": 90.03},
-    {"rank": 17, "name": "Decision Tree",          "live_acc": 57.87, "live_f1": 42.43, "live_auc": 50.00, "far": 100.0,  "mar": 0.00,  "latency": 70.9,    "throughput": 14110, "size_kb": 18.1,   "train_acc": 96.84},
+    {"rank": 1,  "name": "Random Forest",          "live_acc": 90.99, "live_f1": 90.97, "live_auc": 90.59, "far": 11.91, "mar": 6.89,  "latency": 23499.6, "throughput": 42,    "size_kb": 6441.0, "val_acc": 97.77},
+    {"rank": 2,  "name": "Extra Trees",            "live_acc": 90.95, "live_f1": 90.94, "live_auc": 92.17, "far": 11.71, "mar": 7.12,  "latency": 24162.8, "throughput": 41,    "size_kb": 11314.0,"val_acc": 92.43},
+    {"rank": 3,  "name": "K-Nearest Neighbors",    "live_acc": 90.48, "live_f1": 90.48, "live_auc": 90.88, "far": 11.30, "mar": 8.23,  "latency": 13903.8, "throughput": 71,    "size_kb": 5045.0, "val_acc": 90.96},
+    {"rank": 4,  "name": "Logistic Regression",    "live_acc": 89.27, "live_f1": 89.28, "live_auc": 88.79, "far": 12.42, "mar": 9.49,  "latency": 82.8,    "throughput": 12084, "size_kb": 1.0,    "val_acc": 88.08},
+    {"rank": 5,  "name": "Linear Discriminant",     "live_acc": 89.27, "live_f1": 89.28, "live_auc": 88.87, "far": 12.42, "mar": 9.49,  "latency": 94.9,    "throughput": 10536, "size_kb": 1.6,    "val_acc": 87.93},
+    {"rank": 6,  "name": "AdaBoost",               "live_acc": 86.06, "live_f1": 86.14, "live_auc": 91.25, "far": 9.27,  "mar": 17.35, "latency": 5040.1,  "throughput": 198,   "size_kb": 38.9,   "val_acc": 88.25},
+    {"rank": 7,  "name": "Voting Ensemble",        "live_acc": 83.27, "live_f1": 82.72, "live_auc": 90.36, "far": 33.20, "mar": 4.74,  "latency": 39873.5, "throughput": 25,    "size_kb": 3905.0, "val_acc": 97.20},
+    {"rank": 8,  "name": "CatBoost",               "live_acc": 80.69, "live_f1": 79.79, "live_auc": 90.77, "far": 39.82, "mar": 4.37,  "latency": 118.3,   "throughput": 8452,  "size_kb": 248.0,  "val_acc": 97.29},
+    {"rank": 9,  "name": "LightGBM",               "live_acc": 72.42, "live_f1": 69.32, "live_auc": 89.77, "far": 61.10, "mar": 3.19,  "latency": 536.9,   "throughput": 1862,  "size_kb": 669.0,  "val_acc": 97.74},
+    {"rank": 10, "name": "Hist Gradient Boosting", "live_acc": 71.69, "live_f1": 68.28, "live_auc": 89.50, "far": 63.03, "mar": 3.04,  "latency": 3880.7,  "throughput": 257,   "size_kb": 653.0,  "val_acc": 97.40},
+    {"rank": 11, "name": "XGBoost",                "live_acc": 71.56, "live_f1": 68.23, "live_auc": 89.32, "far": 62.73, "mar": 3.48,  "latency": 280.2,   "throughput": 3568,  "size_kb": 464.0,  "val_acc": 97.29},
+    {"rank": 12, "name": "Stacking Ensemble",      "live_acc": 69.24, "live_f1": 64.47, "live_auc": 91.76, "far": 70.16, "mar": 2.08,  "latency": 38560.3, "throughput": 25,    "size_kb": 2256.0, "val_acc": 97.51},
+    {"rank": 13, "name": "Gradient Boosting",      "live_acc": 67.14, "live_f1": 60.67, "live_auc": 89.90, "far": 76.88, "mar": 0.82,  "latency": 237.8,   "throughput": 4205,  "size_kb": 535.0,  "val_acc": 97.17},
+    {"rank": 14, "name": "MLP Neural Network",     "live_acc": 58.99, "live_f1": 44.90, "live_auc": 76.14, "far": 97.35, "mar": 0.00,  "latency": 119.1,   "throughput": 8393,  "size_kb": 392.0,  "val_acc": 96.13},
+    {"rank": 15, "name": "Gaussian Naive Bayes",   "live_acc": 58.13, "live_f1": 43.24, "live_auc": 90.17, "far": 99.08, "mar": 0.22,  "latency": 83.6,    "throughput": 11963, "size_kb": 1.2,    "val_acc": 82.17},
+    {"rank": 16, "name": "SVM (RBF)",              "live_acc": 58.04, "live_f1": 42.82, "live_auc": 87.82, "far": 99.59, "mar": 0.00,  "latency": 255.4,   "throughput": 3915,  "size_kb": 742.0,  "val_acc": 90.03},
+    {"rank": 17, "name": "Decision Tree",          "live_acc": 57.87, "live_f1": 42.43, "live_auc": 50.00, "far": 100.0,  "mar": 0.00,  "latency": 70.9,    "throughput": 14110, "size_kb": 18.1,   "val_acc": 96.84},
 ]
 
 # Save JSON file
 json_path = os.path.join(RESULTS_DIR, 'live_rsu_simulation_benchmark.json')
 with open(json_path, 'w') as f:
     json.dump({
-        "dataset_name": "OMNeT++ / Veins Live RSU Simulation Telemetry",
-        "sample_count": 2331,
+        "environment": "OMNeT++ / Veins Live RSU Simulation",
+        "description": "Validation performed on Split Dataset; Testing performed on Live RSU Environment",
+        "live_test_packets": 2331,
         "attack_packets": 1349,
         "legitimate_packets": 982,
         "models": LIVE_DATA
@@ -79,7 +83,7 @@ short_names = [
 
 
 # ═══════════════════════════════════════════════════════════════════
-# CHART 1: Training Accuracy vs Live RSU Simulation Accuracy & F1
+# CHART 1: Dataset Validation vs Live RSU Simulation Test Accuracy & F1
 # ═══════════════════════════════════════════════════════════════════
 def plot_live_vs_training():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 6.5))
@@ -88,15 +92,15 @@ def plot_live_vs_training():
     x = np.arange(len(LIVE_DATA))
     width = 0.38
     
-    train_accs = [m['train_acc'] for m in LIVE_DATA]
-    live_accs  = [m['live_acc']  for m in LIVE_DATA]
-    live_f1s   = [m['live_f1']   for m in LIVE_DATA]
+    val_accs  = [m['val_acc']  for m in LIVE_DATA]
+    live_accs = [m['live_acc'] for m in LIVE_DATA]
+    live_f1s  = [m['live_f1']  for m in LIVE_DATA]
     
-    # Left: Train vs Live Accuracy
+    # Left: Validation vs Live Test Accuracy
     ax1.set_facecolor('#0d1321')
-    b1 = ax1.bar(x - width/2, train_accs, width, label='Training Holdout Acc (%)', color='#3b82f6')
-    b2 = ax1.bar(x + width/2, live_accs,  width, label='Live RSU Simulation Acc (%)', color='#10b981')
-    ax1.set_title('Training vs Live RSU Simulation Accuracy\n(Tested on 2,331 Live OMNeT++/Veins Packets)',
+    b1 = ax1.bar(x - width/2, val_accs,  width, label='Validation Acc (Split Dataset, %)', color='#3b82f6')
+    b2 = ax1.bar(x + width/2, live_accs, width, label='Live Test Acc (OMNeT++/Veins RSU, %)', color='#10b981')
+    ax1.set_title('Dataset Validation vs Live RSU Simulation Test Accuracy\n(Split Dataset Validation vs 2,331 Live OMNeT++/Veins Packets)',
                   color='white', fontsize=12, fontweight='bold')
     ax1.set_xticks(x)
     ax1.set_xticklabels(short_names, rotation=45, ha='right', color='#94a3b8', fontsize=8)
@@ -108,11 +112,11 @@ def plot_live_vs_training():
     # Highlight top model bar
     b2[0].set_color('#f59e0b')
     
-    # Right: Live F1 Score
+    # Right: Live Test F1 Score
     ax2.set_facecolor('#0d1321')
     colors_f1 = ['#f59e0b' if i == 0 else ('#0284c7' if m['live_f1'] >= 80 else '#475569') for i, m in enumerate(LIVE_DATA)]
     b3 = ax2.bar(x, live_f1s, color=colors_f1, width=0.65)
-    ax2.set_title('Live RSU Simulation F1-Score (%)\n(Ranked by Live RSU Detection Performance)',
+    ax2.set_title('Live RSU Simulation Test F1-Score (%)\n(Ranked by Live Detection Performance on 2,331 Packets)',
                   color='white', fontsize=12, fontweight='bold')
     ax2.set_xticks(x)
     ax2.set_xticklabels(short_names, rotation=45, ha='right', color='#94a3b8', fontsize=8)

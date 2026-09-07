@@ -6,12 +6,9 @@
     \framesubtitle{Rubric: Methodology -- Datasets \& Preprocessing}
     \small
     \begin{itemize}
-        \item \textbf{Published Research Dataset (Kaggle):} Open-sourced on \href{https://www.kaggle.com/datasets/mouniksai/vehicular-misbehavior-dataset-edgetrust-vanet/data}{\textbf{\underline{Kaggle}}} (\texttt{EdgeTrust-VANET}) for community reproducibility and open-access V2X benchmarking.
+        \item \textbf{Published Benchmark Dataset (Kaggle):} Open-sourced on \href{https://www.kaggle.com/datasets/mouniksai/vehicular-misbehavior-dataset-edgetrust-vanet/data}{\textbf{\underline{Kaggle}}} (\texttt{EdgeTrust-VANET}) for community reproducibility.
         
-        \item \textbf{Multi-Source ETL Pipeline (23{,}970 records):} Ingested, standardized, and harmonized 3 heterogeneous VANET simulation sources into a unified schema:
-        \begin{itemize}
-            \item \textbf{VeReMi (72.9\%)} + \textbf{EdgeTrust-VANET (20.9\%)} + \textbf{V-RADD (6.3\%)} [70.6\% Benign, 29.4\% Malicious].
-        \end{itemize}
+        \item \textbf{Multi-Source ETL Harmonization (23{,}970 records):} Standardized 3 corpora into a unified schema: \textbf{VeReMi (72.9\%)}, \textbf{EdgeTrust-VANET (20.9\%)}, \textbf{V-RADD (6.3\%)} [70.6\% Benign, 29.4\% Attack across 6 vectors].
         
         \item \textbf{14 RSU-Observable Features Derived (Zero Leakage):}
         \begin{itemize}
@@ -20,33 +17,45 @@
             \item \textbf{Trust Engine (3):} Direct trust ($T_t$), 300\,m KD-Tree neighbor avg, historical trust.
         \end{itemize}
         
-        \item \textbf{Audit \& Group Splitting:} Purged 4 post-hoc counters that cause live collapse (100\% $\rightarrow$ 86.05\% F1); enforced zero trajectory overlap via \textbf{GroupKFold by Vehicle ID} (70/15/15).
+        \item \textbf{Zero-Leakage Group Splitting:} Purged 4 post-hoc label counters ($100\% \to 86.05\%$ without them); partitioned strictly by \textbf{Vehicle ID (\texttt{node\_id})} (70/15/15) to eliminate trajectory autocorrelation.
         
-        \item \textbf{Result:} Genuine \textbf{97.74\% Weighted F1} on unseen vehicles; verified \textbf{90.99\% Live Accuracy} in OMNeT++/Veins RSU deployment.
+        \item \textbf{Rigorous 2-Stage Evaluation:}
+        \begin{itemize}
+            \item \textbf{Validation (Split Dataset):} \textbf{97.74\% F1} / \textbf{97.77\% Acc} (5-fold CV: \textbf{96.95\% $\pm$ 1.12\%}).
+            \item \textbf{Testing (Live OMNeT++/Veins RSU):} \textbf{90.99\% Acc} / \textbf{90.97\% F1} on 2{,}331 packets.
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
 % =====================================================
-% SLIDE: ML MODEL TRAINING & RESULTS
+% SLIDE: ML MODEL TRAINING & BENCHMARK RESULTS
 % =====================================================
-\begin{frame}{3. ML Model Training \& Benchmark Results}
+\begin{frame}{3. Model Validation \& Live RSU Testing Benchmark}
     \framesubtitle{Rubric: Core Algorithms \& Evaluation Metrics}
     \begin{columns}
-        \column{0.44\textwidth}
-        \footnotesize
+        \column{0.48\textwidth}
+        \scriptsize
         \begin{itemize}
-            \item Benchmarked \textbf{17 ML models} across 5 families: Tree Ensembles, Modern GBDTs (XGBoost, LightGBM, CatBoost, HistGB), Linear/Kernel/Instance (SVM, KNN, LogReg, LDA), MLP Neural Net, and Stacking/Voting Ensembles.
-            \item Validated on \textbf{2{,}331 live RSU-extracted telemetry samples} (1{,}349 attack, 982 legitimate packets) in OMNeT++ / Veins:
+            \item \textbf{17 Models Evaluated} across Ensembles, GBDTs, Linear, Kernel, and Neural Network architectures.
+            
+            \item \textbf{Validation (Split Dataset -- 3{,}539 samples):}
             \begin{itemize}
-                \item \textbf{\#1 Top Champion:} \textbf{Random Forest} -- \textbf{90.99\% Live Acc}, \textbf{90.97\% Live F1}, 90.59\% ROC-AUC, lowest missed attack rate (\textbf{6.89\%}).
-                \item \textbf{Runner-up Ensembles:} Extra Trees (90.95\% Acc) and KNN (90.48\% Acc).
-                \item \textbf{Ultra-High Throughput Edge Leaders:} Logistic Regression \& LDA -- \textbf{89.28\% Live F1}, \textbf{82.8 $\mu$s} latency, \textbf{12{,}084 pkt/s}, \textbf{1.0 KB} size.
-                \item \textbf{Best Edge GBDT:} CatBoost -- \textbf{79.79\% F1}, 90.77\% ROC-AUC, \textbf{118.3 $\mu$s}, \textbf{8{,}452 pkt/s}, 248 KB.
+                \item 5-Fold Stratified Group CV: \textbf{96.95\% $\pm$ 1.12\%}.
+                \item Top models: RF (\textbf{97.77\% Acc}, \textbf{97.74\% F1}), LightGBM (\textbf{97.74\% Acc}), CatBoost (\textbf{97.29\% Acc}).
             \end{itemize}
+            
+            \item \textbf{Testing (Live OMNeT++/Veins RSU -- 2{,}331 pkts):}
+            \begin{itemize}
+                \item \textbf{\#1 Top Champion:} \textbf{Random Forest} -- \textbf{90.99\% Test Acc}, \textbf{90.97\% Test F1}, lowest missed attack rate (\textbf{6.89\%}).
+                \item \textbf{Ultra-Fast Edge Leaders:} \textbf{LogReg \& LDA} -- \textbf{89.28\% Test F1}, \textbf{82.8 $\mu$s} latency ($>12{,}000$ pkt/s), \textbf{1.0 KB} footprint.
+                \item \textbf{Top Edge GBDT:} \textbf{CatBoost} -- \textbf{79.79\% Test F1}, \textbf{90.77\% ROC-AUC}, \textbf{118.3 $\mu$s}, 248 KB.
+            \end{itemize}
+            
+            \item \textbf{Key Live Finding:} Live radio jitter caused MLP/SVM to collapse (FAR $>97\%$), while Tree Ensembles remained robust.
         \end{itemize}
-        \column{0.56\textwidth}
+        \column{0.52\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{vanet_comparison.png}
+        \includegraphics[width=\linewidth,keepaspectratio]{vanet_comparison.png}
     \end{columns}
 \end{frame}
 
@@ -115,8 +124,8 @@
         \begin{itemize}
             \item \textbf{RSU Hardware Trade-off:}
             \begin{itemize}
-                \item \textbf{Multi-Core Edge Servers:} \textbf{Random Forest} provides maximum detection accuracy (\textbf{90.99\% Live Acc}, \textbf{90.97\% F1}) and lowest missed attacks (6.89\%).
-                \item \textbf{Ultra-Constrained RSUs:} \textbf{Logistic Regression \& LDA} execute in \textbf{82.8 $\mu$s} ($>12{,}000$ pkt/s) with a tiny \textbf{1.0 KB} memory footprint and \textbf{89.28\% Live F1}.
+                \item \textbf{Multi-Core Edge Servers:} \textbf{Random Forest} yields top performance (\textbf{97.77\% Val Acc}, \textbf{90.99\% Live Test Acc}, \textbf{90.97\% Live F1}) and lowest missed attacks (\textbf{6.89\%}).
+                \item \textbf{Ultra-Constrained RSUs:} \textbf{Logistic Regression \& LDA} execute in \textbf{82.8 $\mu$s} ($>12{,}000$ pkt/s) with a tiny \textbf{1.0 KB} footprint and \textbf{89.28\% Live Test F1}.
                 \item \textbf{Balanced GBDT:} \textbf{CatBoost} delivers \textbf{8{,}452 pkt/s} at \textbf{118 $\mu$s} latency and \textbf{248 KB} footprint with 90.77\% ROC-AUC.
             \end{itemize}
         \end{itemize}
@@ -159,16 +168,12 @@
 \section{Technical Knowledge}
 \begin{frame}{10. Technical Knowledge \& Design Decisions}
     \framesubtitle{Rubric: Understanding of Methodology, Implementation \& Design Choices}
+    \small
     \begin{itemize}
-        \item \textbf{Why Tree Ensembles Win in Live VANETs:} Physical vehicular telemetry exhibits hard non-linear boundaries (e.g. packet drop ratio $> 0.40$, trust $< 0.40$). Bagging in Random Forest aggregates 150 orthogonal trees, effectively filtering non-Gaussian radio noise and achieving the lowest missed attack rate (\textbf{6.89\%}).
-        \item \textbf{Eliminating Trajectory Leakage:} Random row splitting inflates scores (99.29\% F1) due to temporal autocorrelation. Enforcing \textbf{Group-based vehicle splitting (\texttt{node\_id})} guarantees zero vehicle overlap and honest generalization.
-        \item \textbf{Why $\alpha = 0.70$ in EMA Trust Engine:} Balances historical vehicle stability with rapid anomaly reaction; persistently penalizes attackers within 4 packets without overreacting to single-packet sensor jitter.
-        \item \textbf{Two-Tier RSU Hybrid Architecture:}
-        \begin{itemize}
-            \item Tier 1: Real-time heuristic trust engine executes in $O(1)$ time on every received 802.11p beacon.
-            \item Tier 2: 14-feature ML model predicts transmission integrity.
-            \item \textbf{Safety Policy:} Requires \textbf{both} low trust ($< 0.40$) \textbf{and} ML malicious prediction to \textbf{BLOCK}, ensuring legitimate traffic is never falsely disconnected.
-        \end{itemize}
-        \item \textbf{Class Imbalance \& Validation Protocol:} Handled 70.6\% normal vs 29.4\% malicious distribution via Weighted F1 optimization and 5-Fold Stratified Group Cross-Validation (\textbf{96.95\% $\pm$ 1.12\%}).
+        \item \textbf{Why Tree Ensembles Win in Live Testing:} Vehicular telemetry exhibits sharp non-linear boundaries. Random Forest aggregates 150 orthogonal trees, filtering non-Gaussian radio noise to achieve the lowest missed attack rate (\textbf{6.89\%}) on 2{,}331 OMNeT++ live packets.
+        \item \textbf{Eliminating Trajectory Leakage:} Enforced \textbf{GroupKFold by Vehicle ID (\texttt{node\_id})} (70/15/15) to prevent temporal autocorrelation leakage between train, validation, and test.
+        \item \textbf{Why $\alpha = 0.70$ in EMA Trust Update:} Retains sufficient temporal memory to absorb transient radio fading while decisively dropping trust below 0.40 by packet 4 during attacks.
+        \item \textbf{Two-Tier RSU Hybrid Architecture:} Tier 1 heuristic trust filter runs in $O(1)$ on all BSMs; Tier 2 ML model predicts misbehavior. Requires \textbf{both} low trust ($< 0.40$) \textbf{and} ML malicious prediction to \textbf{BLOCK}, ensuring zero false disconnects.
+        \item \textbf{Validation vs. Live Testing Protocol:} Validated on 3{,}539 split dataset samples (\textbf{97.74\% F1}, CV: $96.95\% \pm 1.12\%$); independently tested on 2{,}331 live OMNeT++/Veins RSU packets (\textbf{90.99\% Acc}).
     \end{itemize}
 \end{frame}
