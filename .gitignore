@@ -9,3 +9,7 @@ venv/
 .venv
 *.pkl
 catboost_info/
+data/raw_veremi/
+.vscode/
+.DS_Store
+
