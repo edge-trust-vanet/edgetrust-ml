@@ -1,94 +1,67 @@
 =========================================================
-      EDGETRUST-VANET: HOW TO RUN THE DEMO
+      EDGETRUST-VANET: HOW TO RUN THE DEMO & PRESENTATION
 =========================================================
 
-Follow these simple steps exactly to run your project for the panel demo.
+Follow these simple steps to run your project for a demo or panel presentation.
 
 STEP 1: OPEN YOUR TERMINAL
 ---------------------------------------------------------
-1. Open VS Code or your standard terminal (PowerShell/Command Prompt).
-2. Make sure you are in the main project folder:
-   C:\Users\konch\OneDrive\Desktop\EdgeTrust-VANET
+1. Open VS Code or your terminal (PowerShell, Command Prompt, or macOS Terminal).
+2. Make sure you are in the project folder:
+   cd /Users/mouniksai/Documents/edgetrust-ml   (or your path to edgetrust-ml)
 
-
-STEP 2: TRAIN THE AI MODELS (Optional but recommended)
+STEP 2: TRAIN & VERIFY THE AI MODELS (Optional - already pre-trained)
 ---------------------------------------------------------
-Before starting the dashboard, you can run the training script to show the panel how the Machine Learning works behind the scenes.
+If you want to show the panel how the models train from scratch:
 1. Run this command:
-   python scripts/analyze_vanet_nodes.py
+   python scripts/train_unified_pipeline.py
 
-2. Wait for it to finish. You will see it print out the 95.6% accuracy results and save the new models to the /models/ folder.
-
+2. Wait ~45 seconds. You will see it print:
+   - 5-Fold Stratified Group Cross-Validation on Train Split (Mean: 96.95% ± 1.12%)
+   - Training all 17 models across 5 distinct ML families
+   - Random Forest wins with 97.74% Weighted F1 and 97.77% Accuracy!
+   - LightGBM achieves 97.71% F1 with an ultra-fast 329 microsecond edge latency.
 
 STEP 3: START THE DASHBOARD SERVER
 ---------------------------------------------------------
-This starts the backend Flask server that connects the AI to your web interface.
+This starts the backend Flask server that connects the AI models to the web interface.
 1. Run this command:
    python dashboard/app.py
 
-2. You should see a message saying:
+2. You should see:
    * Running on http://127.0.0.1:5000
-   (Do NOT close this terminal window while presenting!)
-
+   (Keep this terminal window open while presenting!)
 
 STEP 4: OPEN IN YOUR BROWSER
 ---------------------------------------------------------
-1. Open Google Chrome, Edge, or Firefox.
+1. Open Google Chrome, Edge, Safari, or Firefox.
 2. Type this URL into the address bar and press Enter:
    http://127.0.0.1:5000
 
-3. IMPORTANT: If you ever see old data (like 100% accuracy), press Ctrl + Shift + R to force-refresh the page and clear the browser cache.
+3. IMPORTANT: If you ever see old cached data, press Ctrl + Shift + R (or Cmd + Shift + R on Mac) to force-refresh.
 
-
-STEP 5: WHAT TO SHOW THE PANEL
+STEP 5: WHAT TO SHOW THE PANEL (2-MINUTE WALKTHROUGH)
 ---------------------------------------------------------
-Now that the dashboard is open, walk them through these two main tabs:
+Walk them through the two main tabs:
 
-A) "🌐 VANET Nodes" Tab:
-   - Click this tab first. 
-   - Show them the 5,000 nodes dataset stats.
-   - Scroll down to show that Random Forest won with 95.6% Accuracy.
-   - Explain how you prevented "Data Leakage" to get an honest score.
+A) "🌐 VANET Nodes" Tab (Show Research Rigor First):
+   - Click this tab first.
+   - Show the 23,970 records dataset (72.9% from authentic VeReMi LuST simulation).
+   - Explain that you strictly exclude retrospective attack counters to eliminate data leakage.
+   - Show that Random Forest won with 97.74% F1 on 3,539 completely unseen vehicles!
+   - Point to the Feature Importance chart: Trust features contribute 55.86% of total predictive power!
 
-B) "🚗 Evaluator" Tab:
-   - Click this tab second.
-   - Explain that this simulates a Roadside Unit (RSU).
-   - Click the "Simulate Random" button a few times.
-   - Watch the Activity Log show "ACCEPT", "WARN", or "BLOCK" based on the AI's real-time decision.
-
+B) "🚗 Evaluator" Tab (Show Live RSU Edge Operation Second):
+   - Click back to the Evaluator tab.
+   - Explain: "This simulates a Roadside Unit (RSU) making real-time safety decisions."
+   - Click the purple "Simulate Random" button 4 or 5 times.
+   - Point to the Decision Output card:
+     * When a normal vehicle passes: Trust is ~0.85, ML predicts Normal -> [ ✅ ACCEPT ]
+     * When an attacker passes: Trust drops below 0.40, ML flags Malicious -> [ 🚫 BLOCK ]
+   - Point to the Activity Log table at the bottom updating with each vehicle's verdict.
 
 HOW TO STOP THE DEMO:
 ---------------------------------------------------------
-When you are completely finished, go back to your terminal and press:
+When finished, go back to your terminal and press:
    Ctrl + C
-This will shut down the Flask server.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   python scripts/analyze_vanet_nodes.py
-
-
-   python dashboard/app.py
+This cleanly shuts down the server.
