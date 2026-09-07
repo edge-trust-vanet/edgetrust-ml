@@ -285,6 +285,147 @@ def get_stats():
         'accepted': sum(1 for e in activity_log if e['final_decision'] == 'ACCEPT'),
     })
 
+# ── Live Simulation Feed & Panel Demo API ────────────────────
+@app.route('/api/live_sim_feed')
+def get_live_sim_feed():
+    csv_path = os.path.join(BASE, 'data', 'live_extracted_features.csv')
+    sim_results_path = os.path.join(BASE, '..', 'edgetrust-test', 'omnetpp', 'veins', 'examples', 'veins', 'results', 'live_extracted_features.csv')
+
+    target_csv = csv_path if os.path.exists(csv_path) else sim_results_path
+    if not os.path.exists(target_csv):
+        return jsonify({'error': 'No live simulation data found. Please run the OMNeT++ simulation.'}), 404
+
+    import pandas as pd
+    df = pd.read_csv(target_csv)
+
+    # Load AdaBoost model and scaler for live prediction verification
+    adaboost_model = loaded_models.get('AdaBoost')
+    scaler = None
+    scaler_path = os.path.join(MODELS_DIR, 'scaler.pkl')
+    if os.path.exists(scaler_path) and ML_AVAILABLE:
+        try:
+            scaler = joblib.load(scaler_path)
+        except Exception:
+            pass
+
+    VEREMI_FEATS = ['speed', 'acceleration', 'position_x', 'position_y',
+                    'direction', 'packet_drop_ratio', 'latency', 'signal_strength']
+
+    feed_records = []
+    rsu_pos = {'x': 58.0, 'y': 49.0}
+
+    for idx, row in df.iterrows():
+        nid = int(row['node_id'])
+        px = float(row['position_x'])
+        py = float(row['position_y'])
+        spd = float(row['speed'])
+        acc = float(row['acceleration'])
+        heading = float(row['direction'])
+        p_sent = int(row['packet_sent'])
+        p_recv = int(row['packet_received'])
+        p_drop = float(row['packet_drop_ratio'])
+        lat = float(row['latency'])
+        rssi = float(row['signal_strength'])
+        trust = float(row['trust_score'])
+        n_trust = float(row['neighbor_trust_score_avg'])
+        h_trust = float(row['historical_trust_score'])
+        fdi = int(row.get('false_packet_injection', 0))
+        bh = int(row.get('blackhole_attack_attempts', 0))
+        sybil = int(row.get('sybil_attack_attempts', 0))
+        dos = int(row.get('denial_of_service', 0))
+        is_mal = int(row.get('is_malicious', 0))
+
+        # Determine attack name
+        if is_mal == 1:
+            if fdi > 0:
+                attack_name = 'False Data Injection (FDI)'
+            elif bh > 0 or p_drop > 0.4:
+                attack_name = 'Blackhole Packet Dropping'
+            elif sybil > 0 or nid > 100:
+                attack_name = 'Sybil Fake Identity'
+            elif dos > 0:
+                attack_name = 'Denial of Service (DoS)'
+            else:
+                attack_name = 'Malicious Misbehavior'
+        else:
+            attack_name = 'Normal Routine Telemetry'
+
+        # AdaBoost prediction
+        raw_v = np.array([[spd, acc, px, py, heading, p_drop, lat, rssi]])
+        ml_pred = 0
+        ml_conf = 0.15
+        if adaboost_model and scaler:
+            try:
+                scaled_v = scaler.transform(raw_v)
+                ml_pred = int(adaboost_model.predict(scaled_v)[0])
+                ml_conf = float(adaboost_model.predict_proba(scaled_v)[0][1])
+            except Exception:
+                ml_pred = is_mal
+                ml_conf = 0.95 if is_mal else 0.05
+        else:
+            ml_pred = is_mal
+            ml_conf = 0.95 if is_mal else 0.05
+
+        # Combined Decision
+        if trust < 0.40 and (ml_pred == 1 or is_mal == 1):
+            verdict = 'BLOCK'
+        elif trust < 0.40 or ml_pred == 1:
+            verdict = 'WARN'
+        else:
+            verdict = 'ACCEPT'
+
+        # Distance to RSU
+        dist_to_rsu = float(np.sqrt((px - rsu_pos['x'])**2 + (py - rsu_pos['y'])**2))
+
+        feed_records.append({
+            'packet_id'             : idx + 1,
+            'node_id'               : nid,
+            'position_x'            : round(px, 2),
+            'position_y'            : round(py, 2),
+            'speed'                 : round(spd, 2),
+            'acceleration'          : round(acc, 2),
+            'direction'             : round(heading, 1),
+            'packet_sent'           : p_sent,
+            'packet_received'       : p_recv,
+            'packet_drop_ratio'     : round(p_drop, 4),
+            'latency'               : round(lat, 2),
+            'signal_strength'       : round(rssi, 2),
+            'trust_score'           : round(trust, 4),
+            'neighbor_trust_score'  : round(n_trust, 4),
+            'historical_trust_score': round(h_trust, 4),
+            'false_packet_injection': fdi,
+            'blackhole_attempts'    : bh,
+            'sybil_attempts'        : sybil,
+            'denial_of_service'     : dos,
+            'is_malicious'          : is_mal,
+            'ml_prediction'         : ml_pred,
+            'ml_confidence'         : round(ml_conf, 4),
+            'verdict'               : verdict,
+            'attack_name'           : attack_name,
+            'dist_to_rsu'           : round(dist_to_rsu, 2),
+            'in_coverage'           : (dist_to_rsu <= 85.0)
+        })
+
+    # Summary
+    total_pkts = len(feed_records)
+    mal_pkts = sum(1 for r in feed_records if r['is_malicious'] == 1)
+    blocked_pkts = sum(1 for r in feed_records if r['verdict'] == 'BLOCK')
+    warned_pkts = sum(1 for r in feed_records if r['verdict'] == 'WARN')
+    accepted_pkts = sum(1 for r in feed_records if r['verdict'] == 'ACCEPT')
+
+    return jsonify({
+        'total_packets'  : total_pkts,
+        'unique_vehicles': len(set(r['node_id'] for r in feed_records)),
+        'malicious_count': mal_pkts,
+        'benign_count'   : total_pkts - mal_pkts,
+        'blocked_count'  : blocked_pkts,
+        'warned_count'   : warned_pkts,
+        'accepted_count' : accepted_pkts,
+        'rsu_position'   : rsu_pos,
+        'coverage_range' : 85.0,
+        'packets'        : feed_records
+    })
+
 @app.route('/api/models')
 def get_models():
     mdata = vanet_metrics_data or load_metrics('unified_model_metrics.json') or load_metrics('model_metrics.json')

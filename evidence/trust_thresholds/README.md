@@ -18,6 +18,8 @@ The trust update is an exponential moving average:
 new_trust = 0.7 * previous_trust + 0.3 * evidence_score
 ```
 
+Alpha itself is justified in [`evidence/trust_alpha/`](../trust_alpha/README.md). This folder holds α = 0.7 fixed and varies the 0.70 / 0.40 state boundaries.
+
 The dashboard applies a stricter final policy in `dashboard/app.py`: it returns `BLOCK` only when trust is below `0.40` and the ML prediction is malicious. Low trust alone produces `WARN`, which makes the threshold a staged response rather than an automatic block.
 
 ## Generated evidence

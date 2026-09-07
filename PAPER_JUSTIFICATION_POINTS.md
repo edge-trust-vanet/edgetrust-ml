@@ -84,6 +84,8 @@ Recommended evidence:
 - Measure false punishment: how many benign noisy packets incorrectly lower trust too much.
 - Plot trust decay/recovery curves for different alpha values.
 
+Generated evidence: `evidence/trust_alpha/` compares α ∈ {0.3, 0.5, 0.6, 0.7, 0.8, 0.9} on the implemented EMA. α = 0.7 is the smallest value that stays Trusted after one E=0.10 packet (trust=0.73) and still reaches Blocked at packet 4 under sustained attack.
+
 ### 4. Why Trust Thresholds Are 0.70 And 0.40
 
 Code locations:
