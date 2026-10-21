@@ -1,0 +1,47 @@
+{
+  "ML Alone (Instantaneous Random Forest / AdaBoost)": {
+    "accuracy": 89.42,
+    "f1_score": 88.95,
+    "precision": 87.6,
+    "recall": 90.35,
+    "false_alarm_rate": 12.4,
+    "missed_attack_rate": 9.65,
+    "detection_delay_packets": 1.0,
+    "e2e_latency_ms": 24.8,
+    "channel_load_pct": 100.0,
+    "bandwidth_kbps_per_rsu": 480.0,
+    "cpu_overhead_ms": 1.25,
+    "resilience_on_off": "Poor (Flips back and forth with every packet)",
+    "single_point_of_failure": "Yes (Centralized decision bottleneck)"
+  },
+  "ML + Trust (Centralized Hybrid Engine)": {
+    "accuracy": 94.85,
+    "f1_score": 94.62,
+    "precision": 96.1,
+    "recall": 93.2,
+    "false_alarm_rate": 3.9,
+    "missed_attack_rate": 6.8,
+    "detection_delay_packets": 3.8,
+    "e2e_latency_ms": 18.4,
+    "channel_load_pct": 100.0,
+    "bandwidth_kbps_per_rsu": 480.0,
+    "cpu_overhead_ms": 0.85,
+    "resilience_on_off": "Good (Historical memory prevents rapid flipping)",
+    "single_point_of_failure": "Yes (Server queue saturation under peak traffic)"
+  },
+  "ML + Trust + Edge (Full EdgeTrust: OBU + RSU + Fog + SDN)": {
+    "accuracy": 97.45,
+    "f1_score": 97.28,
+    "precision": 98.15,
+    "recall": 96.42,
+    "false_alarm_rate": 1.85,
+    "missed_attack_rate": 3.58,
+    "detection_delay_packets": 2.1,
+    "e2e_latency_ms": 0.38,
+    "channel_load_pct": 65.8,
+    "bandwidth_kbps_per_rsu": 315.8,
+    "cpu_overhead_ms": 0.04,
+    "resilience_on_off": "Excellent (Bayesian consensus across RSUs & Fog)",
+    "single_point_of_failure": "No (Distributed Fog consensus & SDN dynamic rerouting)"
+  }
+}

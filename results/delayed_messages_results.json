@@ -1,0 +1,10 @@
+{
+  "grace_period_ms": 300.0,
+  "fading_tolerance_ms": 500.0,
+  "malicious_replay_threshold_ms": 1500.0,
+  "benign_trust_at_100ms": 1.0,
+  "benign_trust_at_500ms": 0.8356,
+  "benign_trust_at_2000ms": 0.125,
+  "attacker_trust_at_2000ms": 0.05,
+  "conclusion": "EdgeTrust kinematics dead-reckoning reliably tolerates transmission jitter up to 500ms with trust remaining Trusted (>0.70). True Time-Delay and Replay attacks (>1.5s) suffer severe kinematic deviation and are isolated into Blocked (<0.40) within 2-3 packets."
+}
