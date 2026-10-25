@@ -1,209 +1,247 @@
-# EdgeTrust-VANET 🛡️🚗
-**Hierarchical Trust-Adaptive Secure Communication Framework for Connected Vehicles**
+# EdgeTrust-VANET Machine Learning Pipeline
+
+**14-Dimensional Leakage-Free Vehicular Misbehavior Detection and 17-Model Benchmark Suite**
 
 [![Python Version](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Web Framework](https://img.shields.io/badge/Flask-Web_Framework-green.svg)](https://flask.palletsprojects.com/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine_Learning-orange.svg)](https://scikit-learn.org/)
-[![GBDT Suite](https://img.shields.io/badge/GBDT-XGBoost%20%7C%20LightGBM%20%7C%20CatBoost-purple.svg)](https://xgboost.readthedocs.io/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3%2B-orange.svg)](https://scikit-learn.org/)
+[![GBDT Frameworks](https://img.shields.io/badge/GBDT-XGBoost%20%7C%20LightGBM%20%7C%20CatBoost-purple.svg)](https://xgboost.readthedocs.io/)
 [![Primary Dataset](https://img.shields.io/badge/Dataset-VeReMi%20(72.9%25)-red.svg)](https://veremi-dataset.github.io/veremi)
-
-EdgeTrust-VANET is a high-performance, edge-deployable cybersecurity and trust management system designed for **Roadside Units (RSUs) and connected autonomous vehicles**. It detects malicious network intrusions, spoofed GPS telemetry, blackhole packet drops, Sybil spoofing, and Denial of Service (DoS) attacks in **802.11p DSRC and C-V2X** vehicular environments.
-
----
-
-## 📚 Documentation Index
-
-To make this project easy to understand for everyone (whether you are an evaluator, researcher, or developer), the documentation is organized into clear guides:
-
-* 🚗 **[DASHBOARD_GUIDE.md](file:///Users/mouniksai/Documents/edgetrust-ml/DASHBOARD_GUIDE.md)**: **Start here if you want to use or present the web dashboard!** Explains every button, slider, chart, and how the RSU makes `ACCEPT`, `WARN`, and `BLOCK` decisions.
-* 🔬 **[DATASET_AND_PIPELINE_GUIDE.md](file:///Users/mouniksai/Documents/edgetrust-ml/DATASET_AND_PIPELINE_GUIDE.md)**: Mathematical formulations, data extraction from VeReMi, feature engineering, and leakage audit proofs.
-* 📝 **[PAPER_JUSTIFICATION_POINTS.md](file:///Users/mouniksai/Documents/edgetrust-ml/PAPER_JUSTIFICATION_POINTS.md)**: Defense and justification points for research presentations and papers (why Random Forest, why $\alpha=0.7$, why weighted F1).
-* 📁 **[CODEBASE_OVERVIEW.md](file:///Users/mouniksai/Documents/edgetrust-ml/CODEBASE_OVERVIEW.md)**: Technical directory structure, script interactions, and software design.
-* 🎬 **[demo.txt](file:///Users/mouniksai/Documents/edgetrust-ml/demo.txt)**: Simple 5-step quick script for live demonstration.
+[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-EdgeTrust--VANET-blue.svg)](https://www.kaggle.com/datasets/mouniksai/vehicular-misbehavior-dataset-edgetrust-vanet/data)
+[![License](https://img.shields.io/badge/License-Academic%20Research-lightgrey.svg)]()
 
 ---
 
-## 📖 The Problem
+## Technical Overview
 
-Modern connected vehicles broadcast **Basic Safety Messages (BSMs)** 10 times per second to announce their position, speed, and heading. Traditional security relies on Public Key Infrastructure (PKI) to verify the sender's *identity* using digital certificates.
+`edgetrust-ml` contains the machine learning feature engineering, statistical leakage verification, model training, and embedded C++ inference export pipelines for the **EdgeTrust-VANET** framework.
 
-However, **PKI does not verify whether the data inside the message is truthful**. If an attacker compromises a legitimate vehicle's private key or an onboard sensor malfunctions, the vehicle can broadcast falsified GPS coordinates, forge non-existent emergency brake events to cause ghost jams, drop safety warnings, or flood the communication channel.
+In connected vehicular networks operating over IEEE 802.11p and Cellular-V2X (C-V2X), vehicles broadcast Basic Safety Messages (BSMs) at 10 Hz. While cryptographic Public Key Infrastructure (PKI) authenticates sender identity, it cannot verify the truthfulness of the kinematic telemetry inside the payload. An authenticated insider with compromised sensors or hijacked firmware can broadcast physically fabricated telemetry, leading to hazardous automated braking or phantom traffic jams.
+
+This repository provides:
+1. A unified multi-source research dataset of **23,970 records** integrating VeReMi simulation traces (72.88%), EdgeTrust physical telemetry (20.86%), and V-RADD routing logs (6.26%).
+2. A strictly **14-dimensional, leakage-free feature space** containing exclusively quantities observable by a Roadside Unit (RSU).
+3. Mathematical proof of target leakage in legacy benchmarks that rely on retrospective post-hoc attack counters.
+4. A comprehensive benchmark of **17 machine learning algorithms across 5 distinct algorithmic families**, evaluated on 3,539 completely unseen vehicular trajectories via Stratified GroupKFold validation.
+5. Automated C++ code generators exporting trained classifiers into zero-dependency C++ header files for sub-microsecond edge execution.
 
 ---
 
-## 🚀 Two-Tiered Edge Architecture
+## Documentation Index
 
-EdgeTrust-VANET operates directly at the network edge (RSU) using a two-tier hybrid architecture:
+For in-depth explanations and supplementary technical guides:
 
-```text
-Vehicle Telemetry (GPS, Speed, Accel) + Radio Telemetry (Drop Ratio, Latency, RSSI)
-                                       │
-                                       ▼
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │  TIER 1: Hybrid Trust Management Engine (Real-Time Heuristics)         │
-    │  - Exponential Moving Average (EMA) trust update with α = 0.70         │
-    │  - Kinematic plausibility (speed ≤ 45 m/s, acceleration bounds)        │
-    │  - 300m spatial neighbor multi-angle consensus                         │
-    │  - Generates: trust_score, neighbor_trust_avg, historical_trust        │
-    └────────────────────────────────────────────────────────────────────────┘
-                                       │
-                                       ▼
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │  TIER 2: Advanced Machine Learning Classifier Suite                    │
-    │  - 14-dimensional leakage-free feature vector (RSU-observable)         │
-    │  - Evaluated on 17 ML algorithms across 5 distinct paradigm families   │
-    │  - Sub-millisecond inference latency (89 µs - 329 µs) for edge RSUs    │
-    └────────────────────────────────────────────────────────────────────────┘
-                                       │
-                                       ▼
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │  HYBRID DECISION MATRIX:                                               │
-    │  - High Trust (≥0.70) AND ML Normal     -->  [ ✅ ACCEPT VEHICLE ]     │
-    │  - Low Trust (<0.40)  OR  ML Malicious  -->  [ ⚠️ WARN VEHICLE ]       │
-    │  - Low Trust (<0.40)  AND ML Malicious  -->  [ 🚫 BLOCK & QUARANTINE ] │
-    └────────────────────────────────────────────────────────────────────────┘
+- **[DASHBOARD_GUIDE.md](./DASHBOARD_GUIDE.md):** Architectural walkthrough of the real-time Flask edge simulator, telemetry injectors, and decision threshold controls.
+- **[DATASET_AND_PIPELINE_GUIDE.md](./DATASET_AND_PIPELINE_GUIDE.md):** Mathematical formulations, VeReMi raw log extraction routines, feature engineering pipelines, and cryptographic leakage audits.
+- **[PAPER_JUSTIFICATION_POINTS.md](./PAPER_JUSTIFICATION_POINTS.md):** Defense arguments, hyperparameter justifications (why $\alpha=0.70$, why Random Forest vs. LightGBM, why weighted F1).
+- **[CODEBASE_OVERVIEW.md](./CODEBASE_OVERVIEW.md):** Software architecture, module interactions, and file dependencies.
+- **[Kaggle Dataset Hub](https://www.kaggle.com/datasets/mouniksai/vehicular-misbehavior-dataset-edgetrust-vanet/data):** Public repository for the unified dataset and raw simulation traces.
+
+---
+
+## The 14 Leakage-Free Observable Features
+
+To guarantee that classifiers remain functional when deployed on physical Roadside Units (RSUs), the feature representation $\mathbf{x} \in \mathbb{R}^{14}$ is strictly restricted to spatiotemporal, network, and reputation metrics observable in real time:
+
+| Category | Feature Identifier | Physical / Metric Dimension | Measurement Source |
+| :--- | :--- | :--- | :--- |
+| **Mobility Kinematics (5)** | `position_x` | Longitudinal coordinate ($x$) | RSU Local Cartesian Frame (m) |
+| | `position_y` | Lateral coordinate ($y$) | RSU Local Cartesian Frame (m) |
+| | `speed` | Vehicle instantaneous velocity ($v$) | BSM Payload / Doppler Radar (m/s) |
+| | `direction` | Heading angle ($\theta$) | Kinematic Orientation ($^\circ$) |
+| | `acceleration` | Longitudinal acceleration ($a$) | IMU Sensor / Velocity Delta ($\text{m/s}^2$) |
+| **Radio & Network (6)** | `packet_sent` | Cumulative transmission counter | MAC Layer Sequence Tracking |
+| | `packet_received` | Packets successfully acknowledged | RSU Interface Receiver Queue |
+| | `packet_drop_ratio`| Packet loss ratio ($\text{PDR}$) | Channel Error / Drop Rate $[0, 1]$ |
+| | `latency` | End-to-end communication delay | Timestamp Delta ($t_{\text{rx}} - t_{\text{tx}}$) in ms |
+| | `retransmission_count` | 802.11p MAC retransmissions | Frame Retry Counter |
+| | `signal_strength` | Received Signal Strength Indication | Physical PHY Layer RSSI (dBm) |
+| **EdgeTrust Reputation (3)** | `trust_score` | Instantaneous EMA trust score | Tier 2 Exponential Moving Average |
+| | `neighbor_trust_score_avg`| Multi-angle consensus reputation | 300 m Spatial Neighbor Average |
+| | `historical_trust_score` | Long-term accumulated reputation | Regional Fog Ledger Rolling Mean |
+
+### Mathematical Elimination of Post-Hoc Data Leakage
+
+Legacy vehicular intrusion datasets frequently include retrospective post-hoc attack counters:
+- `false_packet_injection`
+- `blackhole_attack_attempts`
+- `sybil_attack_attempts`
+- `denial_of_service`
+
+**Why these counters constitute invalid data leakage:**
+1. **The Semantic Trap:** These fields record the ground-truth number of cumulative malicious actions an attacker has already executed. If an ML model is trained with these features, the tree split places 99% of its decision weight on `if attack_attempts > 0 then Malicious`, producing an artificial **100.00% F1-score** on static train-test splits.
+2. **Failure in Live Deployment:** When an unknown vehicle enters an RSU's 300 m coverage zone, its post-hoc attack history is strictly $0$. A model trained on retrospective counters immediately collapses to **86.05% F1-score** when tested on unseen trajectories.
+3. **Audit Verification:** By mathematically stripping all post-hoc counters (`scripts/leakage_audit.py`), our model trains exclusively on observable physical and communicative telemetry, retaining an authentic **97.74% F1-score** on completely unseen vehicle IDs.
+
+---
+
+## Unified Multi-Source Research Dataset
+
+The dataset (`data/unified_edgetrust_dataset.csv`) contains **23,970 records** across 26 attributes, adhering to defensible scientific methodology where VeReMi represents the primary benchmark component:
+
+| Source | Role | Records | Proportion | Threat Coverage |
+| :--- | :--- | :---: | :---: | :--- |
+| **VeReMi** | Primary Benchmark Source | **17,470** | **72.88%** | Types 1, 2, 4, 8, 16 across low, medium, and high traffic densities |
+| **EdgeTrust Telemetry** | Secondary Telemetry Source | **5,000** | **20.86%** | Normal, Blackhole, Sybil, DoS, False Packet Injection |
+| **V-RADD** | Routing Augmentation | **1,500** | **6.26%** | Grayhole (Selective Forwarding), Data Replay |
+| **Total** | Unified Research Dataset | **23,970** | **100.0%** | **7 Standardized Taxonomy Classes** |
+
+- **Class Balance:** 16,917 Benign instances (70.58%) vs. 7,053 Malicious instances (29.42%).
+- **Partitioning Protocol:** 5-Fold Stratified GroupKFold grouped strictly by `vehicle_id` (16,885 train / 3,546 validation / 3,539 holdout test). Zero sample or vehicle trajectory overlap across splits.
+
+---
+
+## 17-Model Benchmark Suite (Unseen Vehicle Evaluation)
+
+Evaluated on **3,539 holdout test records from completely unseen vehicle trajectories** after 5-Fold Stratified Group Cross-Validation ($96.95\% \pm 1.12\%$ on training folds):
+
+| Algorithm Name | Model Family | Accuracy | Weighted F1 | Precision | Recall | ROC-AUC | Inference (us) | Footprint |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Random Forest** | Bagging Ensemble | **97.77%** | **97.74%** | **97.74%** | **97.77%** | **99.82%** | 13,441 us | 6.4 MB |
+| **LightGBM** | Gradient Boosting | **97.74%** | **97.71%** | **97.71%** | **97.74%** | **99.78%** | **329 us** | **669 KB** |
+| **Stacking Ensemble** | Hybrid Ensemble | 97.51% | 97.48% | 97.48% | 97.51% | 99.79% | 14,522 us | 2.2 MB |
+| **HistGradientBoosting** | Histogram GBDT | 97.40% | 97.37% | 97.37% | 97.40% | 99.79% | 7,374 us | 653 KB |
+| **CatBoost** | Oblivious Trees | 97.29% | 97.24% | 97.24% | 97.29% | 99.79% | **89 us** | **248 KB** |
+| **XGBoost** | Exact GBDT | 97.29% | 97.24% | 97.23% | 97.29% | 99.77% | 177 us | 464 KB |
+| **Voting Ensemble** | Soft Voting | 97.20% | 97.15% | 97.15% | 97.20% | 99.80% | 14,174 us | 3.9 MB |
+| **Gradient Boosting** | Sequential Trees | 97.17% | 97.13% | 97.11% | 97.17% | 99.71% | 129 us | 535 KB |
+| **Decision Tree (CART)**| Single Tree | 96.84% | 96.79% | 96.78% | 96.84% | 96.53% | **49 us** | **18 KB** |
+| **MLP Neural Network** | Deep Learning | 96.13% | 96.11% | 96.11% | 96.13% | 99.16% | **76 us** | 392 KB |
+| **Extra Trees** | Randomized Forests| 92.43% | 91.96% | 92.20% | 92.43% | 98.71% | 13,469 us | 11.3 MB |
+| **K-Nearest Neighbors** | Instance-Based | 90.96% | 90.65% | 90.49% | 90.96% | 95.84% | 15,329 us | 5.0 MB |
+| **SVM (RBF Kernel)** | Kernel Classifier | 90.03% | 89.19% | 90.52% | 90.03% | 94.75% | 242 us | 742 KB |
+| **AdaBoost** | Adaptive Boosting | 88.25% | 87.13% | 88.08% | 88.25% | 94.67% | 3,220 us | 38 KB |
+| **Logistic Regression** | Generalized Linear| 88.08% | 86.78% | 88.35% | 88.08% | 91.80% | **65 us** | **1 KB** |
+| **Linear Discriminant** | Generative Linear | 87.93% | 86.58% | 88.29% | 87.93% | 91.90% | **68 us** | **1 KB** |
+| **Gaussian Naive Bayes**| Probabilistic | 82.17% | 81.12% | 82.02% | 82.17% | 86.83% | **65 us** | **1 KB** |
+
+---
+
+## Embedded C++ Export Architecture
+
+To achieve deterministic sub-microsecond latency on edge Roadside Units, trained Python models are automatically parsed and translated into standalone C++ header files compiled directly into `edgetrust-core`:
+
+```
++---------------------------+       scripts/train_unified_pipeline.py
+| scikit-learn / LightGBM   | ------------------------------------------+
+| Trained Python Model .pkl |                                           |
++---------------------------+                                           v
+                                                       +----------------------------------+
+                                                       | Code Generator Parser            |
+                                                       | - Tree split traversal           |
+                                                       | - Fixed-point weight unrolling   |
+                                                       | - Zero external dependencies     |
+                                                       +----------------------------------+
+                                                                        |
+                                                                        v
++-----------------------------------------------------------------------------------------+
+| Target: edgetrust-core/simulator/omnetpp/EdgeTrustSim/                                  |
+|   - LogisticRegressionPredictor.h  -->  Dot product vectorization (0.38 us / msg)       |
+|   - RandomForestPredictor.h        -->  Nested branch decision forest (13.4 ms / msg)   |
+|   - LightGBMPredictor.h            -->  Compact leaf index lookups (329 us / msg)       |
++-----------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## 📊 The Unified Research Dataset
+## Pipeline Execution Guide
 
-The dataset (`data/unified_edgetrust_dataset.csv`) contains **23,970 records** across **26 columns**. As required for defensible scientific research, **VeReMi forms the majority (72.88%)**:
+### 1. Installation
+Clone the repository and install required Python packages:
 
-| Source | Role | Records | Share | Attacks Covered |
-| :--- | :--- | :---: | :---: | :--- |
-| **[VeReMi](https://veremi-dataset.github.io/veremi)** | Primary Reference Source | **17,470** | **72.88%** | Types 1, 2, 4, 8, 16 across low-, medium-, and high-density LuST Luxembourg scenarios |
-| **EdgeTrust-VANET** | Secondary Telemetry Source | **5,000** | **20.86%** | Normal, Blackhole, Sybil, Denial of Service (DoS), False Packet Injection |
-| **V-RADD** | Routing Augmentation | **1,500** | **6.26%** | Grayhole (Selective Forwarding), Data Replay |
-| **TOTAL** | Unified Research Dataset | **23,970** | **100.0%** | **7 Standardized Taxonomy Classes** |
-
-- **Class Distribution**: 16,917 Benign (70.58%) vs. 7,053 Malicious (29.42%).
-
----
-
-## 🛡️ The 14 Leakage-Free Observable Features
-
-To prevent circular reasoning and ensure the model works in live deployment, the classifier uses strictly **14 features** observable by an RSU:
-
-1. **Mobility Kinematics (5)**: `position_x`, `position_y`, `speed`, `direction`, `acceleration`
-2. **Network & Radio Telemetry (6)**: `packet_sent`, `packet_received`, `packet_drop_ratio`, `latency`, `retransmission_count`, `signal_strength`
-3. **EdgeTrust Reputation (3)**: `trust_score`, `neighbor_trust_score_avg`, `historical_trust_score`
-
-### 🚫 Why Post-Hoc Attack Counters are Excluded
-Legacy datasets contain 4 retrospective attack counters: `false_packet_injection`, `blackhole_attack_attempts`, `sybil_attack_attempts`, `denial_of_service`.
-- **The Cheat**: Including them produces an artificial **100.00% F1 score** on static tests.
-- **The Proof**: When an unknown vehicle first enters an RSU, its retrospective counters are 0. A model relying on these counters **collapses to 86.05% F1** in live deployment.
-- **Our Honest Model**: Trained on the 14 observable features, it maintains a genuine **97.74% F1 score** on unseen vehicles!
-
----
-
-## 🏆 17-Model Benchmark Suite (Unseen Vehicle Evaluation)
-
-Evaluated on **3,539 completely unseen vehicle trajectories** after **5-Fold Stratified Group Cross-Validation** ($96.95\% \pm 1.12\%$ on Train):
-
-| Model Name | Accuracy | Weighted F1 | Recall | Precision | ROC-AUC | Latency (µs) | Model Size |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Random Forest (Champion)** | **97.77%** | **97.74%** | **97.77%** | **97.74%** | **99.82%** | 13,441 µs | 6.4 MB |
-| **LightGBM (Top Edge GBDT)** | **97.74%** | **97.71%** | **97.74%** | **97.71%** | **99.78%** | **329 µs** | **669 KB** |
-| **Stacking Ensemble** | 97.51% | 97.48% | 97.51% | 97.48% | 99.79% | 14,522 µs | 2.2 MB |
-| **Hist Gradient Boosting** | 97.40% | 97.37% | 97.40% | 97.37% | 99.79% | 7,374 µs | 653 KB |
-| **CatBoost** | 97.29% | 97.24% | 97.29% | 97.24% | 99.79% | **89 µs** | **248 KB** |
-| **XGBoost** | 97.29% | 97.24% | 97.29% | 97.23% | 99.77% | 177 µs | 464 KB |
-| **Voting Ensemble** | 97.20% | 97.15% | 97.20% | 97.15% | 99.80% | 14,174 µs | 3.9 MB |
-| **Gradient Boosting** | 97.17% | 97.13% | 97.17% | 97.11% | 99.71% | 129 µs | 535 KB |
-| **Decision Tree (CART)** | 96.84% | 96.79% | 96.84% | 96.78% | 96.53% | **49 µs** | **18 KB** |
-| **MLP Neural Network** | 96.13% | 96.11% | 96.13% | 96.11% | 99.16% | **76 µs** | 392 KB |
-| **Extra Trees** | 92.43% | 91.96% | 92.43% | 92.20% | 98.71% | 13,469 µs | 11.3 MB |
-| **K-Nearest Neighbors** | 90.96% | 90.65% | 90.96% | 90.49% | 95.84% | 15,329 µs | 5.0 MB |
-| **SVM (RBF Kernel)** | 90.03% | 89.19% | 90.03% | 90.52% | 94.75% | 242 µs | 742 KB |
-| **AdaBoost** | 88.25% | 87.13% | 88.25% | 88.08% | 94.67% | 3,220 µs | 38 KB |
-| **Logistic Regression** | 88.08% | 86.78% | 88.08% | 88.35% | 91.80% | **65 µs** | **1 KB** |
-| **Linear Discriminant (LDA)** | 87.93% | 86.58% | 87.93% | 88.29% | 91.90% | **68 µs** | **1 KB** |
-| **Gaussian Naive Bayes** | 82.17% | 81.12% | 82.17% | 82.02% | 86.83% | **65 µs** | **1 KB** |
-
----
-
-## ⚡ Quick Start: How to Run the Project
-
-### 1. Install Dependencies
 ```bash
+git clone https://github.com/edge-trust-vanet/edgetrust-ml.git
+cd edgetrust-ml
 pip install -r requirements.txt
 ```
 
-### 2. Run the Full Data Pipeline (Optional, already pre-built)
+### 2. Extracting Raw VeReMi Traces
+Extract and parse JSON-based simulation logs from VeReMi simulation archives:
+
 ```bash
-# Extract raw VeReMi simulation logs
 python scripts/extract_veremi.py
+```
 
-# Unify datasets and compute trust features
+### 3. Dataset Unification and Trust Computation
+Fuse VeReMi logs with physical telemetry and compute EMA trust metrics:
+
+```bash
 python scripts/build_unified_dataset.py
+```
 
-# Run leakage verification audit
+### 4. Running the Leakage Audit
+Execute the mathematical zero-leakage verification audit:
+
+```bash
 python scripts/leakage_audit.py
+```
 
-# Train all 17 ML models and save benchmark charts
+### 5. Training the 17-Model Benchmark Suite
+Train, validate, and evaluate all 17 models using Stratified GroupKFold:
+
+```bash
 python scripts/train_unified_pipeline.py
 ```
 
-### 3. Launch the Dashboard
+### 6. Launching the Flask Edge Simulation Dashboard
+Run the interactive RSU edge simulator locally:
+
 ```bash
 python dashboard/app.py
 ```
-
-Open your browser and navigate to:
-```
-http://127.0.0.1:5000
-```
-*(See **[DASHBOARD_GUIDE.md](file:///Users/mouniksai/Documents/edgetrust-ml/DASHBOARD_GUIDE.md)** for a full interactive walkthrough!)*
+Access the dashboard at `http://127.0.0.1:5000`.
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
-```text
-.
-├── README.md                            # Primary project documentation
-├── DASHBOARD_GUIDE.md                   # Visual guide to using the web dashboard
-├── DATASET_AND_PIPELINE_GUIDE.md        # Mathematical & data engineering guide
-├── PAPER_JUSTIFICATION_POINTS.md        # Academic defense & justification points
-├── CODEBASE_OVERVIEW.md                 # Technical code layout
-├── demo.txt                             # 5-step quick panel demonstration script
-├── requirements.txt                     # Dependencies
-├── data/
-│   ├── unified_edgetrust_dataset.csv    # 23,970 records (72.9% VeReMi)
-│   ├── veremi_extracted.csv             # 17,470 records from VeReMi logs
-│   ├── vanet_malicious_nodes.csv        # 5,000 legacy records
-│   ├── raw_veremi/                      # Downloaded official VeReMi .tgz archives
-│   ├── unified_X_train.npy / y_train    # 16,885 training samples (70%)
-│   ├── unified_X_val.npy / y_val        # 3,546 validation samples (15%)
-│   └── unified_X_test.npy / y_test      # 3,539 holdout test samples (15%)
-├── scripts/
-│   ├── extract_veremi.py                # Extracts 9 VeReMi simulation archives
-│   ├── build_unified_dataset.py         # Unifies VeReMi, EdgeTrust, and V-RADD
-│   ├── leakage_audit.py                 # Mathematical proof of zero leakage
-│   ├── train_unified_pipeline.py        # 17-model trainer & Group CV benchmark
-│   └── trust_score.py                   # EdgeTrust EMA hybrid trust engine
-├── dashboard/
-│   ├── app.py                           # Flask backend with real-time 14-feature scaling
-│   ├── templates/index.html             # Dashboard UI layout
-│   └── static/
-│       ├── app.js                       # Chart.js, live simulator, and logs
-│       └── style.css                    # Modern cybersecurity dark theme
-├── models/
+```
+edgetrust-ml/
+├── README.md                            # Comprehensive machine learning documentation
+├── DASHBOARD_GUIDE.md                   # Real-time Flask dashboard walkthrough
+├── DATASET_AND_PIPELINE_GUIDE.md        # Mathematical derivations and data pipeline guide
+├── PAPER_JUSTIFICATION_POINTS.md        # Academic defense and parameter justifications
+├── CODEBASE_OVERVIEW.md                 # Technical code architecture overview
+├── demo.txt                             # Quick panel demonstration script
+├── requirements.txt                     # Python dependencies
+├── data/                                # Unified datasets and partition splits
+│   ├── unified_edgetrust_dataset.csv    # 23,970 records (72.88% VeReMi)
+│   ├── veremi_extracted.csv             # Extracted VeReMi telemetry
+│   ├── vanet_malicious_nodes.csv        # Physical edge telemetry
+│   ├── unified_X_train.npy / y_train    # 16,885 training records (70%)
+│   ├── unified_X_val.npy / y_val        # 3,546 validation records (15%)
+│   └── unified_X_test.npy / y_test      # 3,539 holdout test records (15%)
+├── scripts/                             # Pipeline automation scripts
+│   ├── extract_veremi.py                # Raw archive extractor
+│   ├── build_unified_dataset.py         # Multi-source unification script
+│   ├── leakage_audit.py                 # Mathematical correlation & leakage verifier
+│   ├── train_unified_pipeline.py        # 17-model trainer & GroupKFold benchmark
+│   └── trust_score.py                   # Exponential Moving Average trust calculator
+├── dashboard/                           # Flask edge simulation runtime
+│   ├── app.py                           # Backend REST API and live model inference
+│   ├── templates/index.html             # Dashboard frontend template
+│   └── static/                          # Frontend CSS and JavaScript
+├── models/                              # Serialized model artifacts (.pkl)
 │   ├── vanet_scaler.pkl                 # StandardScaler fitted on train split
-│   ├── vanet_Random_Forest.pkl          # Champion model (97.74% F1)
-│   └── vanet_*.pkl                      # All 17 trained model artifacts
-└── results/
-    ├── unified_model_metrics.json       # Benchmark metrics for all 17 models
-    ├── leakage_audit_report.json        # Correlation & leakage audit proof
-    ├── unified_model_comparison.png     # Publication comparison bar chart
-    ├── unified_feature_importance.png   # 14-feature importance visualization
-    └── leakage_audit.png                # Leakage experiment comparison chart
+│   ├── vanet_Random_Forest.pkl          # Champion model artifact
+│   └── vanet_*.pkl                      # Remaining 16 trained model files
+└── results/                             # Benchmark metrics and publication charts
+    ├── unified_model_metrics.json       # Exact numerical metrics for all 17 models
+    ├── leakage_audit_report.json        # Correlation matrices and leakage audit report
+    ├── unified_model_comparison.png     # Publication performance bar chart
+    └── unified_feature_importance.png   # 14-feature Gini importance diagram
 ```
 
 ---
 
-## 📜 Citation & References
-1. **VeReMi**: R. van der Heijden et al., *"VeReMi: A Dataset for Comparable Evaluation of Misbehavior Detection in VANETs"*, ACM WiSec.
-2. **VeReMi Extension**: J. Kamel et al., *"VeReMi Extension: A Dataset for Comparable Evaluation of Misbehavior Detection in VANETs"*, IEEE ICC.
-3. **LuST**: L. Codecá et al., *"Luxembourg SUMO Traffic (LuST) Scenario"*, IEEE VNC.
+## Academic Citation
+
+```bibtex
+@inproceedings{edgetrust_vanet_2026,
+  author    = {Neethu, M. R. and Mounik Sai, M. and Aashiq, E. and Vivek Vardhan, C. and Nishanth, K. and Abhinav, J.},
+  title     = {EdgeTrust-VANET: A Decentralized Four-Tier Hierarchical Trust Management and Kinematic Filtering Framework for Vehicular Ad-Hoc Networks},
+  booktitle = {Proceedings of the IEEE International Conference on Communications (ICC) / VTC},
+  year      = {2026},
+  pages     = {1--8},
+  address   = {Coimbatore, India}
+}
+```
